@@ -1,24 +1,47 @@
-# README
+# JapanSitesInfo
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## サイト概要
 
-Things you may want to cover:
+日本各地の観光地などの情報を投稿するサイト
 
-* Ruby version
+### サイトテーマ
 
-* System dependencies
+あなただけが知る日本各地のおすすめスポットの魅力をみんなに伝えよう！
 
-* Configuration
+### テーマを選んだ理由
 
-* Database creation
+自身が日本各地を旅行することが好きで、<br>
+昨今はコロナ禍で苦しい状況下に置かれている観光地に対し少しでも力になれたらと思ったため。
 
-* Database initialization
+### ターゲットユーザ
 
-* How to run the test suite
+・旅行が好きな人<br>
+・自分の地元のスポットを紹介したい人<br>
+・旅行で行く地域は決まっているが、具体的にどこに行こうか迷っている人
 
-* Services (job queues, cache servers, search engines, etc.)
+### 主な利用シーン
 
-* Deployment instructions
+・自分の行った場所に関する写真や情報をレビューするとき<br>
+・自分の地元のスポットを紹介したいとき<br>
+・旅行に行く際、とりあえずおすすめの観光地を探すとき<br>
+・観光サイトにも載っていないような穴場おすすめスポットを探すとき
 
-* ...
+## 設計書
+
+(今後、順次作成予定)
+
+## チャレンジ要素一覧
+
+https://docs.google.com/spreadsheets/d/15ZyaacnlLYVt2UiYMu4ja5J2thfTkkYupYOGmhFKg4A/edit#gid=0
+
+## 開発環境
+
+- OS：Linux(CentOS)
+- 言語：HTML,CSS,JavaScript,Ruby,SQL
+- フレームワーク：Ruby on Rails
+- JS ライブラリ：jQuery
+- IDE：Cloud9
+
+## 使用素材
+
+(今後、順次記述予定)

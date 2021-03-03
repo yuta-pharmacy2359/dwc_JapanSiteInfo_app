@@ -28,11 +28,8 @@
 
 ## 設計書
 
-(今後、順次作成予定)
-
-## チャレンジ要素一覧
-
-https://docs.google.com/spreadsheets/d/15ZyaacnlLYVt2UiYMu4ja5J2thfTkkYupYOGmhFKg4A/edit#gid=0
+・機能一覧(https://docs.google.com/spreadsheets/d/15ZyaacnlLYVt2UiYMu4ja5J2thfTkkYupYOGmhFKg4A/edit#gid=0)
+・ER図(https://app.diagrams.net/#G1hehi0GDSWDi59i3i1iXcP50dsJQ1D6wT)
 
 ## 開発環境
 
@@ -44,4 +41,6 @@ https://docs.google.com/spreadsheets/d/15ZyaacnlLYVt2UiYMu4ja5J2thfTkkYupYOGmhFK
 
 ## 使用素材
 
-(今後、順次記述予定)
+写真素材<br>
+・ぱくたそ(https://www.pakutaso.com/)
+・O-DAN(https://o-dan.net/ja/)

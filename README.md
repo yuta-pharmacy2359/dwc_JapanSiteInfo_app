@@ -28,8 +28,8 @@
 
 ## 設計書
 
-・機能一覧(https://docs.google.com/spreadsheets/d/15ZyaacnlLYVt2UiYMu4ja5J2thfTkkYupYOGmhFKg4A/edit#gid=0)
-・ER図(https://app.diagrams.net/#G1hehi0GDSWDi59i3i1iXcP50dsJQ1D6wT)
+・機能一覧(https://docs.google.com/spreadsheets/d/15ZyaacnlLYVt2UiYMu4ja5J2thfTkkYupYOGmhFKg4A/edit#gid=0)<br>
+・ER図(https://app.diagrams.net/#G1hehi0GDSWDi59i3i1iXcP50dsJQ1D6wT)<br>
 
 ## 開発環境
 
@@ -42,5 +42,5 @@
 ## 使用素材
 
 写真素材<br>
-・ぱくたそ(https://www.pakutaso.com/)
+・ぱくたそ(https://www.pakutaso.com/)<br>
 ・O-DAN(https://o-dan.net/ja/)

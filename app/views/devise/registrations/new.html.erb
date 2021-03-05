@@ -4,53 +4,50 @@
   <%= render "devise/shared/error_messages", resource: resource %>
 
   <div class="field">
-    <%= f.label "氏名(フルネーム)" %><br />
+    <label>氏名(フルネーム)</label><br />
     <%= f.text_field :fullname, autofocus: true, autocomplete: "fullname" %>
   </div>
 
   <div class="field">
-    <%= f.label "ニックネーム" %><br />
+    <label>ニックネーム</label><br />
     <%= f.text_field :nickname, autofocus: true, autocomplete: "nickname" %>
   </div>
 
   <div class="field">
-    <%= f.label "メールアドレス" %><br />
+    <label>メールアドレス</label><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
 
   <div class="field">
-    <%= f.label "性別" %><br />
+    <label>性別</label><br />
     <%= f.radio_button :sex, "男性" %>
-    <%= f.label "男性" %>
+    <label>男性</label>
     <%= f.radio_button :sex, "女性" %>
-    <%= f.label "女性" %>
+    <label>女性</label>
   </div>
 
   <div class="field">
-    <%= f.label "生年月日" %><br />
+    <label>生年月日</label><br />
     <%= f.date_field :birthday, class: 'form-control' %>
   </div>
 
   <div class="field">
-    <%= f.label "住所(都道府県)" %><br />
-    <%= f.collection_select :prefecture, JpPrefecture::Prefecture.all, :code, :name %>
+    <label>住所(都道府県)</label><br />
+    <%= f.select :prefecture, User.prefectures.keys %>
   </div>
 
   <div class="field">
-    <%= f.label "住所(市区町村)" %><br />
+    <label>住所(市区町村)</label><br />
     <%= f.text_field :city, autofocus: true, autocomplete: "city" %>
   </div>
 
   <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
+    <label>パスワード(英数字6文字以上)</label><br />
     <%= f.password_field :password, autocomplete: "new-password" %>
   </div>
 
   <div class="field">
-    <%= f.label :password_confirmation %><br />
+    <label>パスワード（確認）</label><br />
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 

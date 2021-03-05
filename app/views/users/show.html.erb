@@ -1,0 +1,18 @@
+<% if @user.id == current_user.id %>
+  <h2>マイページ</h2>
+<% else %>
+  <h2><%= @user.nickname %> さん</h2>
+<% end %>
+
+<div>
+  <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+  <p>ニックネーム: <%= @user.nickname %></p>
+  <p>性別: <%= @user.sex.to_s %></p>
+  <p>年齢: <%= @user.age %>歳</p>
+  <p>住所: <%= @user.prefecture %><%= @user.city %></p>
+  <p>自己紹介: <%= @user.introduction %></p>
+</div>
+
+<% if @user.id == current_user.id %>
+  <%= link_to "プロフィール編集", edit_user_path(@user) %>
+<% end %>

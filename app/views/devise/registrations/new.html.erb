@@ -1,21 +1,44 @@
-<h2>Sign up</h2>
+<h2>新規会員登録</h2>
 
 <%= form_with model: @user, url: user_registration_path, local: true do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
   <div class="field">
-    <%= f.label :fullname %><br />
+    <%= f.label "氏名(フルネーム)" %><br />
     <%= f.text_field :fullname, autofocus: true, autocomplete: "fullname" %>
   </div>
 
   <div class="field">
-    <%= f.label :nickname %><br />
+    <%= f.label "ニックネーム" %><br />
     <%= f.text_field :nickname, autofocus: true, autocomplete: "nickname" %>
   </div>
 
   <div class="field">
-    <%= f.label :email %><br />
+    <%= f.label "メールアドレス" %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label "性別" %><br />
+    <%= f.radio_button :sex, "男性" %>
+    <%= f.label "男性" %>
+    <%= f.radio_button :sex, "女性" %>
+    <%= f.label "女性" %>
+  </div>
+
+  <div class="field">
+    <%= f.label "生年月日" %><br />
+    <%= f.date_field :birthday, class: 'form-control' %>
+  </div>
+
+  <div class="field">
+    <%= f.label "住所(都道府県)" %><br />
+    <%= f.collection_select :prefecture, JpPrefecture::Prefecture.all, :code, :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label "住所(市区町村)" %><br />
+    <%= f.text_field :city, autofocus: true, autocomplete: "city" %>
   </div>
 
   <div class="field">

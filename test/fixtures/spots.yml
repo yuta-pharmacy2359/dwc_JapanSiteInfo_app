@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  title: MyString
+  prefecture: 1
+  city: MyString
+  visited_day: 2021-03-06
+  rate: 1
+  spot_image1_id: MyString
+  spot_image2_id: MyString
+  spot_image3_id: MyString
+  content: MyText
+
+two:
+  user_id: 1
+  title: MyString
+  prefecture: 1
+  city: MyString
+  visited_day: 2021-03-06
+  rate: 1
+  spot_image1_id: MyString
+  spot_image2_id: MyString
+  spot_image3_id: MyString
+  content: MyText

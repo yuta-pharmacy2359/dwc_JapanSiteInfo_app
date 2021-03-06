@@ -23,6 +23,9 @@ ja:
         password: パスワード
         password_confirmation: パスワード確認
         email: メールアドレス
+      spot:
+        title: タイトル
+        visited_day: 来訪日
 
   devise:
     failure:

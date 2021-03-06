@@ -1,2 +1,37 @@
-<h1>Spots#show</h1>
-<p>Find me in app/views/spots/show.html.erb</p>
+<h2><%= @spot.title %></h2>
+
+<p><%= @spot.prefecture %><%= @spot.city %></p>
+
+<p>
+  <% if @spot.visited_day.nil? %>
+    来訪日: 不明
+  <% else %>
+    来訪日: <%= @spot.visited_day.strftime("%Y年%-m月%-d日") %>
+  <% end %>
+</p>
+
+<% if @spot.rate.nil? %>
+  <p>無評価</p>
+<% else %>
+  <p id="star-rate-<%= @spot.id %>"></p>
+  <script>
+    $('#star-rate-<%= @spot.id %>').raty({
+      size: 36,
+      starOff: '<%= asset_path('star-off.png') %>',
+      starOn: '<%= asset_path('star-on.png') %>',
+      readOnly: true,
+      score: <%= @spot.rate %>,
+    });
+  </script>
+<% end %>
+
+<%= attachment_image_tag @spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+<%= attachment_image_tag @spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+<%= attachment_image_tag @spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+
+<p>内容: <%= @spot.content %></p>
+
+<% if @spot.user == current_user %>
+  <%= link_to "編集する", edit_spot_path(@spot) %>
+  <%= link_to "削除する", spot_path(@spot), method: :delete, "data-confirm" => "本当に削除しますか？" %>
+<% end %>

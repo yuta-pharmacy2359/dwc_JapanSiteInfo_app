@@ -1,2 +1,57 @@
-<h1>Spots#new</h1>
-<p>Find me in app/views/spots/new.html.erb</p>
+<h2>新規スポット</h2>
+
+<%= form_with model: @spot, local: true do |f| %>
+  <%= render "spots/error_messages_spot", model: f.object %>
+
+  <div class="field">
+    <%= f.label "タイトル" %><br />
+    <%= f.text_field :title, autofocus: true, autocomplete: "title" %>
+  </div>
+
+  <div class="field">
+    <%= f.label "所在地(都道府県)" %><br />
+    <%= f.select :prefecture, Spot.prefectures.keys %>
+  </div>
+
+  <div class="field">
+    <%= f.label "所在地(市区町村)" %><br />
+    <%= f.text_field :city, autofocus: true, autocomplete: "city" %>
+  </div>
+
+  <div class="field">
+    <%= f.label "来訪日" %><br />
+    <%= f.date_field :visited_day, class: 'form-control' %>
+  </div>
+
+  <div class="field" id="star">
+    <%= f.label "評価" %><br />
+    <%= f.hidden_field :rate, id: :review_star %>
+  </div>
+
+  <script>
+    $('#star').raty({
+      size: 36,
+      starOff: '<%= asset_path('star-off.png') %>',
+      starOn: '<%= asset_path('star-on.png') %>',
+      scoreName: 'spot[rate]',
+    });
+  </script>
+
+  <div class="field">
+  　<%= f.label "写真" %><br />
+  　<%= f.label "1枚目" %>
+    <%= f.attachment_field :spot_image1, placeholder: "写真" %><br />
+    <%= f.label "2枚目" %>
+    <%= f.attachment_field :spot_image2, placeholder: "写真" %><br />
+    <%= f.label "3枚目" %>
+    <%= f.attachment_field :spot_image3, placeholder: "写真" %><br />
+  </div>
+
+  <div class="field">
+    <%= f.label "内容・感想" %><br />
+    <%= f.text_area :content, autofocus: true, autocomplete: "content" %>
+  </div>
+
+  <%= f.submit "投稿する" %>
+
+<% end %>

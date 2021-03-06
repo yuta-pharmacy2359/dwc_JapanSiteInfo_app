@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   has_many :spots, dependent: :destroy
 
+  attachment :profile_image
+
   enum sex: { 男性: 0, 女性: 1 }
   enum prefecture: {
      北海道: 1 ,青森県: 2 ,岩手県: 3, 宮城県: 4, 秋田県: 5, 山形県: 6, 福島県: 7,
@@ -25,18 +27,15 @@ class User < ApplicationRecord
      return (day2 - day1) / 10000
    end
 
-   attachment :profile_image
+   def birthday_is_valid?
+    errors.add(:birthday, "が無効な日付です") if birthday.nil? || birthday > Date.today
+   end
 
    validates :fullname, presence: true
    validates :nickname, presence: true
    validates :sex, presence: true
-   validates :birthday, presence: true
    validate :birthday_is_valid?
    validates :prefecture, presence: true
    validates :city, presence: true
-
-  def birthday_is_valid?
-    errors.add(:birthday, "が無効な日付です") if birthday.nil? || birthday > Date.today
-  end
 
 end

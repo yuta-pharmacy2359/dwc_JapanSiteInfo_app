@@ -10,24 +10,36 @@
   </head>
 
   <body>
-    <% if user_signed_in? %>
-      <li>
-        <%= link_to "マイページ", user_path(current_user) %>
-      </li>
-      <li>
-        <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
-      </li>
-    <% else %>
-      <li>
-        <%= link_to "JSIとは？", about_path %>
-      </li>
-      <li>
-        <%= link_to "新規登録", new_user_registration_path %>
-      </li>
-      <li>
-        <%= link_to "ログイン", new_user_session_path %>
-      </li>
-    <% end %>
-    <%= yield %>
+    <header>
+      <p>
+        <%= link_to "JapanSiteInfo", top_path %>
+      </p>
+      <% if user_signed_in? %>
+        <li>
+          <%= link_to "マイページ", user_path(current_user) %>
+        </li>
+        <li>
+          <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+        </li>
+      <% else %>
+        <li>
+          <%= link_to "JSIとは？", about_path %>
+        </li>
+        <li>
+          <%= link_to "新規登録", new_user_registration_path %>
+        </li>
+        <li>
+          <%= link_to "ログイン", new_user_session_path %>
+        </li>
+      <% end %>
+    </header>
+    <main>
+      <p class="notice">
+        <% if flash.now[:notice] %>
+          <%= flash.now[:notice] %>
+        <% end %>
+      </p>
+      <%= yield %>
+    </main>
   </body>
 </html>

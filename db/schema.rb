@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_05_082828) do
+ActiveRecord::Schema.define(version: 2021_03_06_044543) do
+
+  create_table "spots", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "title"
+    t.integer "prefecture"
+    t.string "city"
+    t.date "visited_day"
+    t.integer "rate"
+    t.string "spot_image1_id"
+    t.string "spot_image2_id"
+    t.string "spot_image3_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false

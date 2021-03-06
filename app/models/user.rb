@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  has_many :spots, dependent: :destroy
+
   enum sex: { 男性: 0, 女性: 1 }
   enum prefecture: {
      北海道: 1 ,青森県: 2 ,岩手県: 3, 宮城県: 4, 秋田県: 5, 山形県: 6, 福島県: 7,

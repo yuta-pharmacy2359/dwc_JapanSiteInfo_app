@@ -50,6 +50,9 @@
         });
       </script>
     <% end %>
+    <div>
+      <%= render "favorites/list_favorite", spot: spot %>
+    </div>
   <% end %>
   <%= paginate @spots %>
 </div>

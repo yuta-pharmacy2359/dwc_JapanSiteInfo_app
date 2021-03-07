@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show, :index, :edit, :update]
 
-  resources :spots
+  resources :spots do
+    resources :comments, only: [:create, :destroy]
+  end
 
 end

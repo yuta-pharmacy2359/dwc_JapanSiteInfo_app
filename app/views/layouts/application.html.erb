@@ -16,6 +16,9 @@
       </p>
       <% if user_signed_in? %>
         <li>
+          <%= current_user.nickname %> さん
+        </li>
+        <li>
           <%= link_to "マイページ", user_path(current_user) %>
         </li>
         <li>
@@ -40,6 +43,8 @@
       <p class="notice">
         <% if flash.now[:notice] %>
           <%= flash.now[:notice] %>
+        <% elsif flash.now[:alert] %>
+          <%= flash.now[:alert] %>
         <% end %>
       </p>
       <%= yield %>

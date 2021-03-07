@@ -1,4 +1,7 @@
 class SpotsController < ApplicationController
+  before_action :authenticate_user!, { only: [:new, :create] }
+  before_action :baria_user, { only: [:edit, :update, :destroy] }
+
   def new
     @spot = Spot.new
   end
@@ -7,7 +10,7 @@ class SpotsController < ApplicationController
     @spot = Spot.new(spot_params)
     @spot.user_id = current_user.id
     if @spot.save
-      flash.now[:notice] = "新規スポットを投稿しました"
+      flash[:notice] = "スポットを投稿しました"
       redirect_to spot_path(@spot.id)
     else
       render :new
@@ -16,6 +19,7 @@ class SpotsController < ApplicationController
 
   def show
     @spot = Spot.find(params[:id])
+    @user = @spot.user
   end
 
   def index
@@ -46,6 +50,13 @@ class SpotsController < ApplicationController
 
   def spot_params
     params.require(:spot).permit(:title, :prefecture, :city, :visited_day, :rate, :spot_image1, :spot_image2, :spot_image3, :content)
+  end
+
+  def baria_user
+    unless Spot.find(params[:id]).user.id.to_i == current_user.id
+      flash[:alert] = "権限がありません"
+      redirect_to top_path
+    end
   end
 
 end

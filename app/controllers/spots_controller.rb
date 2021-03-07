@@ -20,6 +20,7 @@ class SpotsController < ApplicationController
   def show
     @spot = Spot.find(params[:id])
     @user = @spot.user
+    @comment = Comment.new
   end
 
   def index

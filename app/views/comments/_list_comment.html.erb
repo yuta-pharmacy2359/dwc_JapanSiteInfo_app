@@ -11,13 +11,14 @@
       <% end %>
       <%= comment.comment %>
       <%= comment.created_at.strftime("%Y年%-m月%-d日 %-H:%M") %>
-      <% if comment.user_id == current_user.id %>
+      <% if current_user.present? && (comment.user_id == current_user.id) %>
         <%= link_to "削除する", spot_comment_path(comment.spot, comment), method: :delete, remote: true %>
       <% end %>
     </div>
     <% end %>
   </div>
 
+  <% if current_user.present? %>
   <div id="comment-new">
     <h3>コメントをどうぞ</h3>
     <% if flash.now[:success] %>
@@ -30,3 +31,4 @@
       <%= f.submit "送信する" %>
     <% end %>
   </div>
+  <% end %>

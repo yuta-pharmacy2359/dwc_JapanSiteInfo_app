@@ -6,16 +6,18 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     @comment.user_id = current_user.id
     @comment.spot_id = @spot.id
-    @comment.save
-    flash[:notice] = "コメントを送信しました"
-    redirect_to spot_path(@spot)
+    if @comment.save
+      flash.now[:success] = "コメントを送信しました"
+    else
+      flash.now[:danger] = "コメントを記入してください"
+    end
   end
 
   def destroy
     @comment = Comment.find_by(id: params[:id], spot_id: params[:spot_id])
     @comment.destroy
-    flash[:notice] = "コメントを削除しました"
-    redirect_to spot_path(params[:spot_id])
+    @spot = @comment.spot
+    flash.now[:success] = "コメントを削除しました"
   end
 
   private

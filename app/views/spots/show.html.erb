@@ -25,6 +25,10 @@
   </script>
 <% end %>
 
+<div>
+  <%= render "favorites/list_favorite", spot: @spot %>
+</div>
+
 <%= attachment_image_tag @spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
 <%= attachment_image_tag @spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
 <%= attachment_image_tag @spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>

@@ -1,0 +1,10 @@
+<% if spot.favorited_by?(current_user) %>
+  <%= link_to spot_favorites_path(spot), method: :delete, local: true do %>
+    <span class="fa fa-heart like-btn-unlike"></span>
+  <% end %>
+<% else %>
+  <%= link_to spot_favorites_path(spot), method: :post, local: true do %>
+    <span class="fa fa-heart like-btn"></span>
+  <% end %>
+<% end %>
+<%= spot.favorites.count %>

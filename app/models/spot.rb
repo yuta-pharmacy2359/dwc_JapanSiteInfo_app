@@ -1,5 +1,7 @@
 class Spot < ApplicationRecord
   belongs_to :user
+  has_many :comments, dependent: :destroy
+
   attachment :spot_image1
   attachment :spot_image2
   attachment :spot_image3

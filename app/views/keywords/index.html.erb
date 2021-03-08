@@ -1,2 +1,13 @@
-<h1>Keywords#index</h1>
-<p>Find me in app/views/keywords/index.html.erb</p>
+<h2>キーワード一覧</h2>
+
+<% @keywords.each do |keyword| %>
+  <div>
+    キーワード：
+    <%= attachment_image_tag keyword.spots.last, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+    <%= link_to keyword_path(keyword) do %>
+      <%= keyword.keyword %>
+    <% end %>
+  </div>
+  <p>スポット投稿数：<%= keyword.spots.count %></p>
+  <p>評価平均：<%= keyword.spots.average(:rate).round(2) %></p>
+<% end %>

@@ -9,8 +9,13 @@
   </div>
 
   <div class="field">
+    <%= f.label "キーワード" %><br />
+    <%= f.text_field :keyword, autofocus: true, autocomplete: "keyword" %>
+  </div>
+
+  <div class="field">
     <%= f.label "所在地(都道府県)" %><br />
-    <%= f.select :prefecture, Spot.prefectures.keys %>
+    <%= f.select :prefecture, Spot.prefectures.keys, autocomplete: "prefecture" %>
   </div>
 
   <div class="field">
@@ -20,12 +25,12 @@
 
   <div class="field">
     <%= f.label "来訪日" %><br />
-    <%= f.date_field :visited_day, class: 'form-control' %>
+    <%= f.date_field :visited_day, class: 'form-control', autocomplete: "visited_day" %>
   </div>
 
   <div class="field" id="star">
     <%= f.label "評価" %><br />
-    <%= f.hidden_field :rate, id: :review_star %>
+    <%= f.hidden_field :rate, id: :review_star, autocomplete: "rate" %>
   </div>
 
   <script>

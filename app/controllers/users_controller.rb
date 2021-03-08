@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :authenticate_user!, { only: [:index] }
   before_action :baria_user, { only: [:edit, :update] }
 
   def show
@@ -11,6 +12,7 @@ class UsersController < ApplicationController
   end
 
   def index
+    @users = User.page(params[:page]).reverse_order
   end
 
   def edit

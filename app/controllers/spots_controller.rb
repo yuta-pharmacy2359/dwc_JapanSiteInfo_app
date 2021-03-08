@@ -27,6 +27,7 @@ class SpotsController < ApplicationController
   end
 
   def index
+    @spots = Spot.page(params[:page]).reverse_order
   end
 
   def edit

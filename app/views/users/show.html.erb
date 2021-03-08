@@ -30,14 +30,14 @@
     </p>
     <p>
       フォロワー数：
-      <a href="<%= followers_user_path(@user) %>">
+      <a href="<%= followers_user_path(@user) %>", class="followers">
         <%= @user.followers.count %>
       </a>
     </p>
     <p>
       投稿スポット数：<%= @user.spots.count %>
     </p>
-    <p>
+    <p class="user-favorite-count-<%= @user.id %>">
       総いいね数：<%= @favorites_count %>
     </p>
 </div>

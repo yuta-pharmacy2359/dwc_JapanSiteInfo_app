@@ -1,1 +1,2 @@
 $(".favorite-<%= @favorite.spot_id %>").html("<%= j(render 'favorites/list_favorite', spot: @favorite.spot ) %>")
+$(".user-favorite-count-<%= @user.id %>").html('総いいね数：<%= @favorites_count %>')

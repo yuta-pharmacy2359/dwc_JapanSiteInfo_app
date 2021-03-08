@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_07_172531) do
+ActiveRecord::Schema.define(version: 2021_03_08_080245) do
 
   create_table "comments", force: :cascade do |t|
     t.integer "user_id"
@@ -35,6 +35,19 @@ ActiveRecord::Schema.define(version: 2021_03_07_172531) do
     t.index ["followed_id"], name: "index_follow_relationships_on_followed_id"
     t.index ["follower_id", "followed_id"], name: "index_follow_relationships_on_follower_id_and_followed_id", unique: true
     t.index ["follower_id"], name: "index_follow_relationships_on_follower_id"
+  end
+
+  create_table "keyword_relationships", force: :cascade do |t|
+    t.integer "spot_id"
+    t.integer "keyword_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "keywords", force: :cascade do |t|
+    t.string "keyword"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "spots", force: :cascade do |t|

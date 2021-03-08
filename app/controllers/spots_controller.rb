@@ -9,7 +9,9 @@ class SpotsController < ApplicationController
   def create
     @spot = Spot.new(spot_params)
     @spot.user_id = current_user.id
+    @keyword_list = params[:spot][:keyword].split(nil)
     if @spot.save
+      @spot.save_keyword(@keyword_list)
       flash[:notice] = "スポットを投稿しました"
       redirect_to spot_path(@spot.id)
     else
@@ -20,6 +22,7 @@ class SpotsController < ApplicationController
   def show
     @spot = Spot.find(params[:id])
     @user = @spot.user
+    @spot_keywords = @spot.keywords
     @comment = Comment.new
   end
 

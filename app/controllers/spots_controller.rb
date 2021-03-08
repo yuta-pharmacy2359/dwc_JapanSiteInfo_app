@@ -31,11 +31,14 @@ class SpotsController < ApplicationController
 
   def edit
     @spot = Spot.find(params[:id])
+    @keyword_list = @spot.keywords.pluck(:keyword).join(nil)
   end
 
   def update
     @spot = Spot.find(params[:id])
+    @keyword_list = params[:spot][:keyword].split(nil)
     if @spot.update(spot_params)
+      @spot.save_keyword(@keyword_list)
       flash[:notice] = "スポットを更新しました"
       redirect_to spot_path(@spot.id)
     else

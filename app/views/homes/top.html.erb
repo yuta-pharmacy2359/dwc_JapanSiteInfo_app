@@ -32,6 +32,9 @@
         });
       </script>
     <% end %>
+    <div class="favorite-<%= spot.id %>">
+      <%= render "favorites/list_favorite", spot: spot %>
+    </div>
   <% end %>
   <%= paginate @spots %>
 </div>

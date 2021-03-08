@@ -4,6 +4,10 @@ class UsersController < ApplicationController
   def show
     @user= User.find(params[:id])
     @spots = @user.spots.page(params[:page]).reverse_order
+    @favorites_count = 0
+    @spots.each do |spot|
+      @favorites_count += spot.favorites.count
+    end
   end
 
   def index
@@ -21,6 +25,20 @@ class UsersController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def following
+    @title = "フォロー一覧"
+    @user = User.find(params[:id])
+    @users = @user.following.page(params[:page]).reverse_order
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "フォロワー一覧"
+    @user = User.find(params[:id])
+    @users= @user.followers.page(params[:page]).reverse_order
+    render 'show_follow'
   end
 
   private

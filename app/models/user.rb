@@ -36,6 +36,15 @@ class User < ApplicationRecord
     following.include?(other_user)
   end
 
+  def favorite_amount(user)
+    user_spots = User.spots
+    favorites_count = 0
+    user_spots.each do |spot|
+      favorites_count += Spot.favorites.count
+    end
+    return favorites_count
+  end
+
   validates :fullname, presence: true
   validates :nickname, presence: true
   validates :sex, presence: true

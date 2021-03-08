@@ -15,7 +15,32 @@
 
 <% if current_user.present? && (@user.id == current_user.id) %>
   <%= link_to "プロフィール編集", edit_user_path(@user) %>
+<% elsif current_user.present? && (@user.id != current_user.id) %>
+  <%= render "follow_relationships/list_follow_form", user: @user %>
 <% end %>
+
+<div>
+  <h2>活動データ</h2>
+  <% @user ||= current_user %>
+    <p>
+      フォロー数：
+      <a href="<%= following_user_path(@user) %>">
+        <%= @user.following.count %>
+      </a>
+    </p>
+    <p>
+      フォロワー数：
+      <a href="<%= followers_user_path(@user) %>">
+        <%= @user.followers.count %>
+      </a>
+    </p>
+    <p>
+      投稿スポット数：<%= @user.spots.count %>
+    </p>
+    <p>
+      総いいね数：<%= @favorites_count %>
+    </p>
+</div>
 
 <div>
   <h3>スポット一覧</h3>

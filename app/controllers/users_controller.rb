@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :baria_user, { only: [:edit, :update] }
 
   def show
-    @user= User.find(params[:id])
+    @user = User.find(params[:id])
     @spots = @user.spots.page(params[:page]).reverse_order
     @favorites_count = 0
     @spots.each do |spot|

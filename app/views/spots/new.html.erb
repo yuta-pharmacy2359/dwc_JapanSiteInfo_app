@@ -9,6 +9,11 @@
   </div>
 
   <div class="field">
+    <%= f.label "キーワード" %><br />
+    <%= f.text_field :keyword, autofocus: true, autocomplete: "keyword" %>
+  </div>
+
+  <div class="field">
     <%= f.label "所在地(都道府県)" %><br />
     <%= f.select :prefecture, Spot.prefectures.keys %>
   </div>

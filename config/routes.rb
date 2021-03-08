@@ -17,4 +17,6 @@ Rails.application.routes.draw do
 
   resources :follow_relationships, only: [:create, :destroy]
 
+  resources :keywords, only: [:show, :index]
+
 end

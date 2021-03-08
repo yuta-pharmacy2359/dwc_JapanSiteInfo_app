@@ -1,2 +1,41 @@
-<h1>Spots#index</h1>
-<p>Find me in app/views/spots/index.html.erb</p>
+<h2>スポット一覧</h2>
+
+<% @spots.each do |spot| %>
+  <div>
+    <div>
+      フォト：
+      <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+    </div>
+    <p>タイトル：
+      <%= link_to spot_path(spot) do %>
+        <%= spot.title %>
+      <% end %>
+    </p>
+    <p>投稿日：<%= spot.created_at.strftime("%Y年%-m月%-d日") %></p>
+    <p>
+      <% if spot.visited_day.nil? %>
+        来訪日: 不明
+      <% else %>
+        来訪日: <%= spot.visited_day.strftime("%Y年%-m月%-d日") %>
+      <% end %>
+    </p>
+    <% if spot.rate.nil? %>
+      <p>無評価</p>
+    <% else %>
+      <p id="star-rate-<%= spot.id %>"></p>
+      <script>
+        $('#star-rate-<%= spot.id %>').raty({
+          size: 36,
+          starOff: '<%= asset_path('star-off.png') %>',
+          starOn: '<%= asset_path('star-on.png') %>',
+          readOnly: true,
+          score: <%= spot.rate %>,
+        });
+      </script>
+    <% end %>
+    <div class="favorite-<%= spot.id %>">
+      <%= render "favorites/list_favorite", spot: spot %>
+    </div>
+  </div>
+<% end %>
+<%= paginate @spots %>

@@ -25,6 +25,12 @@
           <%= link_to "新規投稿", new_spot_path %>
         </li>
         <li>
+          <%= link_to "スポット一覧", spots_path %>
+        </li>
+        <li>
+          <%= link_to "ユーザー一覧", users_path %>
+        </li>
+        <li>
           <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
         </li>
       <% else %>

@@ -1,8 +1,4 @@
-<h2>Log in</h2>
-
-<% if flash.now[:alert] %>
-  <%= flash.now[:alert] %>
-<% end %>
+<h2>ログイン</h2>
 
 <%= form_with model: @user, url: user_session_path, local: true do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>

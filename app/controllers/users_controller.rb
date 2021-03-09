@@ -12,7 +12,8 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.page(params[:page]).reverse_order
+    @q = User.ransack(params[:q])
+    @users = @q.result(distinct: true).page(params[:page]).reverse_order
   end
 
   def edit

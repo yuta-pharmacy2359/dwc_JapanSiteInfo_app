@@ -12,12 +12,25 @@
         <%= user.nickname %>
       <% end %>
     </p>
-    <p>フォロー数：<%= user.following.count %></p>
-    <p>フォロワー数：<%= user.followers.count %></p>
-    <p>最終更新日：<%= user.spots.order(:updated_at).last.updated_at.strftime('%Y年%-m月%-d日') %></p>
-    <% if current_user.present? && user != current_user %>
-      <%= render "follow_relationships/list_follow_form", user: user %>
-    <% end %>
+    <p>
+      フォロー数：
+      <a href="<%= following_user_path(user) %>">
+        <%= user.following.count %>
+      </a>
+    </p>
+    <p>
+      フォロワー数：
+      <a href="<%= followers_user_path(user) %>">
+        <%= user.followers.count %>
+      </a>
+    </p>
+    <p>
+      <% if user.spots.present? %>
+        最終更新日：<%= user.spots.order(:updated_at).last.updated_at.strftime('%Y年%-m月%-d日') %>
+      <% else %>
+        投稿なし
+      <% end %>
+    </p>
   </div>
 <% end %>
 

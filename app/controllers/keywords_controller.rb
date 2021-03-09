@@ -5,6 +5,7 @@ class KeywordsController < ApplicationController
   end
 
   def index
-    @keywords = Keyword.page(params[:page]).reverse_order
+    @q = Keyword.ransack(params[:q])
+    @keywords = @q.result(distinct: true).page(params[:page]).reverse_order
   end
 end

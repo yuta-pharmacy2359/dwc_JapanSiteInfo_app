@@ -16,7 +16,9 @@
 <% if current_user.present? && (@user.id == current_user.id) %>
   <%= link_to "プロフィール編集", edit_user_path(@user) %>
 <% elsif current_user.present? && (@user.id != current_user.id) %>
-  <%= render "follow_relationships/list_follow_form", user: @user %>
+  <div class="follow-form">
+    <%= render "follow_relationships/list_follow_form", user: @user %>
+  </div>
 <% end %>
 
 <div>

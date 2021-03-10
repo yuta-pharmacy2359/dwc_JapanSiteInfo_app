@@ -33,11 +33,21 @@ class Spot < ApplicationRecord
     end
   end
 
-  ransacker :favotites_count do
-    query = '(SELECT COUNT(favorites.spot_id) FROM favorites where favorites.spot_id = spots.id GROUP BY favorites.spot_id)'
-    Arel.sql(query)
-  end
-
   validates :title, presence: true
   validate :visited_day_is_valid?
+  validates :rate, numericality: {
+    less_than_or_equal_to: 5,
+  }
+
+  private
+
+  ransacker :favotites_count do
+    query = <<-SQL
+      (SELECT COUNT (favorites.spot_id)
+        FROM favorites
+        WHERE favorites.spot_id = spots.id
+        GROUP BY favorites.spot_id)
+    SQL
+    Arel.sql(query)
+  end
 end

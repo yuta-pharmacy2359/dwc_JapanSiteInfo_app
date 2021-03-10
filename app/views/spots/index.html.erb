@@ -52,13 +52,13 @@
     <% else %>
       <p id="star-rate-<%= spot.id %>"></p>
       <script>
-        $('#star-rate-<%= spot.id %>').raty({
+        $(document).on('turbolinks:load', function(){$('#star-rate-<%= spot.id %>').raty({
           size: 36,
           starOff: '<%= asset_path('star-off.png') %>',
           starOn: '<%= asset_path('star-on.png') %>',
           readOnly: true,
           score: <%= spot.rate %>,
-        });
+        });});
       </script>
     <% end %>
     <div class="favorite-<%= spot.id %>">

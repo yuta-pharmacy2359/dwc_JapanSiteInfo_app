@@ -41,9 +41,9 @@ class Spot < ApplicationRecord
 
   private
 
-  ransacker :favotites_count do
+  ransacker :favorites_count do
     query = <<-SQL
-      (SELECT COUNT (favorites.spot_id)
+      (SELECT COUNT (favorites.spot_id) as favorites_count
         FROM favorites
         WHERE favorites.spot_id = spots.id
         GROUP BY favorites.spot_id)

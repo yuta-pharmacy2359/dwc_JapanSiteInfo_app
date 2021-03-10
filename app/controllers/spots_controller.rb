@@ -28,7 +28,7 @@ class SpotsController < ApplicationController
 
   def index
     @q = Spot.ransack(params[:q])
-    @spots = @q.result(distinct: true).page(params[:page]).reverse_order
+    @spots = @q.result.page(params[:page])
   end
 
   def edit

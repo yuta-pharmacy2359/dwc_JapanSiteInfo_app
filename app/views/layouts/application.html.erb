@@ -11,43 +11,72 @@
 
   <body>
     <header>
-      <p>
-        <%= link_to "JapanSiteInfo", top_path %>
-      </p>
-      <% if user_signed_in? %>
-        <li>
-          <%= current_user.nickname %> さん
-        </li>
-        <li>
-          <%= link_to "マイページ", user_path(current_user) %>
-        </li>
-        <li>
-          <%= link_to "新規投稿", new_spot_path %>
-        </li>
-        <li>
-          <%= link_to "スポット一覧", spots_path %>
-        </li>
-        <li>
-          <%= link_to "キーワード一覧", keywords_path %>
-        </li>
-        <li>
-          <%= link_to "ユーザー一覧", users_path %>
-        </li>
-        <li>
-          <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
-        </li>
-      <% else %>
-        <li>
-          <%= link_to "JSIとは？", about_path %>
-        </li>
-        <li>
-          <%= link_to "新規登録", new_user_registration_path %>
-        </li>
-        <li>
-          <%= link_to "ログイン", new_user_session_path %>
-        </li>
-      <% end %>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <p style="margin-bottom: 0;">
+            <%= link_to "JapanSiteInfo", top_path, class: "navbar-brand" %>
+          </p>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+              <% if user_signed_in? %>
+                <li class="text-light mr-5">
+                  <%= current_user.nickname %> さん
+                </li>
+                <li class="ml-4">
+                  <%= link_to " マイページ", user_path(current_user), class: "fas fa-address-card nav-link text-light" %>
+                </li>
+                <li class="ml-4">
+                  <%= link_to " 新規投稿", new_spot_path, class: "fas fa-plus-circle nav-link text-light" %>
+                </li>
+                <li class="ml-4">
+                  <%= link_to " スポット一覧", spots_path, class: "fas fa-atlas nav-link text-light" %>
+                </li>
+                <li class="ml-4">
+                  <%= link_to " キーワード一覧", keywords_path, class: "fas fa-tags nav-link text-light" %>
+                </li>
+                <li class="ml-4">
+                  <%= link_to " ユーザー一覧", users_path, class: "fas fa-users nav-link text-light" %>
+                </li>
+                <li class="ml-4">
+                  <%= link_to " ログアウト", destroy_user_session_path, method: :delete, class: "fas fa-sign-out-alt nav-link text-light" %>
+                </li>
+              <% else %>
+                <li class="ml-4">
+                  <%= link_to " JSIとは？", about_path, class: "fas fa-question-circle nav-link text-light" %>
+                </li>
+                <li class="ml-4">
+                  <%= link_to " 新規登録", new_user_registration_path, class: "fas fa-user-plus nav-link text-light" %>
+                </li>
+                <li class="ml-4">
+                  <%= link_to " ログイン", new_user_session_path, class: "fas fa-sign-in-alt nav-link text-light" %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </header>
+    <div class="main-visual">
+      <div class="main-visual-content">
+        <p class="main-visual-text">
+          あなただけが知るおすすめスポットを、みんなに紹介しよう！<br />
+          〜誰も知らない魅力が、今ここに〜<br />
+        </p>
+        <p class="main-visual-subtitle">
+          日本各地のスポット投稿サイト
+        </p>
+        <p class="main-visual-title">
+          JapanSiteInfo
+        </p>
+      </div>
+      <div class="theTarget">
+        <div class="theTarget-image1"></div>
+        <div class="theTarget-image2"></div>
+        <div class="theTarget-image3"></div>
+        <div class="theTarget-image4"></div>
+        <div class="theTarget-image5"></div>
+      </div>
+    </div>
     <main>
       <p class="notice">
         <% if flash.now[:notice] %>

@@ -19,11 +19,8 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
               <% if user_signed_in? %>
-                <li class="text-light mr-5">
-                  <%= current_user.nickname %> さん
-                </li>
                 <li class="ml-4">
-                  <%= link_to " マイページ", user_path(current_user), class: "fas fa-address-card nav-link text-light" %>
+                  <%= link_to " #{current_user.nickname}さんのマイページ", user_path(current_user), class: "fas fa-address-card nav-link text-light" %>
                 </li>
                 <li class="ml-4">
                   <%= link_to " 新規投稿", new_spot_path, class: "fas fa-plus-circle nav-link text-light" %>

@@ -21,11 +21,11 @@
 </p>
 
 <div>
-  <p><%= sort_link(@q, :title, "タイトル") %></p>
-  <p><%= sort_link(@q, :created_at, "投稿日") %></p>
-  <p><%= sort_link(@q, :visited_day, "来訪日") %></p>
-  <p><%= sort_link(@q, :rate, "評価") %></p>
-  <p><%= sort_link(@q, :favorites_count, "いいね") %></p>
+  <p><%= sort_link(@q, :title, "タイトル", data: {"turbolinks"=>false}) %></p>
+  <p><%= sort_link(@q, :created_at, "投稿日", data: {"turbolinks"=>false}) %></p>
+  <p><%= sort_link(@q, :visited_day, "来訪日", data: {"turbolinks"=>false}) %></p>
+  <p><%= sort_link(@q, :rate, "評価", data: {"turbolinks"=>false}) %></p>
+  <p><%= sort_link(@q, :favorites_count, "いいね", data: {"turbolinks"=>false}) %></p>
 </div>
 
 <% @spots.each do |spot| %>
@@ -52,13 +52,13 @@
     <% else %>
       <p id="star-rate-<%= spot.id %>"></p>
       <script>
-        $(document).on('turbolinks:load', function(){$('#star-rate-<%= spot.id %>').raty({
+        $('#star-rate-<%= spot.id %>').raty({
           size: 36,
           starOff: '<%= asset_path('star-off.png') %>',
           starOn: '<%= asset_path('star-on.png') %>',
           readOnly: true,
           score: <%= spot.rate %>,
-        });});
+        });
       </script>
     <% end %>
     <div class="favorite-<%= spot.id %>">

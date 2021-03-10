@@ -29,7 +29,7 @@
                   <%= link_to " 新規投稿", new_spot_path, class: "fas fa-plus-circle nav-link text-light" %>
                 </li>
                 <li class="ml-4">
-                  <%= link_to " スポット一覧", spots_path, class: "fas fa-atlas nav-link text-light" %>
+                  <%= link_to " スポット一覧", spots_path, class: "fas fa-atlas nav-link text-light", data: {"turbolinks"=>false} %>
                 </li>
                 <li class="ml-4">
                   <%= link_to " キーワード一覧", keywords_path, class: "fas fa-tags nav-link text-light" %>
@@ -56,28 +56,10 @@
         </div>
       </nav>
     </header>
-    <div class="main-visual">
-      <div class="main-visual-content">
-        <p class="main-visual-text">
-          あなただけが知るおすすめスポットを、みんなに紹介しよう！<br />
-          〜誰も知らない魅力が、今ここに〜<br />
-        </p>
-        <p class="main-visual-subtitle">
-          日本各地のスポット投稿サイト
-        </p>
-        <p class="main-visual-title">
-          JapanSiteInfo
-        </p>
-      </div>
-      <div class="theTarget">
-        <div class="theTarget-image1"></div>
-        <div class="theTarget-image2"></div>
-        <div class="theTarget-image3"></div>
-        <div class="theTarget-image4"></div>
-        <div class="theTarget-image5"></div>
-      </div>
-    </div>
     <main>
+      <% if current_page?(top_path) %>
+        <%= yield %>
+      <% end %>
       <p class="notice">
         <% if flash.now[:notice] %>
           <%= flash.now[:notice] %>
@@ -85,7 +67,9 @@
           <%= flash.now[:alert] %>
         <% end %>
       </p>
-      <%= yield %>
+      <% unless current_page?(top_path) %>
+        <%= yield %>
+      <% end %>
     </main>
   </body>
 </html>

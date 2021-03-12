@@ -16,6 +16,7 @@
 
 @import "bootstrap";
 
+/* いいねボタンのスタイル */
 .like-btn-unlike {
   color: deeppink;
 }
@@ -24,6 +25,7 @@
   color: gray;
 }
 
+/* メインビジュアル部分 */
 .main-visual {
   width: 100%;
   height: 500px;
@@ -70,4 +72,67 @@
   &-image5 {
     background-image: url(image5.jpg);
   }
+}
+
+/* メインビジュアルのレスポンシブ対応 */
+@media screen and (max-width:850px) {
+  .main-visual {
+    &-text {
+      font-size: 24px;
+    }
+    &-subtitle {
+      font-size: 21px;
+    }
+  }
+}
+
+@media screen and (max-width:680px) {
+  .main-visual {
+    &-text {
+      font-size: 18px;
+    }
+    &-subtitle {
+      font-size: 16px;
+    }
+  }
+}
+
+/* 投稿画像(一覧)のサイズ */
+.spot-image-index {
+  width: 200px;
+}
+
+/* 入力フォームの幅 */
+.form-width {
+  width: 250px;
+}
+
+/* 入力フォーム画面のレスポンシブ対応 */
+@media screen and (max-width:540px) {
+  .input-form tr td {
+    display: block;
+  }
+  .input-form td {
+    padding-bottom: 0;
+  }
+}
+
+/* 入力フォーム画面のレスポンシブ対応(プロフィール編集) */
+@media screen and (max-width:580px) {
+  .input-form-user-edit tr td {
+    display: block;
+  }
+  .input-form-user-edit td {
+    padding-bottom: 0;
+  }
+}
+
+/* キーワード入力の説明 */
+.keyword-info {
+  font-size: 14px;
+}
+
+/* 投稿画像(編集)のサイズ */
+.spot-image-edit {
+  width: 100px;
 }

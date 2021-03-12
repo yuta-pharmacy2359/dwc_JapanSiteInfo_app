@@ -20,83 +20,74 @@
     </div>
   </div>
 
-<div class="container-xxl mt-5 mx-5">
-  <div class="row">
-    <div class="mt-5 col-md-8 mr-5" style="margin-left: 0; margin-right: 0; padding-left: 0;">
+<div class="container-xxl mt-5 mx-5" style="padding-left: 0; padding-right: 0;">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 mt-5 mr-5" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;">
       <h3>新着スポット</h3>
-      <table class="table table-hover table-inverse mt-4">
-        <thead>
-          <th></th>
-          <th>タイトル</th>
-          <th>都道府県</th>
-          <th>市区町村</th>
-          <th>投稿日</th>
-          <th>来訪日</th>
-          <th>評価</th>
-          <th>いいね</th>
-        </thead>
-        <tbody>
+      <div class="table-responsive-sm">
+      <table class="table table-hover my-4">
           <% @spots.each do |spot| %>
             <tr>
               <td>
-                <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+                <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image-index" %>
               </td>
-              <td>
+              <td class="text-nowrap mt-4">
                 <%= link_to spot_path(spot) do %>
                   <%= spot.title %>
                 <% end %>
-              </td>
-              <td><%= spot.prefecture %></td>
-              <td><%= spot.city %></td>
-              <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
-              <td>
+                <br />
+                <%= spot.prefecture %><%= spot.city %>
+                <br />
+                投稿：<%= spot.created_at.strftime("%Y年%-m月%-d日") %>
+                <br />
                 <% if spot.visited_day.nil? %>
-                  不明
+                  来訪：不明
                 <% else %>
-                  <%= spot.visited_day.strftime("%Y年%-m月%-d日") %>
+                  来訪：<%= spot.visited_day.strftime("%Y年%-m月%-d日") %>
                 <% end %>
-              </td>
-              <% if spot.rate.nil? %>
-                <td>無評価</td>
-              <% else %>
-                <td id="star-rate-<%= spot.id %>"></td>
-                <script>
-                  $('#star-rate-<%= spot.id %>').raty({
-                    size: 36,
-                    starOff: '<%= asset_path('star-off.png') %>',
-                    starOn: '<%= asset_path('star-on.png') %>',
-                    readOnly: true,
-                    score: <%= spot.rate %>,
-                  });
-                </script>
-              <% end %>
-              <td class="favorite-<%= spot.id %>">
-                <%= render "favorites/list_favorite", spot: spot %>
+                <br />
+                <% if spot.rate.nil? %>
+                  無評価
+                <% else %>
+                  <p id="star-rate-<%= spot.id %>"></p>
+                  <script>
+                    $('#star-rate-<%= spot.id %>').raty({
+                      size: 36,
+                      starOff: '<%= asset_path('star-off.png') %>',
+                      starOn: '<%= asset_path('star-on.png') %>',
+                      readOnly: true,
+                      score: <%= spot.rate %>,
+                    });
+                  </script>
+                <% end %>
+                <p class="favorite-<%= spot.id %>">
+                  <%= render "favorites/list_favorite", spot: spot %>
+                </p>
               </td>
             </tr>
           <% end %>
-        </tbody>
       </table>
+      </div>
       <%= paginate @spots, theme: 'twitter-bootstrap-4' %>
     </div>
 
     <% if current_user.nil? %>
-      <div class="mt-5 col-md-3 ml-5" style="margin-left: 0; margin-right: 0; padding-left: 0;">
-          <h3>スポットを探してみる</h3>
+      <div class="col-lg-4 mt-5 ml-5" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;">
+        <h3>スポットを探してみる</h3>
         <%= search_form_for @q do |f| %>
           <%= f.label "都道府県", class: "mt-4" %><br />
           <%= f.select :prefecture_eq, Spot.prefectures.map{|k, v| [Spot.prefectures_i18n[k], v]}, :include_blank => '指定なし' %><br />
 
           <%= f.label "市区町村", class: "mt-3" %><br />
-          <%= f.search_field :city_cont %><br />
+          <%= f.search_field :city_cont, placeholder: "(例) 新宿区" %><br />
 
           <%= f.label "タイトル", class: "mt-3" %><br />
-          <%= f.search_field :title %><br />
+          <%= f.search_field :title, placeholder: "(例) 高層ビル群" %><br />
 
           <%= f.label "キーワード", class: "mt-3" %><br />
-          <%= f.search_field :keywords_keyword_cont %><br />
+          <%= f.search_field :keywords_keyword_cont, placeholder: "(例) 都庁" %><br />
 
-          <%= f.submit "検索", class: "btn btn-secondary mt-3" %>
+          <%= f.submit "検索", class: "btn btn-secondary mt-4" %>
         <% end %>
       </div>
     <% end %>

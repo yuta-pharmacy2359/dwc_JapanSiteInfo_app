@@ -35,9 +35,7 @@ class Spot < ApplicationRecord
 
   validates :title, presence: true
   validate :visited_day_is_valid?
-  validates :rate, numericality: {
-    less_than_or_equal_to: 5,
-  }
+
 
   private
 

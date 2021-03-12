@@ -1,57 +1,59 @@
-<h2>プロフィール編集</h2>
+<div class="container px-5 mt-5 px-sm-0">
 
-<%= form_with model: @user, url: user_path(@user), method: :patch, local: true do |f| %>
-  <%= render "users/error_messages_user_edit", model: f.object %>
+  <h2>プロフィール編集</h2>
 
-  <div class="field">
-    <%= f.label "氏名(フルネーム)" %><br />
-    <%= f.text_field :fullname, autofocus: true, autocomplete: "fullname" %>
+  <p class="mt-5">※のついた項目は入力必須です。</p>
+
+  <div class="row mt-3 mb-5" style="margin-left: 0; margin-right: 0; padding-left: 0;">
+    <%= form_with model: @user, url: user_path(@user), method: :patch, local: true do |f| %>
+      <%= render "users/error_messages_user_edit", model: f.object %>
+
+      <table class="table table-borderless input-form-user-edit mb-4">
+        <tr>
+          <td class="mr-3 mt-4">氏名(フルネーム) ※</td>
+          <td><%= f.text_field :fullname, autofocus: true, autocomplete: "fullname", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">ニックネーム ※</td>
+          <td><%= f.text_field :nickname, autofocus: true, autocomplete: "nickname", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">メールアドレス ※</td>
+          <td><%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">性別 ※</td>
+          <td>
+            <%= f.radio_button :sex, "男性" %> 男性
+            <%= f.radio_button :sex, "女性", class: "ml-4" %> 女性
+          </td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">生年月日 ※</td>
+          <td><%= f.date_field :birthday, class: 'form-width' %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">住所(都道府県) ※</td>
+          <td><%= f.select :prefecture, User.prefectures.keys, autocomplete: "prefecture", :include_blank => '選択してください' %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">住所(市区町村) ※</td>
+          <td><%= f.text_field :city, autofocus: true, autocomplete: "city", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">プロフィール画像</td>
+          <td>
+            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100", autocomplete: "profile_image" %><br />
+            <%= f.attachment_field :profile_image, placeholder: "プロフィール画像", class: "mt-2" %>
+          </td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">自己紹介</td>
+          <td><%= f.text_area :introduction, rows: "5", autofocus: true, autocomplete: "introduction", class: "form-width" %></td>
+        </tr>
+      </table>
+      <%= f.submit "更新する", class: "btn btn-success", style: "width: 125px;" %>
+    <% end %>
   </div>
 
-  <div class="field">
-    <%= f.label "ニックネーム" %><br />
-    <%= f.text_field :nickname, autofocus: true, autocomplete: "nickname" %>
-  </div>
-
-  <div class="field">
-    <%= f.label "メールアドレス" %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label "性別" %><br />
-    <%= f.radio_button :sex, "男性" %>
-    <%= f.label "男性" %>
-    <%= f.radio_button :sex, "女性" %>
-    <%= f.label "女性" %>
-  </div>
-
-  <div class="field">
-    <%= f.label "生年月日" %><br />
-    <%= f.date_field :birthday, class: 'form-control' %>
-  </div>
-
-  <div class="field">
-    <%= f.label "住所(都道府県)" %><br />
-    <%= f.select :prefecture, User.prefectures.keys, autocomplete: "prefecture" %>
-  </div>
-
-  <div class="field">
-    <%= f.label "住所(市区町村)" %><br />
-    <%= f.text_field :city, autofocus: true, autocomplete: "city" %>
-  </div>
-
-  <div class="field">
-    <%= f.label "プロフィール画像" %><br />
-    <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100", autocomplete: "profile_image" %>
-    <%= f.attachment_field :profile_image, placeholder: "プロフィール画像" %>
-  </div>
-
-  <div class="field">
-    <%= f.label "自己紹介" %><br />
-    <%= f.text_field :introduction, autofocus: true, autocomplete: "introduction" %>
-  </div>
-
-  <%= f.submit "更新する" %>
-
-<% end %>
+</div>

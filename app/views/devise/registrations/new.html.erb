@@ -1,59 +1,63 @@
-<h2>新規会員登録</h2>
+<div class="container px-5 mt-5 px-sm-0">
 
-<%= form_with model: @user, url: user_registration_path, local: true do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <h2>新規会員登録</h2>
 
-  <div class="field">
-    <label>氏名(フルネーム)</label><br />
-    <%= f.text_field :fullname, autofocus: true, autocomplete: "fullname" %>
+  <p class="mt-5">
+    全項目入力必須です。<br />
+    氏名(フルネーム)は公開されませんのでご安心ください。
+  </p>
+
+  <div class="row mt-3" style="margin-left: 0; margin-right: 0; padding-left: 0;">
+    <%= form_with model: @user, url: user_registration_path, local: true do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <table class="table table-borderless input-form">
+        <tr>
+          <td class="mr-3 mt-4">氏名(フルネーム)</td>
+          <td><%= f.text_field :fullname, autofocus: true, autocomplete: "fullname", placeholder: "(例)山田太郎", class: "form-width form-ph" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">ニックネーム</td>
+          <td><%= f.text_field :nickname, autofocus: true, autocomplete: "nickname", placeholder: "(例)たろう", class: "form-width form-ph" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">メールアドレス</td>
+          <td><%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "(例)tarou.yamada@example.com", class: "form-width form-ph" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">性別</td>
+          <td>
+            <%= f.radio_button :sex, "男性" %> 男性
+            <%= f.radio_button :sex, "女性", class: "ml-4" %> 女性
+          </td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">生年月日</td>
+          <td><%= f.date_field :birthday, class: 'form-width form-ph' %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">住所(都道府県)</td>
+          <td><%= f.select :prefecture, User.prefectures.keys, :include_blank => '選択してください' %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">住所(市区町村)</td>
+          <td><%= f.text_field :city, autofocus: true, autocomplete: "city", placeholder: "(例)新宿区", class: "form-width form-ph" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">パスワード(英数字6文字以上)</td>
+          <td><%= f.password_field :password, autocomplete: "new-password", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="mr-3 mt-4">パスワード（確認）</td>
+          <td><%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-width" %></td>
+        </tr>
+      </table>
+      <%= f.submit "新規登録", class: "btn btn-success", style: "width: 125px;" %>
+    <% end %>
   </div>
 
-  <div class="field">
-    <label>ニックネーム</label><br />
-    <%= f.text_field :nickname, autofocus: true, autocomplete: "nickname" %>
-  </div>
+  <p class="my-5">
+    会員の方は<%= link_to "こちら", new_user_session_path %>からログイン
+  </p>
 
-  <div class="field">
-    <label>メールアドレス</label><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <label>性別</label><br />
-    <%= f.radio_button :sex, "男性" %>
-    <label>男性</label>
-    <%= f.radio_button :sex, "女性" %>
-    <label>女性</label>
-  </div>
-
-  <div class="field">
-    <label>生年月日</label><br />
-    <%= f.date_field :birthday, class: 'form-control' %>
-  </div>
-
-  <div class="field">
-    <label>住所(都道府県)</label><br />
-    <%= f.select :prefecture, User.prefectures.keys %>
-  </div>
-
-  <div class="field">
-    <label>住所(市区町村)</label><br />
-    <%= f.text_field :city, autofocus: true, autocomplete: "city" %>
-  </div>
-
-  <div class="field">
-    <label>パスワード(英数字6文字以上)</label><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <label>パスワード（確認）</label><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

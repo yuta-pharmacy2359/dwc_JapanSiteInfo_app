@@ -1,85 +1,139 @@
-<% if current_user.present? && (@user.id == current_user.id) %>
-  <h2>マイページ</h2>
-<% else %>
-  <h2><%= @user.nickname %> さん</h2>
-<% end %>
+<div class="container-xxl px-3 mt-5 px-sm-2">
 
-<div>
-  <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-  <p>ニックネーム: <%= @user.nickname %></p>
-  <p>性別: <%= @user.sex.to_s %></p>
-  <p>年齢: <%= @user.age %>歳</p>
-  <p>住所: <%= @user.prefecture %><%= @user.city %></p>
-  <p>自己紹介: <%= @user.introduction %></p>
-</div>
-
-<% if current_user.present? && (@user.id == current_user.id) %>
-  <%= link_to "プロフィール編集", edit_user_path(@user) %>
-<% elsif current_user.present? && (@user.id != current_user.id) %>
-  <div class="follow-form">
-    <%= render "follow_relationships/list_follow_form", user: @user %>
-  </div>
-<% end %>
-
-<div>
-  <h2>活動データ</h2>
-  <% @user ||= current_user %>
-    <p>
-      フォロー数：
-      <a href="<%= following_user_path(@user) %>">
-        <%= @user.following.count %>
-      </a>
-    </p>
-    <p>
-      フォロワー数：
-      <a href="<%= followers_user_path(@user) %>", class="followers">
-        <%= @user.followers.count %>
-      </a>
-    </p>
-    <p>
-      投稿スポット数：<%= @user.spots.count %>
-    </p>
-    <p class="user-favorite-count-<%= @user.id %>">
-      総いいね数：<%= @favorites_count %>
-    </p>
-</div>
-
-<div>
-  <h3>スポット一覧</h3>
-  <% @spots.each do |spot| %>
-    <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-    <p>
-      <%= link_to spot_path(spot) do %>
-        <%= spot.title %>
-      <% end %>
-    </p>
-    <p>都道府県: <%= spot.prefecture %></p>
-    <p>市区町村: <%= spot.city %></p>
-    <p>投稿日: <%= spot.created_at.strftime("%Y年%-m月%-d日") %></p>
-    <p>
-      <% if spot.visited_day.nil? %>
-        来訪日: 不明
+  <div class="row justify-content-center">
+    <div class="col-xxl-2 px-2">
+      <% if current_user.present? && (@user.id == current_user.id) %>
+        <h2>マイページ</h2>
       <% else %>
-        来訪日: <%= spot.visited_day.strftime("%Y年%-m月%-d日") %>
+        <h2><%= @user.nickname %> さん</h2>
       <% end %>
-    </p>
-    <% if spot.rate.nil? %>
-      <p>無評価</p>
-    <% else %>
-      <p id="star-rate-<%= spot.id %>"></p>
-      <script>
-        $('#star-rate-<%= spot.id %>').raty({
-          size: 36,
-          starOff: '<%= asset_path('star-off.png') %>',
-          starOn: '<%= asset_path('star-on.png') %>',
-          readOnly: true,
-          score: <%= spot.rate %>,
-        });
-      </script>
-    <% end %>
-    <div class="favorite-<%= spot.id %>">
-      <%= render "favorites/list_favorite", spot: spot %>
+
+      <table class="table">
+        <tr>
+          <td>
+            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100", autocomplete: "profile_image" %>
+          </td>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td>ニックネーム</td>
+          <td><%= @user.nickname %></td>
+        </tr>
+        <tr>
+          <td>性別</td>
+          <td><%= @user.sex.to_s %></td>
+        </tr>
+        <tr>
+          <td>年齢</td>
+          <td><%= @user.age %>歳</td>
+        </tr>
+        <tr>
+          <td>住所</td>
+          <td><%= @user.prefecture %><%= @user.city %></td>
+        </tr>
+        <tr>
+          <td>自己紹介</td>
+          <td><%= @user.introduction %></td>
+        </tr>
+        <tr>
+          <td>フォロー数</td>
+          <td>
+            <%= link_to following_user_path(@user) do %>
+              <%= @user.following.count %>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>フォロワー数</td>
+          <td>
+            <%= link_to followers_user_path(@user), class: "followers" do %>
+              <%= @user.followers.count %>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>投稿スポット数</td>
+          <td><%= @user.spots.count %></td>
+        </tr>
+        <tr>
+          <td>総いいね数</td>
+          <td class="user-favorite-count-<%= @user.id %>"><%= @favorites_count %></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      <% if current_user.present? && (@user.id == current_user.id) %>
+        <%= link_to "プロフィール編集", edit_user_path(@user), class: "btn btn-outline-secondary mb-5" %>
+      <% elsif current_user.present? && (@user.id != current_user.id) %>
+        <div class="follow-form mb-5">
+          <%= render "follow_relationships/list_follow_form", user: @user %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-  <%= paginate @spots %>
+    <div class="col-xxl-8 px-2 spot-index">
+      <h3>スポット一覧</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <td>
+              青字のカテゴリをクリック<br />
+              で並び替え
+            </td>
+            <td><%= sort_link(@q, :title, "タイトル", data: {"turbolinks"=>false}) %></td>
+            <td><%= sort_link(@q, :prefecture, "都道府県", data: {"turbolinks"=>false}) %></td>
+            <td><%= sort_link(@q, :city, "市区町村", data: {"turbolinks"=>false}) %></td>
+            <td><%= sort_link(@q, :created_at, "投稿日", data: {"turbolinks"=>false}) %></td>
+            <td><%= sort_link(@q, :visited_day, "来訪日", data: {"turbolinks"=>false}) %></td>
+            <td><%= sort_link(@q, :rate, "評価", data: {"turbolinks"=>false}) %></td>
+            <td><%= sort_link(@q, :favorites_count, "いいね", data: {"turbolinks"=>false}) %></td>
+          </tr>
+        </thead>
+        <tbody>
+          <% @spots.each do |spot| %>
+            <tr>
+              <td>
+                <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+              </td>
+              <td>
+                <%= link_to spot_path(spot) do %>
+                  <%= spot.title %>
+                <% end %>
+              </td>
+              <td><%= spot.prefecture %></td>
+              <td><%= spot.city %></td>
+              <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+              <td>
+                <% if spot.visited_day.nil? %>
+                  不明
+                <% else %>
+                  <%= spot.visited_day.strftime("%Y年%-m月%-d日") %>
+                <% end %>
+              </td>
+              <% if spot.rate.nil? %>
+                <td>無評価</td>
+              <% else %>
+                <td id="star-rate-<%= spot.id %>"></td>
+                <script>
+                  $('#star-rate-<%= spot.id %>').raty({
+                    size: 36,
+                    starOff: '<%= asset_path('star-off.png') %>',
+                    starOn: '<%= asset_path('star-on.png') %>',
+                    readOnly: true,
+                    score: <%= spot.rate %>,
+                  });
+                </script>
+              <% end %>
+              <td class="favorite-<%= spot.id %>">
+                <%= render "favorites/list_favorite", spot: spot %>
+              </td>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @spots, theme: 'twitter-bootstrap-4' %>
+    </div>
+  </div>
 </div>

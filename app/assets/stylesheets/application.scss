@@ -136,3 +136,13 @@
 .spot-image-edit {
   width: 100px;
 }
+
+/* スポット一覧画面のレスポンシブ対応 */
+@media screen and (max-width:1120px) {
+  .spot-index tr td {
+    display: block;
+  }
+  .spot-index td:not(:nth-of-type(8n + 1)) {
+    border: none;
+  }
+}

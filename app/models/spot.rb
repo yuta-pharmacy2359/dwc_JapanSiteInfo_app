@@ -36,16 +36,4 @@ class Spot < ApplicationRecord
   validates :title, presence: true
   validate :visited_day_is_valid?
 
-
-  private
-
-  ransacker :favorites_count do
-    query = <<-SQL
-      (SELECT COUNT (favorites.spot_id) as favorites_count
-        FROM favorites
-        WHERE favorites.spot_id = spots.id
-        GROUP BY favorites.spot_id)
-    SQL
-    Arel.sql(query)
-  end
 end

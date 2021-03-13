@@ -10,10 +10,9 @@
 
       <table class="table">
         <tr>
-          <td>
-            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100", autocomplete: "profile_image" %>
+          <td colspan="2">
+            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", autocomplete: "profile_image", class: "profile-image-200px" %>
           </td>
-          <td colspan="2"></td>
         </tr>
         <tr>
           <td>ニックネーム</td>
@@ -74,67 +73,7 @@
     </div>
     <div class="col-xxl-8 px-3 spot-index">
       <h3 class="mb-4">スポット一覧</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <td>
-              青字カテゴリをクリック<br />
-              で並び替え
-            </td>
-            <td><%= sort_link(@q, :title, "タイトル") %></td>
-            <td><%= sort_link(@q, :prefecture, "都道府県") %></td>
-            <td><%= sort_link(@q, :city, "市区町村") %></td>
-            <td><%= sort_link(@q, :created_at, "投稿日") %></td>
-            <td><%= sort_link(@q, :visited_day, "来訪日") %></td>
-            <td><%= sort_link(@q, :rate, "評価") %></td>
-            <td><%= sort_link(@q, :favorites_count, "いいね") %></td>
-          </tr>
-        </thead>
-        <tbody>
-          <% @spots.each do |spot| %>
-            <tr>
-              <td>
-                <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-              </td>
-              <td>
-                <%= link_to spot_path(spot) do %>
-                  <%= spot.title %>
-                <% end %>
-              </td>
-              <td><%= spot.prefecture %></td>
-              <td><%= spot.city %></td>
-              <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
-              <td>
-                <% if spot.visited_day.nil? %>
-                  不明
-                <% else %>
-                  <%= spot.visited_day.strftime("%Y年%-m月%-d日") %>
-                <% end %>
-              </td>
-              <% if spot.rate.nil? %>
-                <td>無評価</td>
-              <% else %>
-                <td id="star-rate-<%= spot.id %>"></td>
-                <script>
-                   if(!$("#star-rate-<%= spot.id %> img").length) {
-                     $('#star-rate-<%= spot.id %>').raty({
-                        size: 36,
-                        starOff: '<%= asset_path('star-off.png') %>',
-                        starOn: '<%= asset_path('star-on.png') %>',
-                        readOnly: true,
-                        score: <%= spot.rate %>,
-                      });
-                    }
-                </script>
-              <% end %>
-              <td class="favorite-<%= spot.id %>">
-                <%= render "favorites/list_favorite", spot: spot %>
-              </td>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <%= render "spots/spot_index", spots: @spots, q: @q %>
       <%= paginate @spots, theme: 'twitter-bootstrap-4' %>
     </div>
   </div>

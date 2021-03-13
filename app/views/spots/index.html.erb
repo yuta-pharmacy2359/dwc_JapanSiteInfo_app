@@ -1,69 +1,35 @@
-<h2>スポット一覧</h2>
+<div class="container px-5 mt-5 px-sm-0">
 
-<%= search_form_for @q do |f| %>
-  <%= f.label "都道府県" %>
-  <%= f.select :prefecture_eq, Spot.prefectures.map{|k, v| [Spot.prefectures_i18n[k], v]}, :include_blank => '指定なし' %>
+  <h3 class="mb-4">スポット一覧</h3>
 
-  <%= f.label "市区町村" %>
-  <%= f.search_field :city_cont %>
-
-  <%= f.label "タイトル" %>
-  <%= f.search_field :title %>
-
-  <%= f.label "キーワード" %>
-  <%= f.search_field :keywords_keyword_cont %>
-
-  <%= f.submit "検索" %>
-<% end %>
-
-<p>
-  全<%= @spots.total_count %>件中、<%= @spots.offset_value + 1 %>〜<%= @spots.offset_value + @spots.length %>件目を表示(<%= @spots.current_page %>/<%= @spots.total_pages %>ページ)
-</p>
-
-<div>
-  <p><%= sort_link(@q, :title, "タイトル", data: {"turbolinks"=>false}) %></p>
-  <p><%= sort_link(@q, :created_at, "投稿日", data: {"turbolinks"=>false}) %></p>
-  <p><%= sort_link(@q, :visited_day, "来訪日", data: {"turbolinks"=>false}) %></p>
-  <p><%= sort_link(@q, :rate, "評価", data: {"turbolinks"=>false}) %></p>
-  <p><%= sort_link(@q, :favorites_count, "いいね", data: {"turbolinks"=>false}) %></p>
-</div>
-
-<% @spots.each do |spot| %>
-  <div>
-    <div>
-      フォト：
-      <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-    </div>
-    <p>タイトル：
-      <%= link_to spot_path(spot) do %>
-        <%= spot.title %>
-      <% end %>
-    </p>
-    <p>投稿日：<%= spot.created_at.strftime("%Y年%-m月%-d日") %></p>
-    <p>
-      <% if spot.visited_day.nil? %>
-        来訪日: 不明
-      <% else %>
-        来訪日: <%= spot.visited_day.strftime("%Y年%-m月%-d日") %>
-      <% end %>
-    </p>
-    <% if spot.rate.nil? %>
-      <p>無評価</p>
-    <% else %>
-      <p id="star-rate-<%= spot.id %>"></p>
-      <script>
-        $('#star-rate-<%= spot.id %>').raty({
-          size: 36,
-          starOff: '<%= asset_path('star-off.png') %>',
-          starOn: '<%= asset_path('star-on.png') %>',
-          readOnly: true,
-          score: <%= spot.rate %>,
-        });
-      </script>
+  <div class="mb-5">
+    <%= search_form_for @q do |f| %>
+      <table class="table-borderless search-container mb-2">
+        <tr>
+          <td class="search-label"><%= f.label "都道府県" %></td>
+          <td class="search-form"><%= f.select :prefecture_eq, Spot.prefectures.map{|k, v| [Spot.prefectures_i18n[k], v]}, :include_blank => '指定なし' %></td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "市区町村" %></td>
+          <td class="search-form"><%= f.search_field :city_cont, placeholder: "(例) 港区", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "タイトル" %></td>
+          <td class="search-form"><%= f.search_field :title, placeholder: "(例) 東京タワー", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "キーワード" %></td>
+          <td class="search-form"><%= f.search_field :keywords_keyword_cont, placeholder: "(例) 東京タワー", class: "form-width" %></td>
+        </tr>
+      </table>
+      <%= f.submit "検索", class: "btn btn-secondary" %>
     <% end %>
-    <div class="favorite-<%= spot.id %>">
-      <%= render "favorites/list_favorite", spot: spot %>
-    </div>
   </div>
-<% end %>
-<%= paginate @spots %>
+  <p class="mb-3">
+    全<%= @spots.total_count %>件中、<%= @spots.offset_value + 1 %>〜<%= @spots.offset_value + @spots.length %>件目を表示(<%= @spots.current_page %>/<%= @spots.total_pages %>ページ)
+  </p>
+  <div class="spot-index">
+    <%= render "spots/spot_index", spots: @spots, q: @q %>
+    <%= paginate @spots, theme: 'twitter-bootstrap-4' %>
+  </div>
+</div>

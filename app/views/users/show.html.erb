@@ -1,11 +1,11 @@
 <div class="container-xxl px-3 mt-5 px-sm-2">
 
-  <div class="row justify-content-center">
-    <div class="col-xxl-2 px-2">
+  <div class="row justify-content-center" style="margin-left: 0; margin-right: 0;">
+    <div class="col-xxl-2 px-3">
       <% if current_user.present? && (@user.id == current_user.id) %>
-        <h2>マイページ</h2>
+        <h3 class="mb-4">マイページ</h2>
       <% else %>
-        <h2><%= @user.nickname %> さん</h2>
+        <h3 class="mb-4"><%= @user.nickname %> さん</h3>
       <% end %>
 
       <table class="table">
@@ -57,7 +57,7 @@
         </tr>
         <tr>
           <td>総いいね数</td>
-          <td class="user-favorite-count-<%= @user.id %>"><%= @favorites_count %></td>
+          <td class="user-favorite-count-<%= @user.id %>"><%= @all_user_favorites_count %></td>
         </tr>
         <tr>
           <td></td>
@@ -72,22 +72,22 @@
         </div>
       <% end %>
     </div>
-    <div class="col-xxl-8 px-2 spot-index">
-      <h3>スポット一覧</h3>
+    <div class="col-xxl-8 px-3 spot-index">
+      <h3 class="mb-4">スポット一覧</h3>
       <table class="table">
         <thead>
           <tr>
             <td>
-              青字のカテゴリをクリック<br />
+              青字カテゴリをクリック<br />
               で並び替え
             </td>
-            <td><%= sort_link(@q, :title, "タイトル", data: {"turbolinks"=>false}) %></td>
-            <td><%= sort_link(@q, :prefecture, "都道府県", data: {"turbolinks"=>false}) %></td>
-            <td><%= sort_link(@q, :city, "市区町村", data: {"turbolinks"=>false}) %></td>
-            <td><%= sort_link(@q, :created_at, "投稿日", data: {"turbolinks"=>false}) %></td>
-            <td><%= sort_link(@q, :visited_day, "来訪日", data: {"turbolinks"=>false}) %></td>
-            <td><%= sort_link(@q, :rate, "評価", data: {"turbolinks"=>false}) %></td>
-            <td><%= sort_link(@q, :favorites_count, "いいね", data: {"turbolinks"=>false}) %></td>
+            <td><%= sort_link(@q, :title, "タイトル") %></td>
+            <td><%= sort_link(@q, :prefecture, "都道府県") %></td>
+            <td><%= sort_link(@q, :city, "市区町村") %></td>
+            <td><%= sort_link(@q, :created_at, "投稿日") %></td>
+            <td><%= sort_link(@q, :visited_day, "来訪日") %></td>
+            <td><%= sort_link(@q, :rate, "評価") %></td>
+            <td><%= sort_link(@q, :favorites_count, "いいね") %></td>
           </tr>
         </thead>
         <tbody>
@@ -116,13 +116,15 @@
               <% else %>
                 <td id="star-rate-<%= spot.id %>"></td>
                 <script>
-                  $('#star-rate-<%= spot.id %>').raty({
-                    size: 36,
-                    starOff: '<%= asset_path('star-off.png') %>',
-                    starOn: '<%= asset_path('star-on.png') %>',
-                    readOnly: true,
-                    score: <%= spot.rate %>,
-                  });
+                   if(!$("#star-rate-<%= spot.id %> img").length) {
+                     $('#star-rate-<%= spot.id %>').raty({
+                        size: 36,
+                        starOff: '<%= asset_path('star-off.png') %>',
+                        starOn: '<%= asset_path('star-on.png') %>',
+                        readOnly: true,
+                        score: <%= spot.rate %>,
+                      });
+                    }
                 </script>
               <% end %>
               <td class="favorite-<%= spot.id %>">

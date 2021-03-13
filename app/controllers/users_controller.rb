@@ -4,11 +4,12 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @q = Spot.ransack(params[:q])
+    @q = @user.spots.ransack(params[:q])
     @spots = @q.result.page(params[:page])
-    @favorites_count = 0
-    @spots.each do |spot|
-      @favorites_count += spot.favorites.count
+    @all_user_spots = @user.spots
+    @all_user_favorites_count = 0
+    @all_user_spots.each do |spot|
+      @all_user_favorites_count += spot.favorites.count
     end
   end
 

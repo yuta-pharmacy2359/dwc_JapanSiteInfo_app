@@ -14,6 +14,11 @@ class FavoritesController < ApplicationController
     @spots.each do |spot|
       @favorites_count += spot.favorites.count
     end
+    @all_user_spots = @user.spots
+    @all_user_favorites_count = 0
+    @all_user_spots.each do |spot|
+      @all_user_favorites_count += spot.favorites.count
+    end
   end
 
   def destroy
@@ -25,6 +30,11 @@ class FavoritesController < ApplicationController
     @favorites_count = 0
     @spots.each do |spot|
       @favorites_count += spot.favorites.count
+    end
+    @all_user_spots = @user.spots
+    @all_user_favorites_count = 0
+    @all_user_spots.each do |spot|
+      @all_user_favorites_count += spot.favorites.count
     end
   end
 

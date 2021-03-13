@@ -1,67 +1,105 @@
-<h2><%= @spot.title %></h2>
-
-<p><%= @spot.prefecture %><%= @spot.city %></p>
-
-<p>
-  <% if @spot.visited_day.nil? %>
-    来訪日: 不明
-  <% else %>
-    来訪日: <%= @spot.visited_day.strftime("%Y年%-m月%-d日") %>
-  <% end %>
-</p>
-
-<% if @spot.rate.nil? %>
-  <p>無評価</p>
-<% else %>
-  <p id="star-rate-<%= @spot.id %>"></p>
-  <script>
-    $('#star-rate-<%= @spot.id %>').raty({
-      size: 36,
-      starOff: '<%= asset_path('star-off.png') %>',
-      starOn: '<%= asset_path('star-on.png') %>',
-      readOnly: true,
-      score: <%= @spot.rate %>,
-    });
-  </script>
-<% end %>
-
-<div class="favorite-<%= @spot.id %>">
-  <%= render "favorites/list_favorite", spot: @spot %>
-</div>
-
-<div>
-  キーワード：
-  <% @spot_keywords.each do |keyword| %>
-    <%= link_to keyword_path(keyword) do %>
-      <%= keyword.keyword %>
-    <% end %>
-  <% end %>
-</div>
-
-<%= attachment_image_tag @spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-<%= attachment_image_tag @spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-<%= attachment_image_tag @spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-
-<p>内容: <%= @spot.content %></p>
-
-<% if @spot.user == current_user %>
-  <%= link_to "編集する", edit_spot_path(@spot) %>
-  <%= link_to "削除する", spot_path(@spot), method: :delete, "data-confirm" => "本当に削除しますか？" %>
-<% end %>
-
-<div>
-  <h2>投稿者プロフィール</h2>
-  <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-  <p>ニックネーム: <%= @user.nickname %></p>
-  <p>性別: <%= @user.sex.to_s %></p>
-  <p>年齢: <%= @user.age %>歳</p>
-  <p>住所: <%= @user.prefecture %><%= @user.city %></p>
-  <p>自己紹介: <%= @user.introduction %></p>
-  <% if current_user.nil? || (@spot.user_id != current_user.id) %>
-    <%= link_to "プロフィールを見る", user_path(@user) %>
-  <% end %>
-</div>
-
-<div class="comments">
-  <%= render "comments/list_comment", spot: @spot, comment: @comment %>
+<div class="container-xxl mt-5 mx-5" style="padding-left: 0; padding-right: 0;">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 px-3">
+      <table class="table-borderless spot-show-window">
+        <tr>
+          <td colspan="3"><h3><%= @spot.title %></h3></td>
+        </tr>
+        <tr>
+          <td colspan="3" class="py-2"><%= @spot.prefecture %><%= @spot.city %></td>
+        </tr>
+        <tr>
+          <td colspan="3">投稿日：<%= @spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <% if @spot.visited_day.nil? %>
+              来訪日：不明
+            <% else %>
+              来訪日：<%= @spot.visited_day.strftime("%Y年%-m月%-d日") %>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <% if @spot.rate.nil? %>
+            <td class="py-3">無評価</td>
+          <% else %>
+            <td id="star-rate-<%= @spot.id %>" class="py-3"></td>
+            <script>
+              if(!$("#star-rate-<%= @spot.id %> img").length) {
+                $('#star-rate-<%= @spot.id %>').raty({
+                  size: 36,
+                  starOff: '<%= asset_path('star-off.png') %>',
+                  starOn: '<%= asset_path('star-on.png') %>',
+                  readOnly: true,
+                  score: <%= @spot.rate %>,
+                });
+              }
+            </script>
+          <% end %>
+          <td colspan="2" class="favorite-<%= @spot.id %>">
+            <%= render "favorites/list_favorite", spot: @spot %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" class="fas fa-tags nav-link text-primary py-2">
+            <% @spot_keywords.each do |keyword| %>
+              <%= link_to keyword_path(keyword) do %>
+                <%= keyword.keyword %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td class="py-3 px-2"><%= attachment_image_tag @spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-show-image" %></td>
+          <td class="px-2"><%= attachment_image_tag @spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-show-image" %></td>
+          <td class="px-2"><%= attachment_image_tag @spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-show-image" %></td>
+        </tr>
+        <tr>
+          <td colspan="3" class="py-4"><%= @spot.content %></td>
+        </tr>
+          <% if @spot.user == current_user %>
+            <tr>
+              <td class="py-4"><%= link_to "編集する", edit_spot_path(@spot), class: "btn btn-success spot-show-button" %></td>
+              <td><%= link_to "削除する", spot_path(@spot), method: :delete, "data-confirm" => "本当に削除しますか？", class: "btn btn-danger spot-show-button" %></td>
+            </tr>
+          <% end %>
+      </table>
+      <div class="comments my-5">
+        <%= render "comments/list_comment", spot: @spot, comment: @comment %>
+      </div>
+    </div>
+    <div class="col-xl-3 px-3 mb-5">
+      <h3 class="mb-4">投稿者プロフィール</h3>
+      <table class="table">
+        <tr>
+          <td colspan="2">
+            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", autocomplete: "profile_image", class: "profile-image-200px" %>
+          </td>
+        </tr>
+        <tr>
+          <td>ニックネーム</td>
+          <td><%= @user.nickname %></td>
+        </tr>
+        <tr>
+          <td>性別</td>
+          <td><%= @user.sex.to_s %></td>
+        </tr>
+        <tr>
+          <td>年齢</td>
+          <td><%= @user.age %>歳</td>
+        </tr>
+        <tr>
+          <td>住所</td>
+          <td><%= @user.prefecture %><%= @user.city %></td>
+        </tr>
+        <tr>
+          <td>自己紹介</td>
+          <td><%= @user.introduction %></td>
+        </tr>
+        <tr></tr>
+      </table>
+      <%= link_to "プロフィールをみる", user_path(@user), class: "btn btn-warning" %>
+    </div>
+  </div>
 </div>

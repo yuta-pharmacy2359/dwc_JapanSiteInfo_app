@@ -184,3 +184,13 @@
     display: block;
   }
 }
+
+/* 画面幅1000px以下におけるレスポンシブ対応 */
+@media screen and (max-width:1000px) {
+  .follow-index-window tr td {
+    display: block;
+  }
+  .follow-index-window td:not(:nth-of-type(5n + 1)) {
+    border: none;
+  }
+}

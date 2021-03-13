@@ -1,37 +1,41 @@
 <% provide(:title, @title) %>
+<div class="container px-5 my-5 px-sm-0">
+  <h3 class="mb-4"><%= @user.nickname %>さんの<%= @title %></h3>
 
-<h3><%= @user.nickname %>さんの<%= @title %></h3>
-
-<% @users.each do |user| %>
-  <div>
-    <%= link_to user_path(user.id) do %>
-      <%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
+  <table class="table follow-index-window">
+    <% @users.each do |user| %>
+      <tr>
+        <td>
+          <%= link_to user_path(user.id) do %>
+            <%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to user_path(user.id) do %>
+            <%= user.nickname %>
+          <% end %>
+        </td>
+        <td>
+          フォロー数：
+          <%= link_to following_user_path(user) do %>
+            <%= user.following.count %>
+          <% end %>
+        </td>
+        <td>
+          フォロワー数：
+          <%= link_to followers_user_path(user) do %>
+            <%= user.followers.count %>
+          <% end %>
+        </td>
+        <td>
+          <% if user.spots.present? %>
+            最終更新：<%= user.spots.order(:updated_at).last.updated_at.strftime('%Y年%-m月%-d日') %>
+          <% else %>
+            投稿なし
+          <% end %>
+        </td>
+      </tr>
     <% end %>
-    <p>
-      <%= link_to user_path(user.id) do %>
-        <%= user.nickname %>
-      <% end %>
-    </p>
-    <p>
-      フォロー数：
-      <a href="<%= following_user_path(user) %>">
-        <%= user.following.count %>
-      </a>
-    </p>
-    <p>
-      フォロワー数：
-      <a href="<%= followers_user_path(user) %>">
-        <%= user.followers.count %>
-      </a>
-    </p>
-    <p>
-      <% if user.spots.present? %>
-        最終更新日：<%= user.spots.order(:updated_at).last.updated_at.strftime('%Y年%-m月%-d日') %>
-      <% else %>
-        投稿なし
-      <% end %>
-    </p>
-  </div>
-<% end %>
-
-<%= paginate @users %>
+  </table>
+  <%= paginate @users %>
+</div>

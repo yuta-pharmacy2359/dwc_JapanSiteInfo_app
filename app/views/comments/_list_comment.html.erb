@@ -1,24 +1,26 @@
-<div>
-    <h2>コメント</h2>
-    <p>
-      全<%= spot.comments.count %>件
-    </p>
-    <% spot.comments.each do |comment| %>
-    <div id="comment-<%= comment.id %>">
-      <%= attachment_image_tag comment.user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-      <%= link_to user_path(comment.user) do %>
-        <%= comment.user.nickname %>
-      <% end %>
-      <%= comment.comment %>
-      <%= comment.created_at.strftime("%Y年%-m月%-d日 %-H:%M") %>
-      <% if current_user.present? && (comment.user_id == current_user.id) %>
-        <%= link_to "削除する", spot_comment_path(comment.spot, comment), method: :delete, remote: true %>
-      <% end %>
-    </div>
-    <% end %>
-  </div>
+<h3>コメント</h3>
+<p>全<%= spot.comments.count %>件 </p>
+<table class="table mb-4 comments-index">
+  <% spot.comments.each do |comment| %>
+    <tr id="comment-<%= comment.id %>">
+      <td><%= attachment_image_tag comment.user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+      <td>
+        <%= link_to user_path(comment.user) do %>
+          <%= comment.user.nickname %><br /><br/>
+        <% end %>
+        <%= comment.comment %><br /><br />
+        <%= comment.created_at.strftime("%Y年%-m月%-d日 %-H:%M") %>
+      </td>
+      <td>
+        <% if current_user.present? && (comment.user_id == current_user.id) %>
+          <%= link_to "削除する", spot_comment_path(comment.spot, comment), method: :delete, remote: true, class: "btn btn-danger text-nowrap" %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
 
-  <% if current_user.present? %>
+<% if current_user.present? %>
   <div id="comment-new">
     <h3>コメントをどうぞ</h3>
     <% if flash.now[:success] %>
@@ -27,8 +29,8 @@
       <%= flash.now[:danger] %>
     <% end %>
     <%= form_with(model: [spot, Comment.new], remote: true) do |f| %>
-      <%= f.text_area :comment, rows: '5', class: "comment-new-container" %>
-      <%= f.submit "送信する" %>
+      <%= f.text_area :comment, rows: '5', class: "comment-new-container" %><br />
+      <%= f.submit "送信する", class: "btn btn-success" %>
     <% end %>
   </div>
-  <% end %>
+<% end %>

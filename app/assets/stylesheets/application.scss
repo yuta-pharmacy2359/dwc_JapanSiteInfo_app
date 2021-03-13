@@ -194,3 +194,21 @@
     border: none;
   }
 }
+
+/* 画面幅440px以下におけるレスポンシブ対応 */
+@media screen and (max-width:440px) {
+  .search-container tr td {
+    display: block;
+  }
+}
+
+/* 検索エリアの調整 */
+.search {
+  &-label {
+    width: 150px;
+    height: 30px;
+  }
+  &-form {
+    height: 50px;
+  }
+}

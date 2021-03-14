@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :spots, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :favorites, dependent: :destroy
+  has_many :favorited_spots, through: :favorites, source: :spot
   has_many :active_relationships, class_name: "FollowRelationship", foreign_key: "follower_id", dependent: :destroy
   has_many :passive_relationships, class_name: "FollowRelationship", foreign_key: "followed_id", dependent: :destroy
   has_many :following, through: :active_relationships, source: :followed

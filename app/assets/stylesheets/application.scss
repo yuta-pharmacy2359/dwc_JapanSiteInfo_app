@@ -107,6 +107,11 @@
   width: 250px;
 }
 
+/* 入力フォーム(年齢)の幅 */
+.form-width-age {
+  width: 70px;
+}
+
 /* 画面幅540px以下におけるレスポンシブ対応 */
 @media screen and (max-width:540px) {
   .input-form tr td {
@@ -191,6 +196,28 @@
     display: block;
   }
   .follow-index-window td:not(:nth-of-type(5n + 1)) {
+    border: none;
+  }
+  .user-index-window tr td {
+    display: block;
+  }
+  .user-index-window thead {
+    display: none;
+  }
+  .user-index-window td:not(:nth-of-type(8n + 1)) {
+    border: none;
+  }
+}
+
+/* 画面幅800px以下におけるレスポンシブ対応 */
+@media screen and (max-width:800px) {
+  .keywords-index tr td {
+    display: block;
+  }
+  .keywords-index thead {
+    display: none;
+  }
+  .keywords-index td:not(:nth-of-type(4n + 1)) {
     border: none;
   }
 }

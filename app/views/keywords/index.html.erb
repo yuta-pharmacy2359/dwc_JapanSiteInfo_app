@@ -1,28 +1,72 @@
-<h2>キーワード一覧</h2>
+<div class="container px-5 mt-5 px-sm-0">
 
-<%= search_form_for @q do |f| %>
-  <%= f.label "都道府県" %>
-  <%= f.select :spots_prefecture_eq, Spot.prefectures.map{|k, v| [Spot.prefectures_i18n[k], v]}, :include_blank => '指定なし' %>
+  <h3 class="mb-4">キーワード一覧</h3>
 
-  <%= f.label "市区町村" %>
-  <%= f.search_field :spots_city_cont %>
-
-  <%= f.label "キーワード" %>
-  <%= f.search_field :keyword_cont %>
-
-  <%= f.submit "検索" %>
-<% end %>
-
-<% @keywords.each do |keyword| %>
-  <div>
-    キーワード：
-    <%= attachment_image_tag keyword.spots.last, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-    <%= link_to keyword_path(keyword) do %>
-      <%= keyword.keyword %>
+  <div class="mb-5">
+    <%= search_form_for @q do |f| %>
+      <table class="table-borderless search-container mb-2">
+        <tr>
+          <td class="search-label"><%= f.label "都道府県" %></td>
+          <td class="search-form"><%= f.select :spots_prefecture_eq, Spot.prefectures.map{|k, v| [Spot.prefectures_i18n[k], v]}, :include_blank => '指定なし' %></td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "市区町村" %></td>
+          <td class="search-form"><%= f.search_field :spots_city_cont, placeholder: "(例) 港区", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "キーワード" %></td>
+          <td class="search-form"><%= f.search_field :keyword_cont, placeholder: "(例) 東京タワー", class: "form-width" %></td>
+        </tr>
+      </table>
+      <%= f.submit "検索", class: "btn btn-secondary" %>
     <% end %>
   </div>
-  <p>スポット投稿数：<%= keyword.spots.count %></p>
-  <p>評価平均：<%= keyword.spots.average(:rate).round(2) %></p>
-<% end %>
-
-<%= paginate @keywords %>
+  <p class="mb-3">
+    全<%= @keywords.total_count %>件中、<%= @keywords.offset_value + 1 %>〜<%= @keywords.offset_value + @keywords.length %>件目を表示(<%= @keywords.current_page %>/<%= @keywords.total_pages %>ページ)
+  </p>
+  <div class="mb-5">
+    <table class="table keywords-index">
+      <thead>
+        <tr>
+          <td></td>
+          <td>キーワード</td>
+          <td>スポット投稿数</td>
+          <td>評価平均</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @keywords.each do |keyword| %>
+          <tr>
+            <td><%= attachment_image_tag keyword.spots.last, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+            <td>
+              <%= link_to keyword_path(keyword) do %>
+                <%= keyword.keyword %>
+              <% end %>
+            </td>
+            <td>
+              <%= keyword.spots.count %>スポット
+            </td>
+            <% if keyword.spots.average(:rate).nil? %>
+              <td>評価なし</td>
+            <% else %>
+              <td id="star-rate-<%= keyword.id %>" class="py-3 text-nowrap"><%= keyword.spots.average(:rate).round(2) %></td>
+              <script>
+                if(!$("#star-rate-<%= keyword.id %> img").length) {
+                  $('#star-rate-<%= keyword.id %>').raty({
+                    size: 36,
+                    starOff: '<%= asset_path('star-off.png') %>',
+                    starOn: '<%= asset_path('star-on.png') %>',
+                    starHalf: '<%= asset_path('star-half') %>',
+                    readOnly: true,
+                    score: <%= keyword.spots.average(:rate) %>,
+                  });
+                 }
+              </script>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate @keywords, theme: 'twitter-bootstrap-4' %>
+  </div>
+</div>

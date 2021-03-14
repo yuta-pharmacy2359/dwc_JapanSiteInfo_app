@@ -1,0 +1,64 @@
+<table class="table table-borderless input-form-user-edit mb-4">
+  <tr>
+    <td class="mr-3 mt-4">タイトル ※</td>
+    <td><%= f.text_field :title, autofocus: true, autocomplete: "title", class: "form-width" %></td>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">キーワード</td>
+    <td>
+      <%= f.text_field :keyword, autofocus: true, placeholder: "(例)東京タワー 夜", class: "form-width" %><br />
+      (注)空白を入れることで、<br />複数のキーワードを登録できます。
+    </td>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">所在地(都道府県) ※</td>
+    <td><%= f.select :prefecture, Spot.prefectures.keys, :include_blank => '選択してください' %></td>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">所在地(市区町村)</td>
+    <td><%= f.text_field :city, autofocus: true, autocomplete: "city", class: "form-width" %></td>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">来訪日</td>
+    <td><%= f.date_field :visited_day, class: 'form-width' %></td>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">評価</td>
+    <td id="star"><%= f.hidden_field :rate, id: :review_star %></td>
+    <script>
+      if(!$("#star img").length) {
+        $('#star').raty({
+          size: 36,
+          starOff: '<%= asset_path('star-off.png') %>',
+          starOn: '<%= asset_path('star-on.png') %>',
+          scoreName: 'spot[rate]',
+        });
+      }
+    </script>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">写真(1枚目)</td>
+    <td>
+      <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image-edit" %><br />
+      <%= f.attachment_field :spot_image1, placeholder: "写真", class: "mt-2" %>
+    </td>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">写真(2枚目)</td>
+    <td>
+      <%= attachment_image_tag spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image-edit" %><br />
+      <%= f.attachment_field :spot_image2, placeholder: "写真", class: "mt-2" %>
+    </td>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">写真(3枚目)</td>
+    <td>
+      <%= attachment_image_tag spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image-edit" %><br />
+      <%= f.attachment_field :spot_image3, placeholder: "写真", class: "mt-2" %>
+    </td>
+  </tr>
+  <tr>
+    <td class="mr-3 mt-4">内容・感想</td>
+    <td><%= f.text_area :content, autofocus: true, rows: "5", autocomplete: "content", placeholder: "スポットの感想や、詳細な位置や情報など、自由に記入してください。", class: "form-width" %></td>
+  </tr>
+</table>

@@ -207,6 +207,15 @@
   .user-index-window td:not(:nth-of-type(8n + 1)) {
     border: none;
   }
+  .spot-favorite-ranking td:not(:nth-of-type(7n + 1),:nth-of-type(7n + 2)) {
+    display: block;
+  }
+  .spot-favorite-ranking thead {
+    display: none;
+  }
+  .spot-favorite-ranking td:not(:nth-of-type(7n + 1),:nth-of-type(7n + 2),:nth-of-type(7n + 3)) {
+    border: none;
+  }
 }
 
 /* 画面幅800px以下におけるレスポンシブ対応 */
@@ -218,6 +227,19 @@
     display: none;
   }
   .keywords-index td:not(:nth-of-type(4n + 1)) {
+    border: none;
+  }
+}
+
+/* 画面幅500px以下におけるレスポンシブ対応 */
+@media screen and (max-width:500px) {
+  .spot-favorite-ranking tr td {
+    display: block;
+  }
+  .spot-favorite-ranking thead {
+    display: none;
+  }
+  .spot-favorite-ranking td:not(:nth-of-type(7n + 1)) {
     border: none;
   }
 }

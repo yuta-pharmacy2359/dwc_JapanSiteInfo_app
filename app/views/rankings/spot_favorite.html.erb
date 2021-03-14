@@ -1,0 +1,42 @@
+<div class="container px-5 mt-5 px-sm-0">
+
+  <h3 class="mb-5">いいね数ランキング(スポット)</h3>
+
+  <div class="mb-5">
+    <table class="table spot-favorite-ranking">
+      <thead>
+        <tr>
+          <td>順位</td>
+          <td></td>
+          <td>タイトル</td>
+          <td>所在地</td>
+          <td>投稿日</td>
+          <td>投稿ユーザー</td>
+          <td>いいね数</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @all_ranks.each.with_index(1) do |spot, i| %>
+          <tr>
+            <td>第<%= i.to_s %>位</td>
+            <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+            <td>
+              <%= link_to spot_path(spot) do %>
+                <%= spot.title %>
+              <% end %>
+            </td>
+            <td><%= spot.prefecture %><%= spot.city %></td>
+            <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+            <td>
+              <%= link_to user_path(spot.user) do %>
+                <%= spot.user.nickname %>
+              <% end %>
+            </td>
+            <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= spot.favorites.count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+</div>

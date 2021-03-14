@@ -1,61 +1,82 @@
-<h2>ユーザー一覧</h2>
+<div class="container px-5 mt-5 px-sm-0">
 
-<%= search_form_for @q do |f| %>
-  <%= f.label "都道府県" %>
-  <%= f.select :prefecture_eq, User.prefectures.map{|k, v| [User.prefectures_i18n[k], v]}, :include_blank => '指定なし' %>
+  <h3 class="mb-4">ユーザー一覧</h3>
 
-  <%= f.label "市区町村" %>
-  <%= f.search_field :city_cont %>
-
-  <%= f.label "性別" %>
-  <%= f.label "指定なし" %>
-  <%= f.radio_button :sex_eq, '', { :checked => true } %>
-  <%= f.label "男性" %>
-  <%= f.radio_button :sex_eq, 0 %>
-  <%= f.label "女性" %>
-  <%= f.radio_button :sex_eq, 1 %>
-
-  <%= f.label "年齢" %>
-  <%= f.search_field :birthday_to_age_gteq %>歳以上<%= f.search_field :birthday_to_age_lt %>歳未満
-
-  <%= f.label "ニックネーム" %>
-  <%= f.search_field :nickname %>
-
-  <%= f.submit "検索" %>
-<% end %>
-
-<p>
-  全<%= @users.total_count %>件中、<%= @users.offset_value + 1 %>〜<%= @users.offset_value + @users.length %>件目を表示(<%= @users.current_page %>/<%= @users.total_pages %>ページ)
-</p>
-
-<% @users.each do |user| %>
-  <div>
-    <div>
-      フォト：
-      <%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100" %>
-    </div>
-    <p>
-      ニックネーム：
-      <%= link_to user_path(user) do %>
-        <%= user.nickname %>
-      <% end %>
-    </p>
-    <p>年齢：<%= user.age %></p>
-    <p>性別：<%= user.sex %></p>
-    <p>都道府県：<%= user.prefecture %></p>
-    <p>市区町村：<%= user.city %></p>
-    <p>投稿数：<%= user.spots.count %></p>
-    <p>
-      フォロー数：
-      <a href="<%= following_user_path(user) %>">
-        <%= user.following.count %>
-      </a>
-    </p>
-    <p>
-      フォロワー数：
-      <a href="<%= followers_user_path(user) %>", class="followers">
-        <%= user.followers.count %>
-      </a>
-    </p>
+  <div class="mb-5">
+    <%= search_form_for @q do |f| %>
+      <table class="table-borderless search-container mb-2">
+        <tr>
+          <td class="search-label"><%= f.label "都道府県" %></td>
+          <td class="search-form"><%= f.select :prefecture_eq, Spot.prefectures.map{|k, v| [Spot.prefectures_i18n[k], v]}, :include_blank => '指定なし' %></td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "市区町村" %></td>
+          <td class="search-form"><%= f.search_field :city_cont, placeholder: "(例) 新宿区", class: "form-width" %></td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "性別" %></td>
+          <td class="search-form">
+            <%= f.label "指定なし" %>
+            <%= f.radio_button :sex_eq, '', { :checked => true } %>
+            <%= f.label "男性", class: "ml-3" %>
+            <%= f.radio_button :sex_eq, 0 %>
+            <%= f.label "女性", class: "ml-3" %>
+            <%= f.radio_button :sex_eq, 1 %>
+          </td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "年齢" %></td>
+          <td class="search-form">
+            <%= f.search_field :birthday_to_age_gteq, placeholder: "(例)20", class: "form-width-age" %>歳以上<span>　</span>
+            <%= f.search_field :birthday_to_age_lt, placeholder: "(例)30", class: "form-width-age" %>歳未満
+          </td>
+        </tr>
+        <tr>
+          <td class="search-label"><%= f.label "ニックネーム" %></td>
+          <td class="search-form"><%= f.search_field :nickname, placeholder: "(例) たろう", class: "form-width" %></td>
+        </tr>
+      </table>
+      <%= f.submit "検索", class: "btn btn-secondary" %>
+    <% end %>
   </div>
-<% end %>
+  <p class="mb-3">
+    全<%= @users.total_count %>件中、<%= @users.offset_value + 1 %>〜<%= @users.offset_value + @users.length %>件目を表示(<%= @users.current_page %>/<%= @users.total_pages %>ページ)
+  </p>
+  <div class="user-index-window mb-5">
+    <table class="table">
+      <thead>
+        <tr>
+          <td></td>
+          <td>ニックネーム</td>
+          <td>年齢</td>
+          <td>性別</td>
+          <td>住所</td>
+          <td>フォロー数</td>
+          <td>フォロワー数</td>
+          <td>投稿数</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+            <td>
+              <%= link_to user_path(user) do %>
+                <%= user.nickname %>
+              <% end %>
+            </td>
+            <td><%= user.age %>歳</td>
+            <td><%= user.sex %></td>
+            <td><%= user.prefecture %><%= user.city %></td>
+            <td><%= user.following.count %>フォロー</td>
+            <td><%= user.followers.count %>フォロワー</td>
+            <td><%= user.spots.count %>スポット</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate @users, theme: 'twitter-bootstrap-4' %>
+  </div>
+</div>
+
+

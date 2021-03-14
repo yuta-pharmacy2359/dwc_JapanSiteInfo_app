@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @q = @user.spots.ransack(params[:q])
+    @q.sorts = 'created_at desc' if @q.sorts.empty?
     @spots = @q.result.page(params[:page])
     @all_user_spots = @user.spots
     @all_user_favorites_count = 0

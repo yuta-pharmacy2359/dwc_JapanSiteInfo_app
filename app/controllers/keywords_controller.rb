@@ -1,7 +1,9 @@
 class KeywordsController < ApplicationController
   def show
     @keyword = Keyword.find(params[:id])
-    @spots = @keyword.spots.page(params[:page]).reverse_order
+    @q = @keyword.spots.ransack(params[:q])
+    @q.sorts = 'created_at desc' if @q.sorts.empty?
+    @spots = @q.result.page(params[:page])
   end
 
   def index

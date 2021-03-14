@@ -24,4 +24,9 @@ class ApplicationRecord < ActiveRecord::Base
     SQL
     Arel.sql(query)
   end
+
+  def self.create_spot_favorite_ranks
+    Spot.find(Favorite.group(:spot_id).order('count(spot_id) desc').limit(10).pluck(:spot_id))
+  end
+
 end

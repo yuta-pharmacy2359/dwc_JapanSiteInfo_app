@@ -28,5 +28,7 @@ class ApplicationRecord < ActiveRecord::Base
   def self.create_spot_favorite_ranks
     Spot.find(Favorite.group(:spot_id).order('count(spot_id) desc').pluck(:spot_id))
   end
+  
+  
 
 end

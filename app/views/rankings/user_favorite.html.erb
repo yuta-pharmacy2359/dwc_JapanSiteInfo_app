@@ -1,0 +1,59 @@
+<div class="container px-5 my-5 px-sm-0">
+
+  <h3 class="mb-5">いいね数ランキング(ユーザー)</h3>
+
+  <div class="mb-5">
+    <table class="table user-favorite-ranking">
+      <thead>
+        <tr>
+          <td>順位</td>
+          <td></td>
+          <td>ニックネーム</td>
+          <td>住所</td>
+          <td>年齢</td>
+          <td>スポット数</td>
+          <td>総いいね数</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% lastFavorite = 0 %>
+        <% j = 1 %>
+        <% @all_ranks.each.with_index(1) do |user, i| %>
+          <% if i == 1 %>
+            <% lastFavorite = spot.favorites.count %>
+          <% end %>
+          <tr>
+            <% if spot.favorites.count != lastFavorite %>
+              <% j = i %>
+              <td>第<%= j.to_s %>位</td>
+              <td><%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td>
+                <%= link_to user_path(user) do %>
+                  <%= user.nickname %>
+                <% end %>
+              </td>
+              <td><%= user.prefecture %><%= user.city %></td>
+              <td><%= user.age %></td>
+              <td><%= user.spots.count %></td>
+              <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= spot.favorites.count %></td>
+              <% lastFavorite = spot.favorites.count %>
+            <% else %>
+              <% lastFavorite = spot.favorites.count %>
+              <td>第<%= j.to_s %>位</td>
+              <td><%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td>
+                <%= link_to user_path(user) do %>
+                  <%= user.nickname %>
+                <% end %>
+              </td>
+              <td><%= user.prefecture %><%= user.city %></td>
+              <td><%= user.age %></td>
+              <td><%= user.spots.count %></td>
+              <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= spot.favorites.count %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+
+</div>

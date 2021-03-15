@@ -4,7 +4,7 @@ class RankingsController < ApplicationController
   end
 
   def spot_favorite
-    @all_ranks = Spot.create_spot_favorite_ranks
+    @all_ranks = Kaminari.paginate_array(Spot.create_spot_favorite_ranks).page(params[:page])
   end
 
 end

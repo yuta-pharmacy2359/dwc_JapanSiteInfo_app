@@ -1,4 +1,4 @@
-<div class="container px-5 mt-5 px-sm-0">
+<div class="container px-5 my-5 px-sm-0">
 
   <h3 class="mb-5">いいね数ランキング(スポット)</h3>
 
@@ -16,27 +16,53 @@
         </tr>
       </thead>
       <tbody>
+        <% lastFavorite = 0 %>
+        <% j = 1 %>
         <% @all_ranks.each.with_index(1) do |spot, i| %>
+          <% if i == 1 %>
+            <% lastFavorite = spot.favorites.count %>
+          <% end %>
           <tr>
-            <td>第<%= i.to_s %>位</td>
-            <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
-            <td>
-              <%= link_to spot_path(spot) do %>
-                <%= spot.title %>
-              <% end %>
-            </td>
-            <td><%= spot.prefecture %><%= spot.city %></td>
-            <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
-            <td>
-              <%= link_to user_path(spot.user) do %>
-                <%= spot.user.nickname %>
-              <% end %>
-            </td>
-            <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= spot.favorites.count %></td>
-          </tr>
+            <% if spot.favorites.count != lastFavorite %>
+              <% j = i %>
+              <td>第<%= j.to_s %>位</td>
+              <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td>
+                <%= link_to spot_path(spot) do %>
+                  <%= spot.title %>
+                <% end %>
+              </td>
+              <td><%= spot.prefecture %><%= spot.city %></td>
+              <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+              <td>
+                <%= link_to user_path(spot.user) do %>
+                  <%= spot.user.nickname %>
+                <% end %>
+              </td>
+              <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= spot.favorites.count %></td>
+              <% lastFavorite = spot.favorites.count %>
+            <% else %>
+              <% lastFavorite = spot.favorites.count %>
+              <td>第<%= j.to_s %>位</td>
+              <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td>
+                <%= link_to spot_path(spot) do %>
+                  <%= spot.title %>
+                <% end %>
+              </td>
+              <td><%= spot.prefecture %><%= spot.city %></td>
+              <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+              <td>
+                <%= link_to user_path(spot.user) do %>
+                  <%= spot.user.nickname %>
+                <% end %>
+              </td>
+              <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= spot.favorites.count %></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
   </div>
-
+  <%= paginate @all_ranks, theme: 'twitter-bootstrap-4' %>
 </div>

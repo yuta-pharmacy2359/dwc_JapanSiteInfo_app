@@ -18,42 +18,43 @@
       <tbody>
         <% lastFavorite = 0 %>
         <% j = 1 %>
-        <% @all_ranks.each.with_index(1) do |user, i| %>
+        <% @summary.each.with_index(1) do |(k, v), i| %>
           <% if i == 1 %>
-            <% lastFavorite = spot.favorites.count %>
+            <% lastFavorite = v %>
           <% end %>
           <tr>
-            <% if spot.favorites.count != lastFavorite %>
+            <% if v != lastFavorite %>
               <% j = i %>
               <td>第<%= j.to_s %>位</td>
-              <td><%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td><%= attachment_image_tag User.find(k.to_i), :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
               <td>
-                <%= link_to user_path(user) do %>
-                  <%= user.nickname %>
+                <%= link_to user_path(User.find(k.to_i)) do %>
+                  <%= User.find(k.to_i).nickname %>
                 <% end %>
               </td>
-              <td><%= user.prefecture %><%= user.city %></td>
-              <td><%= user.age %></td>
-              <td><%= user.spots.count %></td>
-              <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= spot.favorites.count %></td>
-              <% lastFavorite = spot.favorites.count %>
+              <td><%= User.find(k.to_i).prefecture %><%= User.find(k.to_i).city %></td>
+              <td><%= User.find(k.to_i).age %>歳</td>
+              <td><%= User.find(k.to_i).spots.count %>スポット</td>
+              <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= v.to_s %></td>
+              <% lastFavorite = v %>
             <% else %>
-              <% lastFavorite = spot.favorites.count %>
+              <% lastFavorite = v %>
               <td>第<%= j.to_s %>位</td>
-              <td><%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td><%= attachment_image_tag User.find(k.to_i), :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
               <td>
-                <%= link_to user_path(user) do %>
-                  <%= user.nickname %>
+                <%= link_to user_path(User.find(k.to_i)) do %>
+                  <%= User.find(k.to_i).nickname %>
                 <% end %>
               </td>
-              <td><%= user.prefecture %><%= user.city %></td>
-              <td><%= user.age %></td>
-              <td><%= user.spots.count %></td>
-              <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= spot.favorites.count %></td>
-            </tr>
-          <% end %>
+              <td><%= User.find(k.to_i).prefecture %><%= User.find(k.to_i).city %></td>
+              <td><%= User.find(k.to_i).age %>歳</td>
+              <td><%= User.find(k.to_i).spots.count %>スポット</td>
+              <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= v.to_s %></td>
+            <% end %>
+          </tr>
         <% end %>
       </tbody>
     </table>
-
+  </div>
+  <%#= paginate @user_favorite_index, theme: 'twitter-bootstrap-4' %>
 </div>

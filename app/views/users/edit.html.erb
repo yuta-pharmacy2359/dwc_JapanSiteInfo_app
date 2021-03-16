@@ -43,7 +43,7 @@
         <tr>
           <td class="mr-3 mt-4">プロフィール画像</td>
           <td>
-            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", size: "100x100", autocomplete: "profile_image" %><br />
+            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", autocomplete: "profile_image", class: "image-100" %><br />
             <%= f.attachment_field :profile_image, placeholder: "プロフィール画像", class: "mt-2" %>
           </td>
         </tr>

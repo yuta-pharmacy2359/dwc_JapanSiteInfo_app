@@ -35,6 +35,7 @@ class Spot < ApplicationRecord
   end
 
   validates :title, presence: true
+  validates :prefecture, presence: true
   validate :visited_day_is_valid?
 
 end

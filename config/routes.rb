@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   resources :keywords, only: [:show, :index]
 
-  get "/rankings/user_favorite" => "rankings#user_favorite", as: "user_favorite"
-  get "/rankings/spot_favorite" => "rankings#spot_favorite", as: "spot_favorite"
+  get "/rankings/user_favorite" => "rankings#user_favorite", as: "user_favorite_ranking"
+  get "/rankings/spot_favorite" => "rankings#spot_favorite", as: "spot_favorite_ranking"
 
 end

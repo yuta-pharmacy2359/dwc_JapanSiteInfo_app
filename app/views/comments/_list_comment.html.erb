@@ -3,7 +3,7 @@
 <table class="table mb-4 comments-index">
   <% spot.comments.each do |comment| %>
     <tr id="comment-<%= comment.id %>">
-      <td><%= attachment_image_tag comment.user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+      <td><%= attachment_image_tag comment.user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-100" %></td>
       <td>
         <%= link_to user_path(comment.user) do %>
           <%= comment.user.nickname %><br /><br/>

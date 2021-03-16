@@ -1,7 +1,7 @@
 <div class="container-xxl px-3 mt-5 px-sm-2">
 
   <div class="row justify-content-center" style="margin-left: 0; margin-right: 0;">
-    <div class="col-xxl-2 px-3">
+    <div class="col-md-3 px-3 mr-5">
       <% if current_user.present? && (@user.id == current_user.id) %>
         <h3 class="mb-4">マイページ</h2>
       <% else %>
@@ -11,7 +11,7 @@
       <table class="table">
         <tr>
           <td colspan="2">
-            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", autocomplete: "profile_image", class: "profile-image-200px" %>
+            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", autocomplete: "profile_image", class: "image-200" %>
           </td>
         </tr>
         <tr>
@@ -51,7 +51,7 @@
           </td>
         </tr>
         <tr>
-          <td>投稿スポット数</td>
+          <td>スポット数</td>
           <td><%= @user.spots.count %></td>
         </tr>
         <tr>
@@ -71,7 +71,7 @@
         </div>
       <% end %>
     </div>
-    <div class="col-xxl-8 px-3 spot-index">
+    <div class="col-md-7 px-3 ml-5 user-show-spot-index">
       <h3 class="mb-4">スポット一覧</h3>
       <%= render "spots/spot_index", spots: @spots, q: @q %>
       <%= paginate @spots, theme: 'twitter-bootstrap-4' %>

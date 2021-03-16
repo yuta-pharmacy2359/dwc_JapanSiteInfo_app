@@ -1,0 +1,21 @@
+<%= search_form_for q do |f| %>
+  <table class="table-borderless search-container mb-2">
+    <tr>
+      <td class="search-label"><%= f.label "都道府県" %></td>
+      <td class="search-form"><%= f.select :prefecture_eq, Spot.prefectures.map{|k, v| [Spot.prefectures_i18n[k], v]}, :include_blank => '指定なし' %></td>
+    </tr>
+    <tr>
+      <td class="search-label"><%= f.label "市区町村" %></td>
+      <td class="search-form"><%= f.search_field :city_cont, placeholder: "(例) 港区", class: "form-width" %></td>
+    </tr>
+    <tr>
+      <td class="search-label"><%= f.label "タイトル" %></td>
+      <td class="search-form"><%= f.search_field :title, placeholder: "(例) 東京タワー", class: "form-width" %></td>
+    </tr>
+    <tr>
+      <td class="search-label"><%= f.label "キーワード" %></td>
+      <td class="search-form"><%= f.search_field :keywords_keyword_cont, placeholder: "(例) 東京タワー", class: "form-width" %></td>
+    </tr>
+  </table>
+  <%= f.submit "検索", class: "btn btn-secondary" %>
+<% end %>

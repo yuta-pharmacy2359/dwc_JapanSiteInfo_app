@@ -42,7 +42,7 @@
   <p class="mb-3">
     全<%= @users.total_count %>件中、<%= @users.offset_value + 1 %>〜<%= @users.offset_value + @users.length %>件目を表示(<%= @users.current_page %>/<%= @users.total_pages %>ページ)
   </p>
-  <div class="user-index-window mb-5">
+  <div class="user-index mb-5">
     <table class="table">
       <thead>
         <tr>
@@ -59,18 +59,18 @@
       <tbody>
         <% @users.each do |user| %>
           <tr>
-            <td><%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+            <td><%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
             <td>
               <%= link_to user_path(user) do %>
                 <%= user.nickname %>
               <% end %>
             </td>
-            <td><%= user.age %>歳</td>
-            <td><%= user.sex %></td>
+            <td class="text-nowrap"><%= user.age %>歳</td>
+            <td class="text-nowrap"><%= user.sex %></td>
             <td><%= user.prefecture %><%= user.city %></td>
-            <td><%= user.following.count %>フォロー</td>
-            <td><%= user.followers.count %>フォロワー</td>
-            <td><%= user.spots.count %>スポット</td>
+            <td class="text-nowrap"><%= user.following.count %>フォロー</td>
+            <td class="text-nowrap"><%= user.followers.count %>フォロワー</td>
+            <td class="text-nowrap"><%= user.spots.count %>スポット</td>
           </tr>
         <% end %>
       </tbody>

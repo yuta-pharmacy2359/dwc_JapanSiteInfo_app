@@ -2,6 +2,11 @@
 
   <h3 class="mb-5">いいね数ランキング(スポット)</h3>
 
+  <p class="my-5">
+    ユーザーのいいね数ランキングは
+    <%= link_to "こちら", user_favorite_ranking_path %>
+  </p>
+
   <div class="mb-5">
     <table class="table spot-favorite-ranking">
       <thead>
@@ -25,15 +30,15 @@
           <tr>
             <% if spot.favorites.count != lastFavorite %>
               <% j = i %>
-              <td>第<%= j.to_s %>位</td>
-              <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td class="text-nowrap">第<%= j.to_s %>位</td>
+              <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
               <td>
                 <%= link_to spot_path(spot) do %>
                   <%= spot.title %>
                 <% end %>
               </td>
               <td><%= spot.prefecture %><%= spot.city %></td>
-              <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+              <td class="text-nowrap"><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
               <td>
                 <%= link_to user_path(spot.user) do %>
                   <%= spot.user.nickname %>
@@ -43,15 +48,15 @@
               <% lastFavorite = spot.favorites.count %>
             <% else %>
               <% lastFavorite = spot.favorites.count %>
-              <td>第<%= j.to_s %>位</td>
-              <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td class="text-nowrap">第<%= j.to_s %>位</td>
+              <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
               <td>
                 <%= link_to spot_path(spot) do %>
                   <%= spot.title %>
                 <% end %>
               </td>
               <td><%= spot.prefecture %><%= spot.city %></td>
-              <td><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+              <td class="text-nowrap"><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
               <td>
                 <%= link_to user_path(spot.user) do %>
                   <%= spot.user.nickname %>

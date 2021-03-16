@@ -2,6 +2,11 @@
 
   <h3 class="mb-5">いいね数ランキング(ユーザー)</h3>
 
+  <p class="my-5">
+    スポットのいいね数ランキングは
+    <%= link_to "こちら", spot_favorite_ranking_path %>
+  </p>
+
   <div class="mb-5">
     <table class="table user-favorite-ranking">
       <thead>
@@ -25,30 +30,30 @@
           <tr>
             <% if v != lastFavorite %>
               <% j = i %>
-              <td>第<%= j.to_s %>位</td>
-              <td><%= attachment_image_tag User.find(k.to_i), :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td class="text-nowrap">第<%= j.to_s %>位</td>
+              <td><%= attachment_image_tag User.find(k.to_i), :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
               <td>
                 <%= link_to user_path(User.find(k.to_i)) do %>
                   <%= User.find(k.to_i).nickname %>
                 <% end %>
               </td>
               <td><%= User.find(k.to_i).prefecture %><%= User.find(k.to_i).city %></td>
-              <td><%= User.find(k.to_i).age %>歳</td>
-              <td><%= User.find(k.to_i).spots.count %>スポット</td>
+              <td class="text-nowrap"><%= User.find(k.to_i).age %>歳</td>
+              <td class="text-nowrap"><%= User.find(k.to_i).spots.count %>スポット</td>
               <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= v.to_s %></td>
               <% lastFavorite = v %>
             <% else %>
               <% lastFavorite = v %>
-              <td>第<%= j.to_s %>位</td>
-              <td><%= attachment_image_tag User.find(k.to_i), :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %></td>
+              <td class="text-nowrap">第<%= j.to_s %>位</td>
+              <td><%= attachment_image_tag User.find(k.to_i), :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
               <td>
                 <%= link_to user_path(User.find(k.to_i)) do %>
                   <%= User.find(k.to_i).nickname %>
                 <% end %>
               </td>
               <td><%= User.find(k.to_i).prefecture %><%= User.find(k.to_i).city %></td>
-              <td><%= User.find(k.to_i).age %>歳</td>
-              <td><%= User.find(k.to_i).spots.count %>スポット</td>
+              <td class="text-nowrap"><%= User.find(k.to_i).age %>歳</td>
+              <td class="text-nowrap"><%= User.find(k.to_i).spots.count %>スポット</td>
               <td class="text-nowrap"><span class="fa fa-heart like-btn-unlike mr-1"></span><%= v.to_s %></td>
             <% end %>
           </tr>

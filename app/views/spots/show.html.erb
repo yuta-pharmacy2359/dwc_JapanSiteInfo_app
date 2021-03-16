@@ -51,9 +51,9 @@
           </td>
         </tr>
         <tr>
-          <td class="py-3 px-2"><%= attachment_image_tag @spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-show-image" %></td>
-          <td class="px-2"><%= attachment_image_tag @spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-show-image" %></td>
-          <td class="px-2"><%= attachment_image_tag @spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-show-image" %></td>
+          <td class="py-3 px-2"><%= attachment_image_tag @spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-200" %></td>
+          <td class="px-2"><%= attachment_image_tag @spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-200" %></td>
+          <td class="px-2"><%= attachment_image_tag @spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-200" %></td>
         </tr>
         <tr>
           <td colspan="3" class="py-4"><%= @spot.content %></td>
@@ -74,7 +74,7 @@
       <table class="table">
         <tr>
           <td colspan="2">
-            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", autocomplete: "profile_image", class: "profile-image-200px" %>
+            <%= attachment_image_tag @user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", autocomplete: "profile_image", class: "image-200" %>
           </td>
         </tr>
         <tr>

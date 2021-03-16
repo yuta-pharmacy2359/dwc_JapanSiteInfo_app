@@ -2,12 +2,12 @@
 <div class="container px-5 my-5 px-sm-0">
   <h3 class="mb-4"><%= @user.nickname %>さんの<%= @title %></h3>
 
-  <table class="table follow-index-window">
+  <table class="table follow-index">
     <% @users.each do |user| %>
       <tr>
         <td>
           <%= link_to user_path(user.id) do %>
-            <%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "profile-image-100px" %>
+            <%= attachment_image_tag user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %>
           <% end %>
         </td>
         <td>
@@ -15,19 +15,19 @@
             <%= user.nickname %>
           <% end %>
         </td>
-        <td>
+        <td class="text-nowrap">
           フォロー数：
           <%= link_to following_user_path(user) do %>
             <%= user.following.count %>
           <% end %>
         </td>
-        <td>
+        <td class="text-nowrap">
           フォロワー数：
           <%= link_to followers_user_path(user) do %>
             <%= user.followers.count %>
           <% end %>
         </td>
-        <td>
+        <td class="text-nowrap">
           <% if user.spots.present? %>
             最終更新：<%= user.spots.order(:updated_at).last.updated_at.strftime('%Y年%-m月%-d日') %>
           <% else %>

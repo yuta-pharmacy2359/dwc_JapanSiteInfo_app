@@ -10,7 +10,7 @@
     <p class="main-visual-title">
       JapanSiteInfo
     </p>
-    </div>
+  </div>
     <div class="theTarget">
       <div class="theTarget-image1"></div>
       <div class="theTarget-image2"></div>
@@ -19,77 +19,32 @@
       <div class="theTarget-image5"></div>
     </div>
   </div>
+</div>
 
-<div class="container-xxl mt-5 mx-5" style="padding-left: 0; padding-right: 0;">
-  <div class="row justify-content-center">
-    <div class="col-lg-5 mt-5 mr-5" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;">
-      <h3>新着スポット</h3>
-      <div class="table-responsive-sm">
-      <table class="table table-hover my-4">
-          <% @spots.each do |spot| %>
-            <tr>
-              <td>
-                <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image-index" %>
-              </td>
-              <td class="text-nowrap mt-4">
-                <%= link_to spot_path(spot) do %>
-                  <%= spot.title %>
-                <% end %>
-                <br />
-                <%= spot.prefecture %><%= spot.city %>
-                <br />
-                投稿：<%= spot.created_at.strftime("%Y年%-m月%-d日") %>
-                <br />
-                <% if spot.visited_day.nil? %>
-                  来訪：不明
-                <% else %>
-                  来訪：<%= spot.visited_day.strftime("%Y年%-m月%-d日") %>
-                <% end %>
-                <br />
-                <% if spot.rate.nil? %>
-                  無評価
-                <% else %>
-                  <p id="star-rate-<%= spot.id %>"></p>
-                  <script>
-                    $('#star-rate-<%= spot.id %>').raty({
-                      size: 36,
-                      starOff: '<%= asset_path('star-off.png') %>',
-                      starOn: '<%= asset_path('star-on.png') %>',
-                      readOnly: true,
-                      score: <%= spot.rate %>,
-                    });
-                  </script>
-                <% end %>
-                <p class="favorite-<%= spot.id %>">
-                  <%= render "favorites/list_favorite", spot: spot %>
-                </p>
-              </td>
-            </tr>
-          <% end %>
-      </table>
-      </div>
-      <%= paginate @spots, theme: 'twitter-bootstrap-4' %>
+<div class="notice">
+  <% if flash.now[:notice] %>
+    <p class="alert alert-success"><%= flash.now[:notice] %></p>
+  <% elsif flash.now[:alert] %>
+    <p class="alert alert-danger"><%= flash.now[:alert] %></p>
+  <% end %>
+</div>
+
+<div class="container px-5 mt-5 px-sm-0">
+  <% if current_user.nil? %>
+    <h3 class="mb-4">スポットを探してみる</h3>
+
+    <div class="mb-5">
+      <%= render "spots/search_spot", q: @q %>
     </div>
+  <% end %>
 
-    <% if current_user.nil? %>
-      <div class="col-lg-4 mt-5 ml-5" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;">
-        <h3>スポットを探してみる</h3>
-        <%= search_form_for @q do |f| %>
-          <%= f.label "都道府県", class: "mt-4" %><br />
-          <%= f.select :prefecture_eq, Spot.prefectures.map{|k, v| [Spot.prefectures_i18n[k], v]}, :include_blank => '指定なし' %><br />
+  <h3 class="mb-3">新着スポット</h3>
 
-          <%= f.label "市区町村", class: "mt-3" %><br />
-          <%= f.search_field :city_cont, placeholder: "(例) 新宿区" %><br />
-
-          <%= f.label "タイトル", class: "mt-3" %><br />
-          <%= f.search_field :title, placeholder: "(例) 高層ビル群" %><br />
-
-          <%= f.label "キーワード", class: "mt-3" %><br />
-          <%= f.search_field :keywords_keyword_cont, placeholder: "(例) 都庁" %><br />
-
-          <%= f.submit "検索", class: "btn btn-secondary mt-4" %>
-        <% end %>
-      </div>
-    <% end %>
+  <p class="mb-3">
+    全<%= @spots.total_count %>件中、<%= @spots.offset_value + 1 %>〜<%= @spots.offset_value + @spots.length %>件目を表示(<%= @spots.current_page %>/<%= @spots.total_pages %>ページ)
+  </p>
+  <div class="spot-index mb-5">
+    <%= render "spots/spot_index", spots: @spots, q: @q %>
+    <%= paginate @spots, theme: 'twitter-bootstrap-4' %>
   </div>
 </div>

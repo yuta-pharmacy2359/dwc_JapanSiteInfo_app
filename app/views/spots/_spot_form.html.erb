@@ -39,26 +39,26 @@
   <tr>
     <td class="mr-3 mt-4">写真(1枚目)</td>
     <td>
-      <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image-edit" %><br />
+      <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-100" %><br />
       <%= f.attachment_field :spot_image1, placeholder: "写真", class: "mt-2" %>
     </td>
   </tr>
   <tr>
     <td class="mr-3 mt-4">写真(2枚目)</td>
     <td>
-      <%= attachment_image_tag spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image-edit" %><br />
+      <%= attachment_image_tag spot, :spot_image2, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-100" %><br />
       <%= f.attachment_field :spot_image2, placeholder: "写真", class: "mt-2" %>
     </td>
   </tr>
   <tr>
     <td class="mr-3 mt-4">写真(3枚目)</td>
     <td>
-      <%= attachment_image_tag spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image-edit" %><br />
+      <%= attachment_image_tag spot, :spot_image3, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-100" %><br />
       <%= f.attachment_field :spot_image3, placeholder: "写真", class: "mt-2" %>
     </td>
   </tr>
   <tr>
-    <td class="mr-3 mt-4">内容・感想</td>
+    <td class="mr-3 mt-4">内容・感想 ※</td>
     <td><%= f.text_area :content, autofocus: true, rows: "5", autocomplete: "content", placeholder: "スポットの感想や、詳細な位置や情報など、自由に記入してください。", class: "form-width" %></td>
   </tr>
 </table>

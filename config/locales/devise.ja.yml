@@ -25,7 +25,9 @@ ja:
         email: メールアドレス
       spot:
         title: タイトル
+        prefecture: 都道府県
         visited_day: 来訪日
+        content: 内容・感想
 
   devise:
     failure:

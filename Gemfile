@@ -78,4 +78,4 @@ gem 'kaminari', '~> 1.2.1'
 gem 'ransack'
 gem 'enum_help'
 gem 'bootstrap4-kaminari-views'
-
+gem 'jquery-turbolinks'

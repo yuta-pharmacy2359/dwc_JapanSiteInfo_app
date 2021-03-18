@@ -24,12 +24,14 @@ class SpotsController < ApplicationController
     @user = @spot.user
     @spot_keywords = @spot.keywords
     @comment = Comment.new
+    @cookies = cookies[:favorite_spot_id]
   end
 
   def index
     @q = Spot.ransack(params[:q])
     @q.sorts = 'created_at desc' if @q.sorts.empty?
     @spots = @q.result.page(params[:page])
+    @cookies = cookies[:favorite_spot_id]
   end
 
   def edit

@@ -4,6 +4,7 @@ class KeywordsController < ApplicationController
     @q = @keyword.spots.ransack(params[:q])
     @q.sorts = 'created_at desc' if @q.sorts.empty?
     @spots = @q.result.page(params[:page])
+    @cookies = cookies[:favorite_spot_id]
   end
 
   def index

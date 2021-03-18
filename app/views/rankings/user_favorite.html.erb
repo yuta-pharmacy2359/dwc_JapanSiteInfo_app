@@ -23,7 +23,7 @@
       <tbody>
         <% lastFavorite = 0 %>
         <% j = 1 %>
-        <% @summary.each.with_index(1) do |(k, v), i| %>
+        <% @summary.sort{|(k1, v1),(k2, v2)| v2 <=> v1 }.to_h.each.with_index(1) do |(k, v), i| %>
           <% if i == 1 %>
             <% lastFavorite = v %>
           <% end %>

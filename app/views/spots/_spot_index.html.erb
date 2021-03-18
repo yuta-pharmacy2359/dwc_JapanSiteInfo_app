@@ -1,19 +1,31 @@
 <table class="table">
-  <% unless current_page?(top_path) %>
-  <thead>
-    <tr>
-      <td>
+  <% if current_page?(top_path) %>
+    <thead>
+      <tr>
+        <td></td>
+        <td class="text-nowrap">タイトル</td>
+        <td class="text-nowrap">所在地</td>
+        <td class="text-nowrap">投稿日</td>
+        <td class="text-nowrap">来訪日</td>
+        <td class="text-nowrap">評価</td>
+        <td class="text-nowrap">いいね</td>
+      </tr>
+    </thead>
+  <% else %>
+    <thead>
+      <tr>
+        <td>
         青字カテゴリをクリック<br />
         で並び替え
-      </td>
-      <td class="text-nowrap"><%= sort_link(q, :title, "タイトル") %></td>
-      <td><%= sort_link(q, :prefecture, "所在地") %></td>
-      <td class="text-nowrap"><%= sort_link(q, :created_at, "投稿日") %></td>
-      <td class="text-nowrap"><%= sort_link(q, :visited_day, "来訪日") %></td>
-      <td class="text-nowrap"><%= sort_link(q, :rate, "評価") %></td>
-      <td class="text-nowrap"><%= sort_link(q, :favorites_count, "いいね") %></td>
-    </tr>
-  </thead>
+        </td>
+        <td class="text-nowrap"><%= sort_link(q, :title, "タイトル") %></td>
+        <td class="text-nowrap"><%= sort_link(q, :prefecture, "所在地") %></td>
+        <td class="text-nowrap"><%= sort_link(q, :created_at, "投稿日") %></td>
+        <td class="text-nowrap"><%= sort_link(q, :visited_day, "来訪日") %></td>
+        <td class="text-nowrap"><%= sort_link(q, :rate, "評価") %></td>
+        <td class="text-nowrap"><%= sort_link(q, :favorites_count, "いいね") %></td>
+      </tr>
+    </thead>
   <% end %>
   <tbody>
     <% spots.each do |spot| %>
@@ -52,7 +64,7 @@
             </script>
           <% end %>
         <td class="favorite-<%= spot.id %> text-nowrap">
-          <%= render "favorites/list_favorite", spot: spot %>
+          <%= render "favorites/list_favorite", spot: spot, favorites_count: spot.favorites.count, cookies: cookies %>
         </td>
       </tr>
     <% end %>

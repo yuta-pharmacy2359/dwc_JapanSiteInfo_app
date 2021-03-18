@@ -12,6 +12,7 @@ class UsersController < ApplicationController
     @all_user_spots.each do |spot|
       @all_user_favorites_count += spot.favorites.count
     end
+    @cookies = cookies[:favorite_spot_id]
   end
 
   def index

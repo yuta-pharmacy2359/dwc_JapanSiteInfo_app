@@ -45,7 +45,7 @@
     全<%= @spots.total_count %>件中、<%= @spots.offset_value + 1 %>〜<%= @spots.offset_value + @spots.length %>件目を表示(<%= @spots.current_page %>/<%= @spots.total_pages %>ページ)
   </p>
   <div class="spot-index mb-5">
-    <%= render "spots/spot_index", spots: @spots, q: @q %>
+    <%= render "spots/spot_index", spots: @spots, q: @q, cookies: @cookies %>
     <%= paginate @spots, theme: 'twitter-bootstrap-4' %>
   </div>
 </div>

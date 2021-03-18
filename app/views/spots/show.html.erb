@@ -38,7 +38,7 @@
             </script>
           <% end %>
           <td colspan="2" class="favorite-<%= @spot.id %>">
-            <%= render "favorites/list_favorite", spot: @spot %>
+            <%= render "favorites/list_favorite", spot: @spot, favorites_count: @spot.favorites.count, cookies: cookies %>
           </td>
         </tr>
         <tr>

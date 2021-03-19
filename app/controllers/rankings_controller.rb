@@ -16,11 +16,10 @@ class RankingsController < ApplicationController
       end
       @summary[hash] += spot[:count]
     end
-    #@user_favorite_index = Kaminari.paginate_array(@summary).page(params[:page]).per(10)
   end
 
   def spot_favorite
-    @all_ranks = Kaminari.paginate_array(Spot.create_spot_favorite_ranks).page(params[:page])
+    @all_ranks = Spot.create_spot_favorite_ranks
   end
 
 end

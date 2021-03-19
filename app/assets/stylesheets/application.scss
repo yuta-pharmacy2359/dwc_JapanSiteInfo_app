@@ -196,6 +196,22 @@
   border: none;
 }
 
+.now-preparation-image {
+  text-align: center;
+  &-img {
+    width: 200px;
+  }
+}
+
+/* ランキングで最下段の行を表示しない */
+.spot-favorite-ranking tr:last-child {
+  display: none;
+}
+
+.user-favorite-ranking tr:last-child {
+  display: none;
+}
+
 /* 画面幅1121px以上におけるレスポンシブ対応 */
 @media screen and (min-width:1121px) {
   .spot-index .responsive-label {

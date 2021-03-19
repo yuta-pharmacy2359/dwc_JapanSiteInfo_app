@@ -34,8 +34,10 @@ class Spot < ApplicationRecord
     end
   end
 
-  validates :title, presence: true
+  validates :title, presence: true, length: {maximum: 20}
   validates :prefecture, presence: true
+  validates :city, presence: true, length: {maximum: 15}
   validate :visited_day_is_valid?
+  validates :content, presence: true, length: {maximum: 300}
 
 end

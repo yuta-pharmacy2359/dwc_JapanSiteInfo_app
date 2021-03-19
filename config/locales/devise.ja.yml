@@ -26,6 +26,7 @@ ja:
       spot:
         title: タイトル
         prefecture: 都道府県
+        city: 市区町村
         visited_day: 来訪日
         content: 内容・感想
 

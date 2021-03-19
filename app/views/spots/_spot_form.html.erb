@@ -1,12 +1,12 @@
 <table class="table table-borderless input-form-user-edit mb-4">
   <tr>
     <td class="mr-3 mt-4">タイトル ※</td>
-    <td><%= f.text_field :title, autofocus: true, autocomplete: "title", class: "form-width" %></td>
+    <td><%= f.text_field :title, autofocus: true, autocomplete: "title", placeholder: "(例)東京タワーの夜景[20字以内]", class: "form-width" %></td>
   </tr>
   <tr>
     <td class="mr-3 mt-4">キーワード</td>
     <td>
-      <%= f.text_field :keyword, autofocus: true, placeholder: "(例)東京タワー 夜", class: "form-width" %><br />
+      <%= f.text_field :keyword, autofocus: true, placeholder: "(例)東京タワー 夜景", class: "form-width" %><br />
       (注)空白を入れることで、<br />複数のキーワードを登録できます。
     </td>
   </tr>
@@ -15,8 +15,8 @@
     <td><%= f.select :prefecture, Spot.prefectures.keys, :include_blank => '選択してください' %></td>
   </tr>
   <tr>
-    <td class="mr-3 mt-4">所在地(市区町村)</td>
-    <td><%= f.text_field :city, autofocus: true, autocomplete: "city", class: "form-width" %></td>
+    <td class="mr-3 mt-4">所在地(市区町村) ※</td>
+    <td><%= f.text_field :city, autofocus: true, autocomplete: "city", placeholder: "(例)港区[15字以内]", class: "form-width" %></td>
   </tr>
   <tr>
     <td class="mr-3 mt-4">来訪日</td>
@@ -59,6 +59,6 @@
   </tr>
   <tr>
     <td class="mr-3 mt-4">内容・感想 ※</td>
-    <td><%= f.text_area :content, autofocus: true, rows: "5", autocomplete: "content", placeholder: "スポットの感想や、詳細な位置や情報など、自由に記入してください。", class: "form-width" %></td>
+    <td><%= f.text_area :content, autofocus: true, rows: "5", autocomplete: "content", placeholder: "スポットの感想や、詳細な位置や補足情報など、自由に記入してください。[300字以内]", class: "form-width" %></td>
   </tr>
 </table>

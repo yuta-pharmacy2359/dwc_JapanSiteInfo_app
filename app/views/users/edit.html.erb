@@ -49,7 +49,7 @@
         </tr>
         <tr>
           <td class="mr-3 mt-4">自己紹介</td>
-          <td><%= f.text_area :introduction, rows: "5", autofocus: true, autocomplete: "introduction", class: "form-width" %></td>
+          <td><%= f.text_area :introduction, rows: "5", autofocus: true, autocomplete: "introduction", placeholder: "50字以内で自由に記述してください", class: "form-width" %></td>
         </tr>
       </table>
       <%= f.submit "更新する", class: "btn btn-success", style: "width: 125px;" %>

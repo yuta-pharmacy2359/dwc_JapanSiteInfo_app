@@ -22,7 +22,7 @@ class User < ApplicationRecord
   end
 
   def birthday_is_valid?
-   errors.add(:birthday, "が無効な日付です") if birthday.nil? || birthday > Date.today
+    errors.add(:birthday, "が無効な日付です") if birthday.nil? || birthday > Date.today
   end
 
   def follow(other_user)
@@ -46,11 +46,12 @@ class User < ApplicationRecord
     return favorites_count
   end
 
-  validates :fullname, presence: true
-  validates :nickname, presence: true
+  validates :fullname, presence: true, length: {maximum: 20}
+  validates :nickname, {presence: true, uniqueness: true, length: {maximum: 20}}
   validates :sex, presence: true
   validate :birthday_is_valid?
   validates :prefecture, presence: true
-  validates :city, presence: true
+  validates :city, presence: true, length: {maximum: 15}
+  validates :introduction, length: {maximum: 50}
 
 end

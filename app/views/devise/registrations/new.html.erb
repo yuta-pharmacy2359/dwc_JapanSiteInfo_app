@@ -14,11 +14,11 @@
       <table class="table table-borderless input-form">
         <tr>
           <td class="mr-3 mt-4">氏名(フルネーム)</td>
-          <td><%= f.text_field :fullname, autofocus: true, autocomplete: "fullname", placeholder: "(例)山田太郎", class: "form-width form-ph" %></td>
+          <td><%= f.text_field :fullname, autofocus: true, autocomplete: "fullname", placeholder: "(例)山田太郎[20字以内]", class: "form-width form-ph" %></td>
         </tr>
         <tr>
           <td class="mr-3 mt-4">ニックネーム</td>
-          <td><%= f.text_field :nickname, autofocus: true, autocomplete: "nickname", placeholder: "(例)たろう", class: "form-width form-ph" %></td>
+          <td><%= f.text_field :nickname, autofocus: true, autocomplete: "nickname", placeholder: "(例)たろう[20字以内]", class: "form-width form-ph" %></td>
         </tr>
         <tr>
           <td class="mr-3 mt-4">メールアドレス</td>
@@ -41,7 +41,7 @@
         </tr>
         <tr>
           <td class="mr-3 mt-4">住所(市区町村)</td>
-          <td><%= f.text_field :city, autofocus: true, autocomplete: "city", placeholder: "(例)新宿区", class: "form-width form-ph" %></td>
+          <td><%= f.text_field :city, autofocus: true, autocomplete: "city", placeholder: "(例)新宿区[15字以内]", class: "form-width form-ph" %></td>
         </tr>
         <tr>
           <td class="mr-3 mt-4">パスワード(英数字6文字以上)</td>

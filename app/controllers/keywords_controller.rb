@@ -9,6 +9,7 @@ class KeywordsController < ApplicationController
 
   def index
     @q = Keyword.ransack(params[:q])
-    @keywords = @q.result(distinct: true).page(params[:page]).reverse_order
+    @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    @keywords = @q.result(distinct: true).page(params[:page])
   end
 end

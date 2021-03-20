@@ -11,5 +11,4 @@ Ransack.configure do |config|
     formatter: -> (v) { v.years.ago.to_date },
     type: :integer,
     compounds: false
-
 end

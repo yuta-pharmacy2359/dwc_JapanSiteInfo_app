@@ -9,7 +9,7 @@
 
   <% if @summary.count < 11 %>
     <div class="now-preparation mb-5 text-center">現在準備中です。</div>
-    <div class="now-preparation-image"><img src="/assets/398656.jpg" class="now-preparation-image-img"></div>
+    <div class="now-preparation-image"><img src="<%= asset_path "398656.jpg" %>" class="now-preparation-image-img"></div>
   <% else %>
     <div class="mb-5">
       <table class="table user-favorite-ranking">

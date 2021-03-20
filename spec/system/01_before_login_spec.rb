@@ -3,7 +3,7 @@ require 'rails_helper'
 describe '[STEP1] ユーザログイン前のテスト' do
   describe 'トップ画面のテスト' do
     before do
-      visit root_path
+      visit top_path
     end
 
     context '表示内容の確認' do

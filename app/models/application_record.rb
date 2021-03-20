@@ -25,6 +25,17 @@ class ApplicationRecord < ActiveRecord::Base
     Arel.sql(query)
   end
 
+  ransacker :rate_average do
+    query = <<-SQL
+      (SELECT AVG (spots.rate) as rate_average
+        FROM keyword_relationships, spots
+        WHERE keywords.id = keyword_relationships.keyword_id
+        AND spots.id = keyword_relationships.spot_id
+        GROUP BY keyword_relationships.keyword_id)
+    SQL
+    Arel.sql(query)
+  end
+
   def self.create_spot_favorite_ranks
     Spot.find(Favorite.group(:spot_id).order('count(spot_id) desc').pluck(:spot_id))
   end

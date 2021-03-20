@@ -31,7 +31,7 @@
           <td></td>
           <td>キーワード</td>
           <td>スポット投稿数</td>
-          <td>評価平均</td>
+          <td class="text-nowrap"><%= sort_link(@q, :rate_average, "評価平均") %></td>
         </tr>
       </thead>
       <tbody>
@@ -56,7 +56,7 @@
                     size: 36,
                     starOff: '<%= asset_path('star-off.png') %>',
                     starOn: '<%= asset_path('star-on.png') %>',
-                    starHalf: '<%= asset_path('star-half') %>',
+                    starHalf: '<%= asset_path('star-half.png') %>',
                     readOnly: true,
                     score: <%= keyword.spots.average(:rate) %>,
                   });

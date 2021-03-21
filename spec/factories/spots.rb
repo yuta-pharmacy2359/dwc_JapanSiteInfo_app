@@ -10,5 +10,8 @@ FactoryBot.define do
     spot_image3 {'assets/image3.jpg'}
     content { Faker::Lorem.characters(number: 50) }
     user
+    after(:create) do |spot|
+      create(:keyword_relationship, spot: spot, keyword: create(:keyword))
+    end
   end
 end

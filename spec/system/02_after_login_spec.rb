@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe '[STEP2] ユーザログイン後のテスト' do
   let(:user) { create(:user) }
+  let(:keyword) { create(:keyword) }
   let!(:other_user) { create(:user) }
   let!(:spot) { create(:spot, user: user) }
   let!(:other_spot) { create(:spot, user: other_user) }
@@ -68,127 +69,166 @@ describe '[STEP2] ユーザログイン後のテスト' do
     end
   end
 
-  describe '投稿一覧画面のテスト' do
+  describe 'スポット一覧画面のテスト' do
     before do
-      visit books_path
+      visit spots_path
     end
 
-    context '表示内容の確認' do
+    context 'スポット一覧表示の確認' do
       it 'URLが正しい' do
-        expect(current_path).to eq '/books'
+        expect(current_path).to eq '/spots'
       end
-      it '自分と他人の画像のリンク先が正しい' do
-        expect(page).to have_link '', href: user_path(book.user)
-        expect(page).to have_link '', href: user_path(other_book.user)
+      it '「スポット一覧」と表示されている' do
+        expect(page).to have_content 'スポット一覧'
       end
-      it '自分の投稿と他人の投稿のタイトルのリンク先がそれぞれ正しい' do
-        expect(page).to have_link book.title, href: book_path(book)
-        expect(page).to have_link other_book.title, href: book_path(other_book)
+      it '自分と他人のスポットのタイトルのリンク先がそれぞれ正しい' do
+        expect(page).to have_link spot.title, href: spot_path(spot)
+        expect(page).to have_link other_spot.title, href: spot_path(other_spot)
       end
-      it '自分の投稿と他人の投稿のオピニオンが表示される' do
-        expect(page).to have_content book.body
-        expect(page).to have_content other_book.body
+      it '自分と他人のスポットの所在地が表示される' do
+        expect(page).to have_content spot.prefecture
+        expect(page).to have_content other_spot.prefecture
+        expect(page).to have_content spot.city
+        expect(page).to have_content other_spot.city
       end
-    end
-
-    context 'サイドバーの確認' do
-      it '自分の名前と紹介文が表示される' do
-        expect(page).to have_content user.name
-        expect(page).to have_content user.introduction
+      it '自分と他人のスポットの投稿日が表示される' do
+        expect(page).to have_content spot.created_at.strftime("%Y年%-m月%-d日")
+        expect(page).to have_content other_spot.created_at.strftime("%Y年%-m月%-d日")
       end
-      it '自分のユーザ編集画面へのリンクが存在する' do
-        expect(page).to have_link '', href: edit_user_path(user)
+      it '自分と他人のスポットの来訪日が表示される' do
+        expect(page).to have_content spot.visited_day.strftime("%Y年%-m月%-d日")
+        expect(page).to have_content other_spot.visited_day.strftime("%Y年%-m月%-d日")
       end
-      it '「New book」と表示される' do
-        expect(page).to have_content 'New book'
+      it '自分と他人のスポットの評価が表示される', js: true do
+        expect(page).to have_content spot.rate
+        expect(page).to have_content other_spot.rate
       end
-      it 'titleフォームが表示される' do
-        expect(page).to have_field 'book[title]'
+      it '自分と他人のスポットのいいねボタンが表示される' do
+        expect(page).to have_link '', href: spot_favorites_path(spot)
+        expect(page).to have_link '', href: spot_favorites_path(other_spot)
       end
-      it 'titleフォームに値が入っていない' do
-        expect(find_field('book[title]').text).to be_blank
-      end
-      it 'opinionフォームが表示される' do
-        expect(page).to have_field 'book[body]'
-      end
-      it 'opinionフォームに値が入っていない' do
-        expect(find_field('book[body]').text).to be_blank
-      end
-      it 'Create Bookボタンが表示される' do
-        expect(page).to have_button 'Create Book'
+      it '自分と他人のスポットのいいね数が表示される' do
+        expect(page).to have_content spot.favorites.count
+        expect(page).to have_content other_spot.favorites.count
       end
     end
 
-    context '投稿成功のテスト' do
-      before do
-        fill_in 'book[title]', with: Faker::Lorem.characters(number: 5)
-        fill_in 'book[body]', with: Faker::Lorem.characters(number: 20)
+    context '検索エリアの確認' do
+      it '「都道府県」フォームがラベルを含め表示されている' do
+        expect(page).to have_content '都道府県'
+        expect(page).to have_field 'q[prefecture_eq]'
       end
-
-      it '自分の新しい投稿が正しく保存される' do
-        expect { click_button 'Create Book' }.to change(user.books, :count).by(1)
+      it '「市区町村」フォームがラベルを含め表示されている' do
+        expect(page).to have_content '市区町村'
+        expect(page).to have_field 'q[city_cont]'
       end
-      it 'リダイレクト先が、保存できた投稿の詳細画面になっている' do
-        click_button 'Create Book'
-        expect(current_path).to eq '/books/' + Book.last.id.to_s
+      it '「タイトル」フォームがラベルを含め表示されている' do
+        expect(page).to have_content 'タイトル'
+        expect(page).to have_field 'q[title_cont]'
+      end
+      it '「キーワード」フォームがラベルを含め表示されている' do
+        expect(page).to have_content 'キーワード'
+        expect(page).to have_field 'q[keywords_keyword_cont]'
+      end
+      it '検索ボタンが表示される' do
+        expect(page).to have_button '検索'
       end
     end
   end
 
-  describe '自分の投稿詳細画面のテスト' do
+  describe '自分のスポット詳細画面のテスト' do
     before do
-      visit book_path(book)
+      visit spot_path(spot)
     end
 
     context '表示内容の確認' do
       it 'URLが正しい' do
-        expect(current_path).to eq '/books/' + book.id.to_s
+        expect(current_path).to eq '/spots/' + spot.id.to_s
       end
-      it '「Book detail」と表示される' do
-        expect(page).to have_content 'Book detail'
+      it 'スポットのタイトルが表示される' do
+        expect(page).to have_content spot.title
       end
-      it 'ユーザ画像・名前のリンク先が正しい' do
-        expect(page).to have_link book.user.name, href: user_path(book.user)
+      it 'スポットの都道府県が表示される' do
+        expect(page).to have_content spot.prefecture
       end
-      it '投稿のtitleが表示される' do
-        expect(page).to have_content book.title
+      it 'スポットの市区町村が表示される' do
+        expect(page).to have_content spot.city
       end
-      it '投稿のopinionが表示される' do
-        expect(page).to have_content book.body
+      it 'スポットの投稿日が表示される' do
+        expect(page).to have_content spot.created_at.strftime("%Y年%-m月%-d日")
       end
-      it '投稿の編集リンクが表示される' do
-        expect(page).to have_link 'Edit', href: edit_book_path(book)
+      it 'スポットの来訪日が表示される' do
+        expect(page).to have_content spot.visited_day.strftime("%Y年%-m月%-d日")
       end
-      it '投稿の削除リンクが表示される' do
-        expect(page).to have_link 'Destroy', href: book_path(book)
+      it 'スポットの評価が表示される', js: true do
+        expect(page).to have_content spot.rate
+      end
+      #it 'スポットのキーワードが表示される' do
+        #expect(page).to have_css(".keyword", keyword: keyword.keyword)
+      #end
+      #it 'キーワードのリンク先が正しい' do
+        #expect(page).to have_link keyword.keyword, href: keyword_path(keyword)
+      #end
+      it 'スポットの画像(1枚目)が表示される' do
+        expect(page).to have_content spot.spot_image1
+      end
+      it 'スポットの画像(2枚目)が表示される' do
+        expect(page).to have_content spot.spot_image2
+      end
+      it 'スポットの画像(3枚目)が表示される' do
+        expect(page).to have_content spot.spot_image3
+      end
+      it 'スポットの内容が表示される' do
+        expect(page).to have_content spot.content
+      end
+      it 'スポットの編集ボタンが表示される' do
+        expect(page).to have_link '編集する', href: edit_spot_path(spot)
+      end
+      it 'スポットの削除ボタンが表示される' do
+        expect(page).to have_link '削除する', href: spot_path(spot)
       end
     end
 
     context 'サイドバーの確認' do
-      it '自分の名前と紹介文が表示される' do
-        expect(page).to have_content user.name
+      it '「投稿者プロフィール」と表示されている' do
+        expect(page).to have_content '投稿者プロフィール'
+      end
+      it '自分のプロフィール画像が表示される' do
+        expect(page).to have_content user.profile_image
+      end
+      it '自分のニックネームが表示される' do
+        expect(page).to have_content user.nickname
+      end
+      it '自分の性別が表示される' do
+        expect(page).to have_content user.sex
+      end
+      it '自分の年齢が表示される' do
+        expect(page).to have_content user.age
+      end
+      it '自分の住所が表示される' do
+        expect(page).to have_content user.prefecture
+        expect(page).to have_content user.city
+      end
+      it '自分の自己紹介が表示される' do
         expect(page).to have_content user.introduction
       end
-      it '自分のユーザ編集画面へのリンクが存在する' do
-        expect(page).to have_link '', href: edit_user_path(user)
+      it '「プロフィールをみる」(マイページ画面へのリンク)が存在する' do
+        expect(page).to have_link 'プロフィールをみる', href: user_path(user)
       end
-      it '「New book」と表示される' do
-        expect(page).to have_content 'New book'
+      it '「コメント」と表示される' do
+        expect(page).to have_content 'コメント'
       end
-      it 'titleフォームが表示される' do
-        expect(page).to have_field 'book[title]'
+      it 'コメントの全件数が表示される' do
+        expect(page).to have_content "全#{spot.comments.count}件"
       end
-      it 'titleフォームに値が入っていない' do
-        expect(find_field('book[title]').text).to be_blank
+      it '「コメントをどうぞ」と表示される' do
+        expect(page).to have_content 'コメントをどうぞ'
       end
-      it 'opinionフォームが表示される' do
-        expect(page).to have_field 'book[body]'
+      it 'コメントフォームが表示される' do
+        expect(page).to have_field 'comment[comment]'
       end
-      it 'opinionフォームに値が入っていない' do
-        expect(find_field('book[body]').text).to be_blank
-      end
-      it 'Create Bookボタンが表示される' do
-        expect(page).to have_button 'Create Book'
+      it 'コメント送信ボタンが表示される' do
+        expect(page).to have_button '送信する'
       end
     end
 
@@ -205,21 +245,21 @@ describe '[STEP2] ユーザログイン後のテスト' do
 
     context '編集リンクのテスト' do
       it '編集画面に遷移する' do
-        click_link 'Edit'
-        expect(current_path).to eq '/books/' + book.id.to_s + '/edit'
+        click_link '編集する'
+        expect(current_path).to eq '/spots/' + spot.id.to_s + '/edit'
       end
     end
 
     context '削除リンクのテスト' do
       before do
-        click_link 'Destroy'
+        click_link '削除する'
       end
 
-      it '正しく削除される' do
-        expect(Book.where(id: book.id).count).to eq 0
+      it '正しく削除される', js: true do
+        expect(Spot.where(id: spot.id).count).to eq 0
       end
-      it 'リダイレクト先が、投稿一覧画面になっている' do
-        expect(current_path).to eq '/books'
+      it 'リダイレクト先が、マイページ画面になっている', js: true do
+        expect(current_path).to eq '/users/' + user.id.to_s
       end
     end
   end

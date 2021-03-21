@@ -7,6 +7,7 @@ FactoryBot.define do
     prefecture {'東京都'}
     city { Faker::Lorem.characters(number: 5) }
     email { Faker::Internet.email }
+    profile_image { 'assets/image4.jpg' }
     introduction { Faker::Lorem.characters(number: 20) }
     password { 'password' }
     password_confirmation { 'password' }

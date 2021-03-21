@@ -109,28 +109,31 @@ describe '[STEP1] ユーザログイン前のテスト' do
       it '「新規会員登録」と表示される' do
         expect(page).to have_content '新規会員登録'
       end
-      it 'fullnameフォームが表示される' do
+      it '「氏名(フルネーム)」フォームが表示される' do
         expect(page).to have_field 'user[fullname]'
       end
-      it 'nicknameフォームが表示される' do
+      it '「ニックネーム」フォームが表示される' do
         expect(page).to have_field 'user[nickname]'
       end
-      it 'emailフォームが表示される' do
+      it '「メールアドレス」フォームが表示される' do
         expect(page).to have_field 'user[email]'
       end
-      it 'sexフォームが表示される' do
+      it '「性別」フォームが表示される' do
         expect(page).to have_field 'user[sex]'
       end
-      it 'birthdayフォームが表示される' do
+      it '「誕生日」フォームが表示される' do
         expect(page).to have_field 'user[birthday]'
       end
-      it 'prefectureフォームが表示される' do
+      it '「住所(都道府県)」フォームが表示される' do
         expect(page).to have_field 'user[prefecture]'
       end
-      it 'passwordフォームが表示される' do
+      it '「住所(市区町村)」フォームが表示される' do
+        expect(page).to have_field 'user[city]'
+      end
+      it '「パスワード(英数字6文字以上)」フォームが表示される' do
         expect(page).to have_field 'user[password]'
       end
-      it 'password_confirmationフォームが表示される' do
+      it '「パスワード（確認）」フォームが表示される' do
         expect(page).to have_field 'user[password_confirmation]'
       end
       it '新規登録ボタンが表示される' do
@@ -148,17 +151,22 @@ describe '[STEP1] ユーザログイン前のテスト' do
 
     context '新規登録成功のテスト' do
       before do
-        fill_in 'user[name]', with: Faker::Lorem.characters(number: 10)
+        fill_in 'user[fullname]', with: Faker::Lorem.characters(number: 10)
+        fill_in 'user[nickname]', with: Faker::Lorem.characters(number: 10)
         fill_in 'user[email]', with: Faker::Internet.email
+        choose('user_sex_male')
+        fill_in 'user[birthday]', with: '2000-01-01'
+        select '東京都', from: 'user_prefecture'
+        fill_in 'user[city]', with: Faker::Lorem.characters(number: 10)
         fill_in 'user[password]', with: 'password'
         fill_in 'user[password_confirmation]', with: 'password'
       end
 
       it '正しく新規登録される' do
-        expect { click_button 'Sign up' }.to change(User.all, :count).by(1)
+        expect { click_button '新規登録' }.to change(User.all, :count).by(1)
       end
       it '新規登録後のリダイレクト先が、新規登録できたユーザの詳細画面になっている' do
-        click_button 'Sign up'
+        click_button '新規登録'
         expect(current_path).to eq '/users/' + User.last.id.to_s
       end
     end
@@ -175,28 +183,44 @@ describe '[STEP1] ユーザログイン前のテスト' do
       it 'URLが正しい' do
         expect(current_path).to eq '/users/sign_in'
       end
-      it '「Log in」と表示される' do
-        expect(page).to have_content 'Log in'
+      it '「ログイン」と表示される' do
+        expect(page).to have_content 'ログイン'
       end
-      it 'nameフォームが表示される' do
-        expect(page).to have_field 'user[name]'
+      it '「メールアドレス」フォームが表示される' do
+        expect(page).to have_field 'user[email]'
       end
-      it 'passwordフォームが表示される' do
+      it '「パスワード」フォームが表示される' do
         expect(page).to have_field 'user[password]'
       end
-      it 'Sign upボタンが表示される' do
-        expect(page).to have_button 'Log in'
+      it '「ログイン」ボタンが表示される' do
+        expect(page).to have_button 'ログイン'
       end
-      it 'emailフォームは表示されない' do
-        expect(page).not_to have_field 'user[email]'
+      it '「入力情報を記憶する」のチェックボックスが表示されている' do
+        expect(page).to have_field('user_remember_me')
+      end
+      it '「新規登録はこちらから」と表示されている' do
+        expect(page).to have_content '新規登録はこちらから'
+      end
+      it '「こちら(新規登録)」を押すと新規登録画面に遷移する' do
+        log_in_link = find_all('a')[4]
+        log_in_link.click
+        expect(current_path).to eq('/users/sign_up')
+      end
+      it '「パスワードをお忘れの方はこちら」と表示されている' do
+        expect(page).to have_content 'パスワードをお忘れの方はこちら'
+      end
+      it '「こちら(パスワード)」を押すとパスワード発行画面に遷移する' do
+        log_in_link = find_all('a')[5]
+        log_in_link.click
+        expect(current_path).to eq('/users/password/new')
       end
     end
 
     context 'ログイン成功のテスト' do
       before do
-        fill_in 'user[name]', with: user.name
+        fill_in 'user[email]', with: user.email
         fill_in 'user[password]', with: user.password
-        click_button 'Log in'
+        click_button 'ログイン'
       end
 
       it 'ログイン後のリダイレクト先が、ログインしたユーザの詳細画面になっている' do
@@ -206,9 +230,9 @@ describe '[STEP1] ユーザログイン前のテスト' do
 
     context 'ログイン失敗のテスト' do
       before do
-        fill_in 'user[name]', with: ''
+        fill_in 'user[email]', with: ''
         fill_in 'user[password]', with: ''
-        click_button 'Log in'
+        click_button 'ログイン'
       end
 
       it 'ログインに失敗し、ログイン画面にリダイレクトされる' do
@@ -222,30 +246,50 @@ describe '[STEP1] ユーザログイン前のテスト' do
 
     before do
       visit new_user_session_path
-      fill_in 'user[name]', with: user.name
+      fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
-      click_button 'Log in'
+      click_button 'ログイン'
     end
 
     context 'ヘッダーの表示を確認' do
       it 'タイトルが表示される' do
-        expect(page).to have_content 'Bookers'
+        expect(page).to have_content 'JapanSiteInfo'
       end
-      it 'Homeリンクが表示される: 左上から1番目のリンクが「Home」である' do
-        home_link = find_all('a')[1].native.inner_text
-        expect(home_link).to match(/home/i)
+      it 'ユーザー名が表示される: 左上から2番目のリンクが「(ユーザーニックネーム)さん」である' do
+        users_link = find_all('a')[1].native.inner_text
+        expect(users_link).to match("#{user.nickname}さん")
       end
-      it 'Usersリンクが表示される: 左上から2番目のリンクが「Users」である' do
-        users_link = find_all('a')[2].native.inner_text
-        expect(users_link).to match(/users/i)
+      it '「マイページ」リンクが表示される: 左上から3番目のリンクが「マイページ」である' do
+        books_link = find_all('a')[2].native.inner_text
+        expect(books_link).to match('マイページ')
       end
-      it 'Booksリンクが表示される: 左上から3番目のリンクが「Books」である' do
+      it '「新規投稿」リンクが表示される: 左上から4番目のリンクが「新規投稿」である' do
         books_link = find_all('a')[3].native.inner_text
-        expect(books_link).to match(/books/i)
+        expect(books_link).to match('新規投稿')
       end
-      it 'log outリンクが表示される: 左上から4番目のリンクが「logout」である' do
+      it '「一覧・その他」リンクが表示される: 左上から5番目のリンクが「一覧・その他」である' do
         logout_link = find_all('a')[4].native.inner_text
-        expect(logout_link).to match(/logout/i)
+        expect(logout_link).to match('一覧・その他')
+      end
+      it '「スポット一覧」リンクが表示される: 「一覧・その他」中の1番目のリンクが「スポット一覧」である' do
+        logout_link = find_all('a')[5].native.inner_text
+        expect(logout_link).to match('スポット一覧')
+      end
+      it '「キーワード一覧」リンクが表示される: 「一覧・その他」中の2番目のリンクが「キーワード一覧」である' do
+        logout_link = find_all('a')[6].native.inner_text
+        expect(logout_link).to match('キーワード一覧')
+      end
+      it '「ユーザー一覧」リンクが表示される: 「一覧・その他」中の3番目のリンクが「ユーザー一覧」である' do
+        logout_link = find_all('a')[7].native.inner_text
+        expect(logout_link).to match('ユーザー一覧')
+      end
+      it '「ランキング」リンクが表示される: 「一覧・その他」中の4番目のリンクが「ランキング」である' do
+        logout_link = find_all('a')[8].native.inner_text
+        expect(logout_link).to match('ランキング')
+      end
+      it '「ログアウト」リンクが表示される: 左上から6番目のリンクが「ログアウト」である' do
+        logout_link = find_all('a')[9].native.inner_text
+        expect(logout_link).to match('ログアウト')
       end
     end
   end
@@ -255,17 +299,17 @@ describe '[STEP1] ユーザログイン前のテスト' do
 
     before do
       visit new_user_session_path
-      fill_in 'user[name]', with: user.name
+      fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
-      click_button 'Log in'
-      logout_link = find_all('a')[4].native.inner_text
+      click_button 'ログイン'
+      logout_link = find_all('a')[9].native.inner_text
       logout_link = logout_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
       click_link logout_link
     end
 
     context 'ログアウト機能のテスト' do
-      it '正しくログアウトできている: ログアウト後のリダイレクト先においてAbout画面へのリンクが存在する' do
-        expect(page).to have_link '', href: '/home/about'
+      it '正しくログアウトできている: ログアウト後のリダイレクト先においてアバウト画面へのリンクが存在する' do
+        expect(page).to have_link '', href: '/about'
       end
       it 'ログアウト後のリダイレクト先が、トップになっている' do
         expect(current_path).to eq '/'

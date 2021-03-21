@@ -3,37 +3,67 @@ require 'rails_helper'
 describe '[STEP2] ユーザログイン後のテスト' do
   let(:user) { create(:user) }
   let!(:other_user) { create(:user) }
-  let!(:book) { create(:book, user: user) }
-  let!(:other_book) { create(:book, user: other_user) }
+  let!(:spot) { create(:spot, user: user) }
+  let!(:other_spot) { create(:spot, user: other_user) }
 
   before do
     visit new_user_session_path
-    fill_in 'user[name]', with: user.name
+    fill_in 'user[email]', with: user.email
     fill_in 'user[password]', with: user.password
-    click_button 'Log in'
+    click_button 'ログイン'
   end
 
   describe 'ヘッダーのテスト: ログインしている場合' do
-    context 'リンクの内容を確認: ※logoutは『ユーザログアウトのテスト』でテスト済みになります。' do
+    context 'リンクの内容を確認: ※「ログアウト」は『ユーザログアウトのテスト』でテスト済み' do
       subject { current_path }
 
-      it 'Homeを押すと、自分のユーザ詳細画面に遷移する' do
-        home_link = find_all('a')[1].native.inner_text
-        home_link = home_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
-        click_link home_link
+      it '「JapanSiteInfo」を押すと、トップ画面に遷移する' do
+        top_link = find_all('a')[0].native.inner_text
+        top_link = top_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
+        click_link top_link
+        is_expected.to eq '/'
+      end
+      it '「(ニックネーム)さん」を押すと、マイページ画面に遷移する' do
+        nickname_link = find_all('a')[1].native.inner_text
+        nickname_link = nickname_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
+        click_link nickname_link
         is_expected.to eq '/users/' + user.id.to_s
       end
-      it 'Usersを押すと、ユーザ一覧画面に遷移する' do
-        users_link = find_all('a')[2].native.inner_text
+      it '「マイページ」を押すと、マイページ画面に遷移する' do
+        mypage_link = find_all('a')[2].native.inner_text
+        mypage_link = mypage_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
+        click_link mypage_link
+        is_expected.to eq '/users/' + user.id.to_s
+      end
+      it '「新規投稿」を押すと、新規投稿画面に遷移する' do
+        new_spot_link = find_all('a')[3].native.inner_text
+        new_spot_link = new_spot_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
+        click_link new_spot_link
+        is_expected.to eq '/spots/new'
+      end
+      it '「スポット一覧」を押すと、スポット一覧画面に遷移する' do
+        spots_link = find_all('a')[5].native.inner_text
+        spots_link = spots_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
+        click_link spots_link
+        is_expected.to eq '/spots'
+      end
+      it '「キーワード一覧」を押すと、キーワード一覧画面に遷移する' do
+        keywords_link = find_all('a')[6].native.inner_text
+        keywords_link = keywords_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
+        click_link keywords_link
+        is_expected.to eq '/keywords'
+      end
+      it '「ユーザー一覧」を押すと、ユーザ一覧画面に遷移する' do
+        users_link = find_all('a')[7].native.inner_text
         users_link = users_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
         click_link users_link
         is_expected.to eq '/users'
       end
-      it 'Booksを押すと、投稿一覧画面に遷移する' do
-        books_link = find_all('a')[3].native.inner_text
-        books_link = books_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
-        click_link books_link
-        is_expected.to eq '/books'
+      it '「ランキング」を押すと、いいね数ランキング(スポット)画面に遷移する' do
+        ranking_link = find_all('a')[8].native.inner_text
+        ranking_link = ranking_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
+        click_link ranking_link
+        is_expected.to eq '/rankings/spot_favorite'
       end
     end
   end

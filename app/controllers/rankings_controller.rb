@@ -1,4 +1,5 @@
 class RankingsController < ApplicationController
+  before_action :authenticate_user!, { only: [:user_favorite, :spot_favorite] }
 
   def user_favorite
     spots = []

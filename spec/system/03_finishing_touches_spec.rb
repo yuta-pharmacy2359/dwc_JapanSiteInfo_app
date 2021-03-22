@@ -220,94 +220,148 @@ describe '[STEP3] 仕上げのテスト' do
     end
   end
 
-  describe 'ログインしていない場合のアクセス制限のテスト: アクセスできず、ログイン画面に遷移する' do
+  describe 'ログインしていない場合のアクセス制限のテスト: アクセスできず、新規登録画面またはトップ画面に遷移する' do
     subject { current_path }
 
     it 'ユーザ一覧画面' do
       visit users_path
-      is_expected.to eq '/users/sign_in'
+      is_expected.to eq '/users/sign_up'
     end
     it 'ユーザ詳細画面' do
       visit user_path(user)
-      is_expected.to eq '/users/sign_in'
+      is_expected.to eq '/users/sign_up'
     end
     it 'ユーザ情報編集画面' do
       visit edit_user_path(user)
-      is_expected.to eq '/users/sign_in'
-    end
-    it '投稿一覧画面' do
-      visit books_path
-      is_expected.to eq '/users/sign_in'
-    end
-    it '投稿詳細画面' do
-      visit book_path(book)
-      is_expected.to eq '/users/sign_in'
+      is_expected.to eq '/'
     end
     it '投稿編集画面' do
-      visit edit_book_path(book)
-      is_expected.to eq '/users/sign_in'
+      visit edit_spot_path(spot)
+      is_expected.to eq '/'
+    end
+    it 'キーワード一覧画面' do
+      visit keywords_path
+      is_expected.to eq '/users/sign_up'
+    end
+    it 'フォロー一覧画面' do
+      visit following_user_path(user)
+      is_expected.to eq '/users/sign_up'
+    end
+    it 'フォロワー一覧画面' do
+      visit followers_user_path(user)
+      is_expected.to eq '/users/sign_up'
+    end
+    it 'ランキング(スポット)画面' do
+      visit spot_favorite_ranking_path
+      is_expected.to eq '/users/sign_up'
+    end
+    it 'ランキング(ユーザー)画面' do
+      visit user_favorite_ranking_path
+      is_expected.to eq '/users/sign_up'
     end
   end
 
   describe '他人の画面のテスト' do
     before do
       visit new_user_session_path
-      fill_in 'user[name]', with: user.name
+      fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
-      click_button 'Log in'
+      click_button 'ログイン'
     end
 
     describe '他人の投稿詳細画面のテスト' do
       before do
-        visit book_path(other_book)
+        visit spot_path(other_spot)
       end
 
       context '表示内容の確認' do
         it 'URLが正しい' do
-          expect(current_path).to eq '/books/' + other_book.id.to_s
+          expect(current_path).to eq '/spots/' + other_spot.id.to_s
         end
-        it '「Book detail」と表示される' do
-          expect(page).to have_content 'Book detail'
+        it 'スポットのタイトルが表示される' do
+          expect(page).to have_content other_spot.title
         end
-        it 'ユーザ画像・名前のリンク先が正しい' do
-          expect(page).to have_link other_book.user.name, href: user_path(other_book.user)
+        it 'スポットの都道府県が表示される' do
+          expect(page).to have_content other_spot.prefecture
         end
-        it '投稿のtitleが表示される' do
-          expect(page).to have_content other_book.title
+        it 'スポットの市区町村が表示される' do
+          expect(page).to have_content other_spot.city
         end
-        it '投稿のopinionが表示される' do
-          expect(page).to have_content other_book.body
+        it 'スポットの投稿日が表示される' do
+          expect(page).to have_content other_spot.created_at.strftime("%Y年%-m月%-d日")
+        end
+        it 'スポットの来訪日が表示される' do
+          expect(page).to have_content other_spot.visited_day.strftime("%Y年%-m月%-d日")
+        end
+        it 'スポットの評価が表示される', js: true do
+          expect(page).to have_content other_spot.rate
+          sleep 3
+        end
+        it 'スポットのいいねボタンが表示される' do
+          expect(page).to have_link '', href: spot_favorites_path(other_spot)
+        end
+        it '自分のスポットのいいね数が表示される' do
+          expect(page).to have_content other_spot.favorites.count
+        end
+        #it 'スポットのキーワードが表示される' do
+          #expect(page).to have_css(".keyword", keyword: keyword.keyword)
+        #end
+        #it 'キーワードのリンク先が正しい' do
+          #expect(page).to have_link keyword.keyword, href: keyword_path(keyword)
+        #end
+        it 'スポットの画像(1枚目)が表示される' do
+          expect(page).to have_content other_spot.spot_image1
+        end
+        it 'スポットの画像(2枚目)が表示される' do
+          expect(page).to have_content other_spot.spot_image2
+        end
+        it 'スポットの画像(3枚目)が表示される' do
+          expect(page).to have_content other_spot.spot_image3
+        end
+        it 'スポットの内容が表示される' do
+          expect(page).to have_content other_spot.content
         end
         it '投稿の編集リンクが表示されない' do
-          expect(page).not_to have_link 'Edit'
+          expect(page).not_to have_link '編集する'
         end
         it '投稿の削除リンクが表示されない' do
-          expect(page).not_to have_link 'Destroy'
+          expect(page).not_to have_link '削除する'
         end
       end
 
       context 'サイドバーの確認' do
-        it '他人の名前と紹介文が表示される' do
-          expect(page).to have_content other_user.name
+        it '「投稿者プロフィール」と表示されている' do
+          expect(page).to have_content '投稿者プロフィール'
+        end
+        it '他人のプロフィール画像が表示される' do
+          expect(page).to have_content other_user.profile_image
+        end
+        it '他人のニックネームが表示される' do
+          expect(page).to have_content other_user.nickname
+        end
+        it '他人の性別が表示される' do
+          expect(page).to have_content other_user.sex
+        end
+        it '他人の年齢が表示される' do
+          expect(page).to have_content other_user.age
+        end
+        it '他人の住所が表示される' do
+          expect(page).to have_content other_user.prefecture
+          expect(page).to have_content other_user.city
+        end
+        it '自分の自己紹介が表示される' do
           expect(page).to have_content other_user.introduction
         end
-        it '他人のユーザ編集画面へのリンクが存在する' do
-          expect(page).to have_link '', href: edit_user_path(other_user)
-        end
-        it '自分の名前と紹介文は表示されない' do
-          expect(page).not_to have_content user.name
-          expect(page).not_to have_content user.introduction
-        end
-        it '自分のユーザ編集画面へのリンクは存在しない' do
-          expect(page).not_to have_link '', href: edit_user_path(user)
+        it '「プロフィールをみる」(ユーザー詳細画面へのリンク)が存在する' do
+          expect(page).to have_link 'プロフィールをみる', href: user_path(other_user)
         end
       end
     end
 
     context '他人の投稿編集画面' do
-      it '遷移できず、投稿一覧画面にリダイレクトされる' do
-        visit edit_book_path(other_book)
-        expect(current_path).to eq '/books'
+      it '遷移できず、トップ画面にリダイレクトされる' do
+        visit edit_spot_path(other_spot)
+        expect(current_path).to eq '/'
       end
     end
 
@@ -317,177 +371,85 @@ describe '[STEP3] 仕上げのテスト' do
       end
 
       context '表示の確認' do
-        it 'URLが正しい' do
-          expect(current_path).to eq '/users/' + other_user.id.to_s
+        it '「(他人のニックネーム名) さん」と表示されている' do
+          expect(page).to have_content "#{other_user.nickname} さん"
         end
-        it '投稿一覧のユーザ画像のリンク先が正しい' do
-          expect(page).to have_link '', href: user_path(other_user)
+        it '他人のプロフィール画像が表示される' do
+          expect(page).to have_content other_user.profile_image
         end
-        it '投稿一覧に他人の投稿のtitleが表示され、リンクが正しい' do
-          expect(page).to have_link other_book.title, href: book_path(other_book)
+        it '他人のニックネームが表示される' do
+          expect(page).to have_content other_user.nickname
         end
-        it '投稿一覧に他人の投稿のopinionが表示される' do
-          expect(page).to have_content other_book.body
+        it '他人の性別が表示される' do
+        expect(page).to have_content other_user.sex
         end
-        it '自分の投稿は表示されない' do
-          expect(page).not_to have_content book.title
-          expect(page).not_to have_content book.body
+        it '他人の年齢が表示される' do
+          expect(page).to have_content other_user.age
+        end
+        it '他人の住所が表示される' do
+          expect(page).to have_content other_user.prefecture
+          expect(page).to have_content other_user.city
+        end
+        it '他人の自己紹介が表示される' do
+          expect(page).to have_content other_user.introduction
+        end
+        it '他人のフォロー数がそれぞれ表示される' do
+          expect(page).to have_content other_user.following.count
+        end
+        it '他人のフォロワー数がそれぞれ表示される' do
+          expect(page).to have_content other_user.followers.count
+        end
+        it '他人のスポット数がそれぞれ表示される' do
+          expect(page).to have_content other_user.spots.count
+        end
+        #it '自分の総いいね数が表示される' do
+          #expect(page).to have_content other_user.all_user_favorites_count
+        #end
+        it '「フォローする」のボタンが存在する' do
+          expect(page).to have_button 'フォローする'
         end
       end
 
       context 'サイドバーの確認' do
-        it '他人の名前と紹介文が表示される' do
-          expect(page).to have_content other_user.name
-          expect(page).to have_content other_user.introduction
+        it 'URLが正しい' do
+          expect(current_path).to eq '/users/' + other_user.id.to_s
         end
-        it '他人のユーザ編集画面へのリンクが存在する' do
-          expect(page).to have_link '', href: edit_user_path(other_user)
+        it 'スポット一覧に他人のスポットの画像(1枚目)が表示される' do
+          expect(page).to have_content other_spot.spot_image1
         end
-        it '自分の名前と紹介文は表示されない' do
-          expect(page).not_to have_content user.name
-          expect(page).not_to have_content user.introduction
+        it 'スポット一覧に他人のスポットのタイトルが表示され、リンクが正しい' do
+          expect(page).to have_link other_spot.title, href: spot_path(other_spot)
         end
-        it '自分のユーザ編集画面へのリンクは存在しない' do
-          expect(page).not_to have_link '', href: edit_user_path(user)
+        it 'スポット一覧に他人のスポットの所在地が表示される' do
+          expect(page).to have_content other_spot.prefecture
+          expect(page).to have_content other_spot.city
+        end
+        it 'スポット一覧に他人のスポットの投稿日が表示される' do
+          expect(page).to have_content other_spot.created_at.strftime("%Y年%-m月%-d日")
+        end
+        it 'スポット一覧に他人のスポットの来訪日が表示される' do
+          expect(page).to have_content other_spot.visited_day.strftime("%Y年%-m月%-d日")
+        end
+        it 'スポット一覧に他人のスポットの評価が表示される', js: true do
+          expect(page).to have_content other_spot.rate
+          sleep 3
+        end
+        it '他人のスポットのいいねボタンが表示される' do
+          expect(page).to have_link '', href: spot_favorites_path(other_spot)
+        end
+        it '他人のスポットのいいね数が表示される' do
+          expect(page).to have_content other_spot.favorites.count
+        end
+        it '自分のスポットのタイトルは表示されない' do
+          expect(page).not_to have_link spot.title, href: spot_path(spot)
         end
       end
     end
 
     context '他人のユーザ情報編集画面' do
-      it '遷移できず、自分のユーザ詳細画面にリダイレクトされる' do
+      it '遷移できず、トップ画面にリダイレクトされる' do
         visit edit_user_path(other_user)
-        expect(current_path).to eq '/users/' + user.id.to_s
-      end
-    end
-  end
-
-  describe 'グリッドシステムのテスト: container, row, col-md-〇を正しく使えている' do
-    subject { page }
-
-    before do
-      visit new_user_session_path
-      fill_in 'user[name]', with: user.name
-      fill_in 'user[password]', with: user.password
-      click_button 'Log in'
-    end
-
-    it 'ユーザ一覧画面' do
-      visit users_path
-      is_expected.to have_selector '.container .row .col-md-3'
-      is_expected.to have_selector '.container .row .col-md-8.offset-md-1'
-    end
-    it 'ユーザ詳細画面' do
-      visit user_path(user)
-      is_expected.to have_selector '.container .row .col-md-3'
-      is_expected.to have_selector '.container .row .col-md-8.offset-md-1'
-    end
-    it '投稿一覧画面' do
-      visit books_path
-      is_expected.to have_selector '.container .row .col-md-3'
-      is_expected.to have_selector '.container .row .col-md-8.offset-md-1'
-    end
-    it '投稿詳細画面' do
-      visit book_path(book)
-      is_expected.to have_selector '.container .row .col-md-3'
-      is_expected.to have_selector '.container .row .col-md-8.offset-md-1'
-    end
-  end
-
-  describe 'アイコンのテスト' do
-    context 'トップ画面' do
-      subject { page }
-
-      before do
-        visit root_path
-      end
-
-      it '本のアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-book'
-      end
-    end
-
-    context 'アバウト画面' do
-      subject { page }
-
-      before do
-        visit '/home/about'
-      end
-
-      it '本のアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-book'
-      end
-    end
-
-    context 'ヘッダー: ログインしていない場合' do
-      subject { page }
-
-      before do
-        visit root_path
-      end
-
-      it 'Homeリンクのアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-home'
-      end
-      it 'Aboutリンクのアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-link'
-      end
-      it 'sign upリンクのアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-user-plus'
-      end
-      it 'loginリンクのアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-sign-in-alt'
-      end
-    end
-
-    context 'ヘッダー: ログインしている場合' do
-      subject { page }
-
-      before do
-        visit new_user_session_path
-        fill_in 'user[name]', with: user.name
-        fill_in 'user[password]', with: user.password
-        click_button 'Log in'
-      end
-
-      it 'Homeリンクのアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-home'
-      end
-      it 'Usersリンクのアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-users'
-      end
-      it 'Booksリンクのアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-book-open'
-      end
-      it 'log outリンクのアイコンが表示される' do
-        is_expected.to have_selector '.fas.fa-sign-out-alt'
-      end
-    end
-
-    context 'サイドバー' do
-      subject { page }
-
-      before do
-        visit new_user_session_path
-        fill_in 'user[name]', with: user.name
-        fill_in 'user[password]', with: user.password
-        click_button 'Log in'
-      end
-
-      it 'ユーザ一覧画面でレンチアイコンが表示される' do
-        visit users_path
-        is_expected.to have_selector '.fas.fa-user-cog'
-      end
-      it 'ユーザ詳細画面でレンチアイコンが表示される' do
-        visit user_path(user)
-        is_expected.to have_selector '.fas.fa-user-cog'
-      end
-      it '投稿一覧画面でレンチアイコンが表示される' do
-        visit books_path
-        is_expected.to have_selector '.fas.fa-user-cog'
-      end
-      it '投稿詳細画面でレンチアイコンが表示される' do
-        visit book_path(book)
-        is_expected.to have_selector '.fas.fa-user-cog'
+        expect(current_path).to eq '/'
       end
     end
   end

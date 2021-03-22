@@ -99,7 +99,9 @@
         </tr>
         <tr></tr>
       </table>
-      <%= link_to "プロフィールをみる", user_path(@user), class: "btn btn-warning" %>
+      <% if current_user.present? %>
+        <%= link_to "プロフィールをみる", user_path(@user), class: "btn btn-warning" %>
+      <% end %>
     </div>
   </div>
 </div>

@@ -506,43 +506,8 @@ describe '[STEP2] ユーザログイン後のテスト' do
     before do
       visit user_path(user)
     end
-
+    
     context '表示の確認' do
-      it 'URLが正しい' do
-        expect(current_path).to eq '/users/' + user.id.to_s
-      end
-      it 'スポット一覧に自分のスポットの画像(1枚目)が表示される' do
-        expect(page).to have_content spot.spot_image1
-      end
-      it 'スポット一覧に自分のスポットのタイトルが表示され、リンクが正しい' do
-        expect(page).to have_link spot.title, href: spot_path(spot)
-      end
-      it 'スポット一覧に自分のスポットの所在地が表示される' do
-        expect(page).to have_content spot.prefecture
-        expect(page).to have_content spot.city
-      end
-      it 'スポット一覧に自分のスポットの投稿日が表示される' do
-        expect(page).to have_content spot.created_at.strftime("%Y年%-m月%-d日")
-      end
-      it 'スポット一覧に自分のスポットの来訪日が表示される' do
-        expect(page).to have_content spot.visited_day.strftime("%Y年%-m月%-d日")
-      end
-      it 'スポットの評価が表示される', js: true do
-        expect(page).to have_content spot.rate
-        sleep 3
-      end
-      it '自分のスポットのいいねボタンが表示される' do
-        expect(page).to have_link '', href: spot_favorites_path(spot)
-      end
-      it '自分のスポットのいいね数が表示される' do
-        expect(page).to have_content spot.favorites.count
-      end
-      it '他人のスポットのタイトルは表示されない' do
-        expect(page).not_to have_link other_spot.title, href: spot_path(other_spot)
-      end
-    end
-
-    context 'サイドバーの確認' do
       it '「マイページ」と表示されている' do
         expect(page).to have_content 'マイページ'
       end
@@ -579,6 +544,41 @@ describe '[STEP2] ユーザログイン後のテスト' do
       #end
       it '「プロフィール編集」のリンクが存在する' do
         expect(page).to have_link 'プロフィール編集', href: edit_user_path(user)
+      end
+    end
+    
+    context 'サイドバーの確認' do
+      it 'URLが正しい' do
+        expect(current_path).to eq '/users/' + user.id.to_s
+      end
+      it 'スポット一覧に自分のスポットの画像(1枚目)が表示される' do
+        expect(page).to have_content spot.spot_image1
+      end
+      it 'スポット一覧に自分のスポットのタイトルが表示され、リンクが正しい' do
+        expect(page).to have_link spot.title, href: spot_path(spot)
+      end
+      it 'スポット一覧に自分のスポットの所在地が表示される' do
+        expect(page).to have_content spot.prefecture
+        expect(page).to have_content spot.city
+      end
+      it 'スポット一覧に自分のスポットの投稿日が表示される' do
+        expect(page).to have_content spot.created_at.strftime("%Y年%-m月%-d日")
+      end
+      it 'スポット一覧に自分のスポットの来訪日が表示される' do
+        expect(page).to have_content spot.visited_day.strftime("%Y年%-m月%-d日")
+      end
+      it 'スポットの評価が表示される', js: true do
+        expect(page).to have_content spot.rate
+        sleep 3
+      end
+      it '自分のスポットのいいねボタンが表示される' do
+        expect(page).to have_link '', href: spot_favorites_path(spot)
+      end
+      it '自分のスポットのいいね数が表示される' do
+        expect(page).to have_content spot.favorites.count
+      end
+      it '他人のスポットのタイトルは表示されない' do
+        expect(page).not_to have_link other_spot.title, href: spot_path(other_spot)
       end
     end
   end

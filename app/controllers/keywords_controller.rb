@@ -1,4 +1,6 @@
 class KeywordsController < ApplicationController
+  before_action :authenticate_user!, { only: [:index] }
+
   def show
     @keyword = Keyword.find(params[:id])
     @q = @keyword.spots.ransack(params[:q])

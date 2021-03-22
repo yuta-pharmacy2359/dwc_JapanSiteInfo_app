@@ -65,7 +65,7 @@ class SpotsController < ApplicationController
   end
 
   def baria_user
-    unless Spot.find(params[:id]).user.id.to_i == current_user.id
+    if current_user.nil? || Spot.find(params[:id]).user.id.to_i != current_user.id
       flash[:alert] = "権限がありません"
       redirect_to top_path
     end

@@ -36,7 +36,7 @@
           <td><%= f.date_field :birthday, class: 'form-width form-ph' %></td>
         </tr>
         <tr>
-          <td class="mr-3 mt-4">住所(都道府県)</td>
+          <td class="mr-3 mt-4">住所(<%= f.label "prefecture" %>)</td>
           <td><%= f.select :prefecture, User.prefectures.keys, :include_blank => '選択してください', id: 'user_prefecture' %></td>
         </tr>
         <tr>

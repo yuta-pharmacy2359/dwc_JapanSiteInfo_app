@@ -11,7 +11,7 @@
     </td>
   </tr>
   <tr>
-    <td class="mr-3 mt-4">所在地(都道府県) ※</td>
+    <td class="mr-3 mt-4">所在地(<%= f.label "prefecture" %>) ※</td>
     <td><%= f.select :prefecture, Spot.prefectures.keys, :include_blank => '選択してください' %></td>
   </tr>
   <tr>

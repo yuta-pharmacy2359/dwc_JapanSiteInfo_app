@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, { only: [:index] }
+  before_action :authenticate_user!, { only: [:show, :index, :following, :followers] }
   before_action :baria_user, { only: [:edit, :update] }
 
   def show
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
   end
 
   def baria_user
-    unless User.find(params[:id]).id.to_i == current_user.id
+    if current_user.nil? || User.find(params[:id]).id.to_i != current_user.id
       flash[:alert] = "権限がありません"
       redirect_to top_path
     end

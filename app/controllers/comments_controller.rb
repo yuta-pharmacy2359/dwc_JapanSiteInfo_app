@@ -28,7 +28,7 @@ class CommentsController < ApplicationController
   end
 
   def baria_user
-    unless Comment.find(params[:id]).user.id.to_i == current_user.id
+    if current_user.nil? || Comment.find(params[:id]).user.id.to_i != current_user.id
       flash[:alert] = "権限がありません"
       redirect_to spot_path(@spot)
     end

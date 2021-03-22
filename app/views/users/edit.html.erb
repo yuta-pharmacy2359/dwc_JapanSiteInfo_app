@@ -24,8 +24,8 @@
         <tr>
           <td class="mr-3 mt-4">性別 ※</td>
           <td>
-            <%= f.radio_button :sex, "男性" %> 男性
-            <%= f.radio_button :sex, "女性", class: "ml-4" %> 女性
+            <%= f.radio_button :sex, "男性", id: "edit_user_sex_male" %> 男性
+            <%= f.radio_button :sex, "女性", id: "edit_user_sex_female", class: "ml-4" %> 女性
           </td>
         </tr>
         <tr>
@@ -33,7 +33,7 @@
           <td><%= f.date_field :birthday, class: 'form-width' %></td>
         </tr>
         <tr>
-          <td class="mr-3 mt-4">住所(都道府県) ※</td>
+          <td class="mr-3 mt-4">住所(<%= f.label "prefecture" %>) ※</td>
           <td><%= f.select :prefecture, User.prefectures.keys, autocomplete: "prefecture", :include_blank => '選択してください' %></td>
         </tr>
         <tr>

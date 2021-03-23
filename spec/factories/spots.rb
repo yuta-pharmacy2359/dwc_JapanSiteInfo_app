@@ -5,13 +5,19 @@ FactoryBot.define do
     city { Faker::Lorem.characters(number: 5) }
     visited_day {'2020-01-01'}
     rate {'5'}
-    spot_image1 {'assets/image1.jpg'}
-    spot_image2 {'assets/image2.jpg'}
-    spot_image3 {'assets/image3.jpg'}
+    spot_image1  {File.open("#{Rails.root}/app/assets/images/image1.jpg")}
+    spot_image2  {File.open("#{Rails.root}/app/assets/images/image2.jpg")}
+    spot_image3  {File.open("#{Rails.root}/app/assets/images/image3.jpg")}
     content { Faker::Lorem.characters(number: 50) }
     user
-    after(:create) do |spot|
-      create(:keyword_relationship, spot: spot, keyword: create(:keyword))
+    
+    factory :other_spot do
+      prefecture {'神奈川県'}
+      visited_day {'2019-01-01'}
+      rate {'4'}
+      spot_image1  {File.open("#{Rails.root}/app/assets/images/image4.jpg")}
+      spot_image2  {File.open("#{Rails.root}/app/assets/images/image5.jpg")}
+      spot_image3  {File.open("#{Rails.root}/app/assets/images/image6.jpg")}
     end
   end
 end

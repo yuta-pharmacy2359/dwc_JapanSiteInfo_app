@@ -59,10 +59,10 @@ describe '[STEP3] 仕上げのテスト' do
       select '東京都', from: 'spot_prefecture'
       fill_in 'spot[city]', with: Faker::Lorem.characters(number: 10)
       fill_in 'spot[visited_day]', with: '2021-01-01'
-      #fill_in 'spot[rate]', with: '5', visible: false
-      #写真(1〜3枚目)の入力
-
-
+      find('input[@name="spot[rate]"]', visible: false).set('5')
+      attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
+      attach_file "spot[spot_image2]", "app/assets/images/image2.jpg"
+      attach_file "spot[spot_image3]", "app/assets/images/image3.jpg"
       fill_in 'spot[content]', with: Faker::Lorem.characters(number: 50)
       click_button '投稿する'
       is_expected.to have_content 'スポットを投稿しました'
@@ -144,7 +144,7 @@ describe '[STEP3] 仕上げのテスト' do
         expect(page).to have_field 'user[birthday]', with: @birthday
         expect(page).to have_select('都道府県', selected: '東京都')
         expect(page).to have_field 'user[city]', with: user.city
-        #expect(page).to have_field 'user[profile_image]', with: user.profile_image
+        expect(page).to have_selector("img[src$='profile_image.jpeg']")
         expect(page).to have_field 'user[introduction]', with: user.introduction
       end
       it 'バリデーションエラーが表示される' do
@@ -165,10 +165,7 @@ describe '[STEP3] 仕上げのテスト' do
         select '東京都', from: 'spot_prefecture'
         fill_in 'spot[city]', with: @city
         fill_in 'spot[visited_day]', with: @visited_day
-        #fill_in 'spot[rate]', with: '5', visible: false
-        #写真(1〜3枚目)の入力
-
-
+        find('input[@name="spot[rate]"]', visible: false).set('5')
         fill_in 'spot[content]', with: @content
       end
 
@@ -181,7 +178,6 @@ describe '[STEP3] 仕上げのテスト' do
         expect(page).to have_select('都道府県', selected: '東京都')
         expect(page).to have_field 'spot[city]', with: @city
         expect(page).to have_field 'spot[visited_day]', with: @visited_day
-        #写真1〜3枚目
         expect(page).to have_field 'spot[content]', with: @content
       end
       it 'バリデーションエラーが表示される' do
@@ -211,7 +207,9 @@ describe '[STEP3] 仕上げのテスト' do
         expect(page).to have_select('都道府県', selected: '東京都')
         expect(page).to have_field 'spot[city]', with: spot.city
         expect(page).to have_field 'spot[visited_day]', with: spot.visited_day
-        #写真1〜3枚目
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
+        expect(page).to have_selector("img[src$='spot_image2.jpeg']")
+        expect(page).to have_selector("img[src$='spot_image3.jpeg']")
         expect(page).to have_field 'spot[content]', with: spot.content
       end
       it 'エラーメッセージが表示される' do
@@ -303,20 +301,10 @@ describe '[STEP3] 仕上げのテスト' do
         it '自分のスポットのいいね数が表示される' do
           expect(page).to have_content other_spot.favorites.count
         end
-        #it 'スポットのキーワードが表示される' do
-          #expect(page).to have_css(".keyword", keyword: keyword.keyword)
-        #end
-        #it 'キーワードのリンク先が正しい' do
-          #expect(page).to have_link keyword.keyword, href: keyword_path(keyword)
-        #end
         it 'スポットの画像(1枚目)が表示される' do
-          expect(page).to have_content other_spot.spot_image1
-        end
-        it 'スポットの画像(2枚目)が表示される' do
-          expect(page).to have_content other_spot.spot_image2
-        end
-        it 'スポットの画像(3枚目)が表示される' do
-          expect(page).to have_content other_spot.spot_image3
+          expect(page).to have_selector("img[src$='spot_image1.jpeg']")
+          expect(page).to have_selector("img[src$='spot_image2.jpeg']")
+          expect(page).to have_selector("img[src$='spot_image3.jpeg']")
         end
         it 'スポットの内容が表示される' do
           expect(page).to have_content other_spot.content
@@ -334,7 +322,7 @@ describe '[STEP3] 仕上げのテスト' do
           expect(page).to have_content '投稿者プロフィール'
         end
         it '他人のプロフィール画像が表示される' do
-          expect(page).to have_content other_user.profile_image
+          expect(page).to have_selector("img[src$='profile_image.jpeg']")
         end
         it '他人のニックネームが表示される' do
           expect(page).to have_content other_user.nickname
@@ -375,7 +363,7 @@ describe '[STEP3] 仕上げのテスト' do
           expect(page).to have_content "#{other_user.nickname} さん"
         end
         it '他人のプロフィール画像が表示される' do
-          expect(page).to have_content other_user.profile_image
+          expect(page).to have_selector("img[src$='profile_image.jpeg']")
         end
         it '他人のニックネームが表示される' do
           expect(page).to have_content other_user.nickname
@@ -415,7 +403,7 @@ describe '[STEP3] 仕上げのテスト' do
           expect(current_path).to eq '/users/' + other_user.id.to_s
         end
         it 'スポット一覧に他人のスポットの画像(1枚目)が表示される' do
-          expect(page).to have_content other_spot.spot_image1
+          expect(page).to have_selector("img[src$='spot_image1.jpeg']")
         end
         it 'スポット一覧に他人のスポットのタイトルが表示され、リンクが正しい' do
           expect(page).to have_link other_spot.title, href: spot_path(other_spot)

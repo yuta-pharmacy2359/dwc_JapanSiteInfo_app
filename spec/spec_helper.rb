@@ -19,6 +19,7 @@ RSpec.configure do |config|
     # driven_by :selenium_chrome_headless
     driven_by :rack_test
   end
+  Capybara.ignore_hidden_elements = false
   # config.after(:suite) do
   #   DatabaseCleaner.strategy = :transaction
   #   DatabaseCleaner.clean_with(:truncation)

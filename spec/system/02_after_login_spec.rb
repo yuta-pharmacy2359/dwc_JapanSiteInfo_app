@@ -2,10 +2,9 @@ require 'rails_helper'
 
 describe '[STEP2] ユーザログイン後のテスト' do
   let(:user) { create(:user) }
-  let(:keyword) { create(:keyword) }
-  let!(:other_user) { create(:user) }
+  let!(:other_user) { create(:other_user) }
   let!(:spot) { create(:spot, user: user) }
-  let!(:other_spot) { create(:spot, user: other_user) }
+  let!(:other_spot) { create(:other_spot, user: other_user) }
 
   before do
     visit new_user_session_path
@@ -80,6 +79,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
       end
       it '「スポット一覧」と表示されている' do
         expect(page).to have_content 'スポット一覧'
+      end
+      it '自分と他人のスポットの画像(1枚目)が表示される：1枚目が1枚ずつ表示される' do
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
       end
       it '自分と他人のスポットのタイトルのリンク先がそれぞれ正しい' do
         expect(page).to have_link spot.title, href: spot_path(spot)
@@ -161,19 +163,15 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '「所在地(市区町村)」フォームが表示される' do
         expect(page).to have_field 'spot[city]'
       end
-       it '「来訪日」フォームが表示される' do
+      it '「来訪日」フォームが表示される' do
         expect(page).to have_field 'spot[visited_day]'
       end
-      #it '「評価」フォームが表示される', js: true do
-        #expect(page).to have_field('star', visible: false)
-        #sleep 3
-      #end
-      #it '「写真(1枚目)」のフォームが表示される' do
-      #end
-      #it '「写真(2枚目)」のフォームが表示される' do
-      #end
-      #it '「写真(3枚目)」のフォームが表示される' do
-      #end
+      it '「評価」フォームが表示される' do
+        expect(find('input[@name="spot[rate]"]', visible: false).text).to be_blank
+      end
+      it '画像選択のフォームが3つ表示される' do
+        expect(page).to have_content('ファイルを選択', count: 3)
+      end
       it '「内容・感想」フォームが表示される' do
         expect(page).to have_field 'spot[content]'
       end
@@ -182,16 +180,17 @@ describe '[STEP2] ユーザログイン後のテスト' do
       end
     end
 
-    context '新規投稿のテスト' do
+    context '新規投稿・キーワードのテスト' do
       before do
         fill_in 'spot[title]', with: Faker::Lorem.characters(number: 10)
+        fill_in 'spot[keyword]', with: '東京タワー'
         select '東京都', from: 'spot_prefecture'
         fill_in 'spot[city]', with: Faker::Lorem.characters(number: 10)
         fill_in 'spot[visited_day]', with: '2021-01-01'
-        #fill_in 'spot[rate]', with: '5', visible: false
-        #写真(1〜3枚目)の入力
-
-
+        find('input[@name="spot[rate]"]', visible: false).set('5')
+        attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
+        attach_file "spot[spot_image2]", "app/assets/images/image2.jpg"
+        attach_file "spot[spot_image3]", "app/assets/images/image3.jpg"
         fill_in 'spot[content]', with: Faker::Lorem.characters(number: 50)
       end
 
@@ -201,6 +200,22 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '新規投稿後のリダイレクト先が、新規投稿できたスポットの詳細画面になっている' do
         click_button '投稿する'
         expect(current_path).to eq '/spots/' + Spot.last.id.to_s
+      end
+      it 'キーワードが入力されている' do
+        click_button '投稿する'
+        expect(page).to have_content '東京タワー'
+      end
+      it 'キーワードのリンク先がキーワード詳細になっている' do
+        click_button '投稿する'
+        expect(page).to have_link '東京タワー', href: keyword_path(Keyword.last.id)
+      end
+      it 'キーワード一覧画面に新規登録したキーワードの情報が表示されている' do
+        click_button '投稿する'
+        visit keywords_path
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
+        expect(page).to have_link '東京タワー', href: keyword_path(Keyword.last.id)
+        expect(page).to have_content Keyword.last.spots.count
+        expect(page).to have_content Keyword.last.spots.average(:rate)
       end
     end
   end
@@ -239,20 +254,16 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '自分のスポットのいいね数が表示される' do
         expect(page).to have_content spot.favorites.count
       end
-      #it 'スポットのキーワードが表示される' do
-        #expect(page).to have_css(".keyword", keyword: keyword.keyword)
-      #end
-      #it 'キーワードのリンク先が正しい' do
-        #expect(page).to have_link keyword.keyword, href: keyword_path(keyword)
-      #end
+      #'スポットのキーワードが表示される'は、新規登録のテストで確認
+
       it 'スポットの画像(1枚目)が表示される' do
-        expect(page).to have_content spot.spot_image1
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
       end
       it 'スポットの画像(2枚目)が表示される' do
-        expect(page).to have_content spot.spot_image2
+        expect(page).to have_selector("img[src$='spot_image2.jpeg']")
       end
       it 'スポットの画像(3枚目)が表示される' do
-        expect(page).to have_content spot.spot_image3
+        expect(page).to have_selector("img[src$='spot_image3.jpeg']")
       end
       it 'スポットの内容が表示される' do
         expect(page).to have_content spot.content
@@ -270,7 +281,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_content '投稿者プロフィール'
       end
       it '自分のプロフィール画像が表示される' do
-        expect(page).to have_content user.profile_image
+        expect(page).to have_selector("img[src$='profile_image.jpeg']")
       end
       it '自分のニックネームが表示される' do
         expect(page).to have_content user.nickname
@@ -359,15 +370,20 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '生年月日編集フォームにスポットの来訪日が表示される' do
         expect(page).to have_field 'spot[visited_day]', with: spot.visited_day
       end
+      it '評価フォームが表示される' do
+        expect(find('input[@name="spot[rate]"]', visible: false).text).to be_blank
+      end
+      it '画像選択フォームが3つ表示される' do
+        expect(page).to have_content('ファイルを選択', count: 3)
+      end
+      it 'スポットの画像が表示される' do
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
+        expect(page).to have_selector("img[src$='spot_image2.jpeg']")
+        expect(page).to have_selector("img[src$='spot_image3.jpeg']")
+      end
       it '内容・感想編集フォームにスポットの内容・感想が表示される' do
         expect(page).to have_field 'spot[content]', with: spot.content
       end
-      #it '写真(1枚目)フォームが表示される' do
-      #end
-      #it '写真(2枚目)フォームが表示される' do
-      #end
-      #it '写真(3枚目)フォームが表示される' do
-      #end
       it '更新ボタンが表示される' do
         expect(page).to have_button '更新する'
       end
@@ -379,18 +395,18 @@ describe '[STEP2] ユーザログイン後のテスト' do
         @spot_old_prefecture = spot.prefecture
         @spot_old_city = spot.city
         @spot_old_visited_day = spot.visited_day
-        #@spot_old_rate = spot.rate
-        #@spot_old_image1 = spot.spot_image1
-        #@spot_old_image2 = spot.spot_image2
-        #@spot_old_image3 = spot.spot_image3
+        @spot_old_rate = spot.rate
+        @spot_old_image1 = spot.spot_image1
+        @spot_old_image2 = spot.spot_image2
+        @spot_old_image3 = spot.spot_image3
         fill_in 'spot[title]', with: Faker::Lorem.characters(number: 9)
         select '神奈川県', from: 'spot_prefecture'
         fill_in 'spot[city]', with: Faker::Lorem.characters(number: 9)
         fill_in 'spot[visited_day]', with: '2021-01-01'
-        #fill_in 'spot[rate]', with: '4', visible: false
-        #写真(1〜3枚目)の入力
-
-
+        find('input[@name="spot[rate]"]', visible: false).set('4')
+        attach_file "spot[spot_image1]", "app/assets/images/image4.jpg"
+        attach_file "spot[spot_image2]", "app/assets/images/image5.jpg"
+        attach_file "spot[spot_image3]", "app/assets/images/image6.jpg"
         fill_in 'spot[content]', with: Faker::Lorem.characters(number: 49)
         click_button '更新する'
       end
@@ -407,18 +423,18 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '来訪日が正しく更新される' do
         expect(spot.reload.visited_day).not_to eq @spot_old_visited_day
       end
-      #it '評価が正しく更新される' do
-        #expect(spot.reload.rate).not_to eq @spot_old_rate
-      #end
-      #it '写真(1枚目)が正しく更新される' do
-        #expect(spot.reload.spot_image1).not_to eq @spot_old_image1
-      #end
-      #it '写真(2枚目)が正しく更新される' do
-        #expect(spot.reload.spot_image2).not_to eq @spot_old_image2
-      #end
-      #it '写真(3枚目)が正しく更新される' do
-        #expect(spot.reload.spot_image3).not_to eq @spot_old_image3
-      #end
+      it '評価が正しく更新される' do
+        expect(spot.reload.rate).not_to eq @spot_old_rate
+      end
+      it '写真(1枚目)が正しく更新される' do
+        expect(spot.reload.spot_image1).not_to eq @spot_old_image1
+      end
+      it '写真(2枚目)が正しく更新される' do
+        expect(spot.reload.spot_image2).not_to eq @spot_old_image2
+      end
+      it '写真(3枚目)が正しく更新される' do
+        expect(spot.reload.spot_image3).not_to eq @spot_old_image3
+      end
       it 'リダイレクト先が、更新したスポットの詳細画面になっている' do
         expect(current_path).to eq '/spots/' + spot.id.to_s
         expect(page).to have_content "#{spot.reload.title}"
@@ -506,13 +522,13 @@ describe '[STEP2] ユーザログイン後のテスト' do
     before do
       visit user_path(user)
     end
-    
+
     context '表示の確認' do
       it '「マイページ」と表示されている' do
         expect(page).to have_content 'マイページ'
       end
       it '自分のプロフィール画像が表示される' do
-        expect(page).to have_content user.profile_image
+        expect(page).to have_selector("img[src$='profile_image.jpeg']")
       end
       it '自分のニックネームが表示される' do
         expect(page).to have_content user.nickname
@@ -546,13 +562,13 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_link 'プロフィール編集', href: edit_user_path(user)
       end
     end
-    
+
     context 'サイドバーの確認' do
       it 'URLが正しい' do
         expect(current_path).to eq '/users/' + user.id.to_s
       end
       it 'スポット一覧に自分のスポットの画像(1枚目)が表示される' do
-        expect(page).to have_content spot.spot_image1
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
       end
       it 'スポット一覧に自分のスポットのタイトルが表示され、リンクが正しい' do
         expect(page).to have_link spot.title, href: spot_path(spot)
@@ -642,7 +658,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         fill_in 'user[birthday]', with: '2001-01-01'
         select '神奈川県', from: 'user_prefecture'
         fill_in 'user[city]', with: Faker::Lorem.characters(number: 6)
-        #profile_image { 'assets/image5.jpg' }
+        attach_file "user[profile_image]", "app/assets/images/image8.jpg"
         fill_in 'user[introduction]', with: Faker::Lorem.characters(number: 19)
         click_button '更新する'
       end
@@ -671,9 +687,45 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '市区町村が正しく更新される' do
         expect(user.reload.city).not_to eq @user_old_city
       end
-
+      it 'プロフィール画像が正しく更新される' do
+        expect(user.reload.profile_image).not_to eq @user_old_profile_image
+      end
+      it '自己紹介が正しく更新される' do
+        expect(user.reload.introduction).not_to eq @user_old_introduction
+      end
       it 'リダイレクト先が、自分のユーザ詳細画面になっている' do
         expect(current_path).to eq '/users/' + user.id.to_s
+      end
+    end
+  end
+
+  describe 'コメント機能のテスト' do
+    let!(:other_user2) { create(:user) }
+    let!(:other_spot2) { create(:spot, user: other_user2) }
+    let!(:comment) { create(:comment, user: user, spot: other_spot2) }
+    let!(:other_comment) { create(:comment, user: other_user, spot: other_spot2) }
+
+    before do
+      visit spot_path(other_spot2)
+    end
+    context '表示の確認' do
+      it '自分と他人のニックネームのリンクが表示され、リンク先が正しい' do
+        expect(page).to have_link user.nickname, href: user_path(user)
+        expect(page).to have_link other_user.nickname, href: user_path(other_user)
+      end
+      it '自分と他人のコメントの内容が表示される' do
+        expect(page).to have_content comment.comment
+        expect(page).to have_content other_comment.comment
+      end
+      it '自分と他人のコメントの送信日時が表示される' do
+        expect(page).to have_content comment.created_at.strftime("%Y年%-m月%-d日 %-H:%M")
+        expect(page).to have_content other_comment.created_at.strftime("%Y年%-m月%-d日 %-H:%M")
+      end
+      it '自分のコメントの削除リンクが表示される' do
+        expect(page).to have_link '削除する', href: spot_comment_path(other_spot2.comment)
+      end
+      it '他人のコメントの削除リンクは表示されない' do
+        expect(page).not_to have_link '削除する', href: spot_comment_path(other_spot2.other_comment)
       end
     end
   end

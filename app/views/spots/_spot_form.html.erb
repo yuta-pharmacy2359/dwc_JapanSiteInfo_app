@@ -24,17 +24,19 @@
   </tr>
   <tr>
     <td class="mr-3 mt-4">評価</td>
-    <td id="star"><%= f.hidden_field :rate, id: :review_star %></td>
-    <script>
-      if(!$("#star img").length) {
-        $('#star').raty({
-          size: 36,
-          starOff: '<%= asset_path('star-off.png') %>',
-          starOn: '<%= asset_path('star-on.png') %>',
-          scoreName: 'spot[rate]',
-        });
-      }
-    </script>
+    <td id="star">
+      <input type="hidden" name="spot[rate]">
+      <script>
+        if(!$("#star img").length) {
+          $('#star').raty({
+            size: 36,
+            starOff: '<%= asset_path('star-off.png') %>',
+            starOn: '<%= asset_path('star-on.png') %>',
+            scoreName: 'spot[rate]',
+          });
+        }
+      </script>
+    </td>
   </tr>
   <tr>
     <td class="mr-3 mt-4">写真(1枚目)</td>

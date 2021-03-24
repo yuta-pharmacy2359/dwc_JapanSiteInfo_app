@@ -118,4 +118,18 @@ RSpec.describe 'Userモデルのテスト', type: :model do
       end
     end
   end
+
+  describe 'following, followers関連のテスト' do
+    let(:user) { create(:user) }
+    let(:other_user) { create(:other_user) }
+
+    it 'following, followersの関係性が正しいか' do
+      expect(user.following?(other_user)).to eq false
+      user.follow(other_user)
+      expect(user.following?(other_user)).to eq true
+      expect(other_user.followers.include?(user)).to eq true
+      user.unfollow(other_user)
+      expect(user.following?(other_user)).to eq false
+    end
+  end
 end

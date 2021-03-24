@@ -170,7 +170,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(find('input[@name="spot[rate]"]', visible: false).text).to be_blank
       end
       it '画像選択のフォームが3つ表示される' do
-        expect(page).to have_content('ファイルを選択', count: 3)
+        expect(page).to have_field 'spot[spot_image1]'
+        expect(page).to have_field 'spot[spot_image2]'
+        expect(page).to have_field 'spot[spot_image3]'
       end
       it '「内容・感想」フォームが表示される' do
         expect(page).to have_field 'spot[content]'
@@ -374,7 +376,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(find('input[@name="spot[rate]"]', visible: false).text).to be_blank
       end
       it '画像選択フォームが3つ表示される' do
-        expect(page).to have_content('ファイルを選択', count: 3)
+        expect(page).to have_field 'spot[spot_image1]'
+        expect(page).to have_field 'spot[spot_image2]'
+        expect(page).to have_field 'spot[spot_image3]'
       end
       it 'スポットの画像が表示される' do
         expect(page).to have_selector("img[src$='spot_image1.jpeg']")
@@ -708,6 +712,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
     before do
       visit spot_path(other_spot2)
     end
+
     context '表示の確認' do
       it '自分と他人のニックネームのリンクが表示され、リンク先が正しい' do
         expect(page).to have_link user.nickname, href: user_path(user)
@@ -722,11 +727,208 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_content other_comment.created_at.strftime("%Y年%-m月%-d日 %-H:%M")
       end
       it '自分のコメントの削除リンクが表示される' do
-        expect(page).to have_link '削除する', href: spot_comment_path(other_spot2.comment)
+        expect(page).to have_link 'delete-' + comment.id.to_s + '-btn'
       end
       it '他人のコメントの削除リンクは表示されない' do
-        expect(page).not_to have_link '削除する', href: spot_comment_path(other_spot2.other_comment)
+        expect(page).not_to have_link 'delete-' + other_comment.id.to_s + '-btn'
+      end
+    end
+
+    context '新規コメント送信のテスト' do
+      before do
+        fill_in 'comment[comment]', with: Faker::Lorem.characters(number: 50)
+      end
+
+      it '正しく送信される', js: true do
+        expect { click_button '送信する' }.to change{ user.comments.count }.by(1)
+      end
+      it '遷移先が、スポット詳細になっている', js: true do
+        expect(current_path).to eq '/spots/' + other_spot2.id.to_s
+      end
+    end
+
+    context '削除のテスト' do
+      it '正しく削除される', js: true do
+        expect { click_link 'delete-' + comment.id.to_s + '-btn' }.to change{ user.comments.count }.by(-1)
+      end
+      it '遷移先が、マイページ画面になっている', js: true do
+        expect(current_path).to eq '/spots/' + other_spot2.id.to_s
       end
     end
   end
+
+  describe 'フォロー機能のテスト' do
+
+    context 'フォロー・フォロワー一覧のページのテスト' do
+      let!(:other_user2) { create(:user) }
+      before do
+        user.follow(other_user)
+        user.follow(other_user2)
+        other_user.follow(user)
+      end
+
+      it 'フォロー一覧、「(自分のニックネーム)さんのフォロー一覧」と表示されているか' do
+        visit following_user_path(user)
+        expect(page).to have_content "#{user.nickname}さんのフォロー一覧"
+      end
+      it 'フォロー一覧、自分がフォローしているユーザーの情報が表示されているか' do
+        visit following_user_path(user)
+        expect(page).to have_selector("img[src$='profile_image.jpeg']")
+        expect(page).to have_content other_user.nickname
+        expect(page).to have_content other_user.following.count
+        expect(page).to have_content other_user.followers.count
+        expect(page).to have_content other_user.spots.last.updated_at.strftime("%Y年%-m月%-d日")
+      end
+      it 'フォロワー一覧、「(自分のニックネーム)さんのフォロワー一覧」と表示されているか' do
+        visit followers_user_path(user)
+        expect(page).to have_content "#{user.nickname}さんのフォロワー一覧"
+      end
+      it 'フォロワー一覧、自分をフォローしているユーザーの情報が表示されているか' do
+        visit followers_user_path(user)
+        expect(page).to have_selector("img[src$='profile_image.jpeg']")
+        expect(page).to have_content other_user.nickname
+        expect(page).to have_content other_user.following.count
+        expect(page).to have_content other_user.followers.count
+        expect(page).to have_content other_user.spots.last.updated_at.strftime("%Y年%-m月%-d日")
+      end
+      it '一度も投稿していないユーザーの場合、「投稿なし」が表示されているか' do
+        visit following_user_path(user)
+        expect(page).to have_content '投稿なし'
+      end
+    end
+
+    context 'フォロー一覧のページのテスト(追加)' do
+      let!(:other_user2) { create(:user) }
+      before do
+        user.follow(other_user2)
+        visit following_user_path(user)
+      end
+
+      it '一度も投稿していないユーザーの場合、「投稿なし」が表示されているか' do
+        expect(page).to have_content '投稿なし'
+      end
+    end
+
+    context 'フォロー・フォロー解除のテスト' do
+      before do
+        visit user_path(other_user)
+      end
+
+      it 'フォローする：フォロー数が1となり、ボタンが「フォロー解除」に変化する', js: true do
+        click_button 'フォローする'
+        expect(other_user.followers.count).to eq 1
+        expect(page).to have_button 'フォロー解除'
+      end
+      it 'フォロー解除する：フォロー数が0となり、ボタンが「フォローする」に変化する', js: true do
+        click_button 'フォローする'
+        click_button 'フォロー解除'
+        expect(other_user.followers.count).to eq 0
+        expect(page).to have_button 'フォローする'
+      end
+    end
+  end
+
+  describe 'ランキング機能のテスト' do
+    context 'いいね数ランキング(スポット)、対象スポット数が10以下の場合' do
+
+    end
+  end
+end
+
+describe '[STEP2] ユーザログイン後のテスト いいね機能のテスト' do
+  let(:user) { create(:user) }
+  let!(:spot) { create(:spot, user: user) }
+
+  before do
+    visit new_user_session_path
+    fill_in 'user[email]', with: user.email
+    fill_in 'user[password]', with: user.password
+    click_button 'ログイン'
+  end
+
+  context 'トップ画面でのテスト' do
+    before do
+      visit top_path
+    end
+    it 'いいねを押す', js: true do
+      expect {
+        find("#like-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+    it 'いいねを取り消す', js: true do
+      find("#like-#{spot.id}").click
+      sleep 1
+      expect {
+        find("#unlike-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(-1)
+      expect(page).to have_css "#like-#{spot.id}"
+    end
+  end
+  context 'ユーザー詳細画面でのテスト' do
+    before do
+      visit user_path(user)
+    end
+    it 'いいねを押す', js: true do
+      expect {
+        find("#like-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+    it 'いいねを取り消す', js: true do
+      find("#like-#{spot.id}").click
+      sleep 1
+      expect {
+        find("#unlike-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(-1)
+      expect(page).to have_css "#like-#{spot.id}"
+    end
+  end
+  context 'スポット詳細画面でのテスト' do
+    before do
+      visit spot_path(spot)
+    end
+    it 'いいねを押す', js: true do
+      expect {
+        find("#like-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+    it 'いいねを取り消す', js: true do
+      find("#like-#{spot.id}").click
+      sleep 1
+      expect {
+        find("#unlike-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(-1)
+      expect(page).to have_css "#like-#{spot.id}"
+    end
+  end
+  context 'スポット一覧画面でのテスト' do
+    before do
+      visit spots_path
+    end
+    it 'いいねを押す', js: true do
+      expect {
+        find("#like-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+    it 'いいねを取り消す', js: true do
+      find("#like-#{spot.id}").click
+      sleep 1
+      expect {
+        find("#unlike-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(-1)
+      expect(page).to have_css "#like-#{spot.id}"
+    end
+  end
+  #ランキング、キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
 end

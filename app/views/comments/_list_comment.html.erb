@@ -13,7 +13,7 @@
       </td>
       <td>
         <% if current_user.present? && (comment.user_id == current_user.id) %>
-          <%= link_to "削除する", spot_comment_path(comment.spot, comment), method: :delete, remote: true, class: "btn btn-danger text-nowrap" %>
+          <%= link_to "削除する", spot_comment_path(comment.spot, comment), id: 'delete-' + comment.id.to_s + '-btn' ,method: :delete, remote: true, class: "btn btn-danger text-nowrap" %>
         <% end %>
       </td>
     </tr>

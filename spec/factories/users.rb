@@ -18,5 +18,11 @@ FactoryBot.define do
       prefecture {'大阪府'}
       profile_image {File.open("#{Rails.root}/app/assets/images/image8.jpg")}
     end
+
+    factory :other_user2 do
+      birthday {'1995-01-01'}
+      prefecture {'沖縄県'}
+      profile_image {File.open("#{Rails.root}/app/assets/images/image9.jpg")}
+    end
   end
 end

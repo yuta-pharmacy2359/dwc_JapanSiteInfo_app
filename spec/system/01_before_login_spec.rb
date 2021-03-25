@@ -5,6 +5,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
     let(:user) { create(:user) }
     let!(:search_spot) { create(:search_spot, user: user) }
     let!(:search_spot2) { create(:search_spot2, user: user) }
+    let!(:favorite) { create(:favorite, spot: search_spot) }
 
     before do
       visit top_path
@@ -135,6 +136,61 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(page).to have_content 'ディズニーランド'
         expect(page).not_to have_content '稲荷山古墳'
       end
+    end
+
+    context 'ソート機能のテスト' do
+      before do
+        click_button '検索'
+      end
+
+      it 'タイトルのソート：正しく表示されるか' do
+        click_link 'タイトル' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('ディズニーランド')
+        click_link 'タイトル' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+      end
+      it '所在地のソート：正しく表示されるか' do
+        click_link '所在地' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+        click_link '所在地' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('ディズニーランド')
+      end
+      it '投稿日のソート：正しく表示されるか' do
+        click_link '投稿日' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('ディズニーランド')
+        click_link '投稿日' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+      end
+      it '来訪日のソート：正しく表示されるか' do
+        click_link '来訪日' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('ディズニーランド')
+        click_link '来訪日' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+      end
+      it '評価のソート：正しく表示されるか' do
+        click_link '評価' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+        click_link '評価' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('ディズニーランド')
+      end
+      #it 'いいねのソート：正しく表示されるか' do
+        #click_link 'いいね' #昇順
+        #first_spot_link = find_all('a')[10]
+        #expect(first_spot_link).to match(spot_path(search_spot))
+        #click_link 'いいね' #降順
+        #first_spot_link = find_all('a')[10]
+        #expect(first_spot_link).to match(spot_path(search_spot2))
+      #end
     end
   end
 

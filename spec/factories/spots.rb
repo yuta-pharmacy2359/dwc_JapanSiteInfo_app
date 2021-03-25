@@ -35,5 +35,13 @@ FactoryBot.define do
       visited_day {'2021-01-01'}
       rate {'4'}
     end
+
+    factory :search_spot3 do
+      title { '大仙陵古墳' }
+      prefecture { '大阪府' }
+      city { '堺市' }
+      visited_day {'2019-01-01'}
+      rate {'3'}
+    end
   end
 end

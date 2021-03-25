@@ -211,13 +211,63 @@ describe '[STEP2] ユーザログイン後のテスト' do
         click_button '投稿する'
         expect(page).to have_link '東京タワー', href: keyword_path(Keyword.last.id)
       end
-      it 'キーワード一覧画面に新規登録したキーワードの情報が表示されている' do
+    end
+
+    context 'キーワード一覧・検索のテスト' do
+      before do
+        fill_in 'spot[title]', with: Faker::Lorem.characters(number: 10)
+        fill_in 'spot[keyword]', with: '東京タワー'
+        select '東京都', from: 'spot_prefecture'
+        fill_in 'spot[city]', with: '港区'
+        fill_in 'spot[visited_day]', with: '2021-01-01'
+        find('input[@name="spot[rate]"]', visible: false).set('5')
+        attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
+        attach_file "spot[spot_image2]", "app/assets/images/image2.jpg"
+        attach_file "spot[spot_image3]", "app/assets/images/image3.jpg"
+        fill_in 'spot[content]', with: Faker::Lorem.characters(number: 50)
+        click_button '投稿する'
+        visit new_spot_path
+        fill_in 'spot[title]', with: Faker::Lorem.characters(number: 10)
+        fill_in 'spot[keyword]', with: 'あべのハルカス'
+        select '大阪府', from: 'spot_prefecture'
+        fill_in 'spot[city]', with: '大阪市阿倍野区'
+        fill_in 'spot[visited_day]', with: '2020-01-01'
+        find('input[@name="spot[rate]"]', visible: false).set('4')
+        attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
+        attach_file "spot[spot_image2]", "app/assets/images/image2.jpg"
+        attach_file "spot[spot_image3]", "app/assets/images/image3.jpg"
+        fill_in 'spot[content]', with: Faker::Lorem.characters(number: 50)
         click_button '投稿する'
         visit keywords_path
+      end
+
+      it 'キーワード一覧が表示されている' do
+        visit keywords_path
         expect(page).to have_selector("img[src$='spot_image1.jpeg']")
-        expect(page).to have_link '東京タワー', href: keyword_path(Keyword.last.id)
+        expect(page).to have_link '東京タワー', href: keyword_path(Keyword.first.id)
+        expect(page).to have_link 'あべのハルカス', href: keyword_path(Keyword.last.id)
+        expect(page).to have_content Keyword.first.spots.count
+        expect(page).to have_content Keyword.first.spots.average(:rate)
         expect(page).to have_content Keyword.last.spots.count
         expect(page).to have_content Keyword.last.spots.average(:rate)
+      end
+      it '都道府県での検索：条件に合致するものだけが表示されるか' do
+        select '東京都', from: 'q_spots_prefecture_eq'
+        click_button '検索'
+        expect(page).to have_content '東京タワー'
+        expect(page).not_to have_content 'あべのハルカス'
+      end
+      it '市区町村での検索：条件に合致するものだけが表示されるか' do
+        fill_in 'q[spots_city_cont]', with: '阿倍'
+        click_button '検索'
+        expect(page).not_to have_content '東京タワー'
+        expect(page).to have_content 'あべのハルカス'
+      end
+      it 'キーワードでの検索：条件に合致するものだけが表示されるか' do
+        fill_in 'q[keyword_cont]', with: 'タワー'
+        click_button '検索'
+        expect(page).to have_content '東京タワー'
+        expect(page).not_to have_content 'あべのハルカス'
       end
     end
   end
@@ -828,9 +878,150 @@ describe '[STEP2] ユーザログイン後のテスト' do
     end
   end
 
-  describe 'ランキング機能のテスト' do
-    context 'いいね数ランキング(スポット)、対象スポット数が10以下の場合' do
+  describe '検索機能のテスト' do
+    let!(:search_user) { create(:search_user) }
+    let!(:search_user2) { create(:search_user2) }
+    let!(:search_spot) { create(:search_spot, user: user) }
+    let!(:search_spot2) { create(:search_spot2, user: user) }
 
+    context 'スポット一覧画面での検索テスト' do
+      #フォームの表示はテスト済
+      before do
+        visit spots_path
+      end
+
+      it '都道府県での検索：条件に合致するものだけが表示されるか' do
+        select '千葉県', from: 'q_prefecture_eq'
+        click_button '検索'
+        expect(page).to have_content 'ディズニーランド'
+        expect(page).not_to have_content '稲荷山古墳'
+      end
+      it '市区町村での検索：条件に合致するものだけが表示されるか' do
+        fill_in 'q[city_cont]', with: '行田'
+        click_button '検索'
+        expect(page).not_to have_content 'ディズニーランド'
+        expect(page).to have_content '稲荷山古墳'
+      end
+      it 'タイトルでの検索：条件に合致するものだけが表示されるか' do
+        fill_in 'q[title_cont]', with: 'ディズニー'
+        click_button '検索'
+        expect(page).to have_content 'ディズニーランド'
+        expect(page).not_to have_content '稲荷山古墳'
+      end
+    end
+
+    context 'ユーザー一覧画面での検索テスト' do
+      #フォームの表示はテスト済
+      before do
+        visit users_path
+      end
+
+      it '都道府県での検索：条件に合致するものだけが表示されるか' do
+        select '千葉県', from: 'q_prefecture_eq'
+        click_button '検索'
+        expect(page).to have_content 'ハナコ'
+        expect(page).not_to have_content 'タロー'
+      end
+      it '市区町村での検索：条件に合致するものだけが表示されるか' do
+        fill_in 'q[city_cont]', with: '所沢'
+        click_button '検索'
+        expect(page).not_to have_content 'ハナコ'
+        expect(page).to have_content 'タロー'
+      end
+      it '性別での検索：条件に合致するものだけが表示されるか' do
+        choose('q_sex_eq_1')
+        click_button '検索'
+        expect(page).to have_content 'ハナコ'
+        expect(page).not_to have_content 'タロー'
+      end
+      it '年齢での検索：検索結果に合致するものだけが表示されるか' do
+        fill_in 'q[birthday_to_age_gteq]', with: '30'
+        fill_in 'q[birthday_to_age_lt]', with: '40'
+        click_button '検索'
+        expect(page).to have_content 'ハナコ'
+        expect(page).not_to have_content 'タロー'
+      end
+      it 'ニックネームでの検索：検索結果に合致するものだけが表示されるか' do
+        fill_in 'q[nickname_cont]', with: 'タロ'
+        click_button '検索'
+        expect(page).not_to have_content 'ハナコ'
+        expect(page).to have_content 'タロー'
+      end
+    end
+  end
+
+  describe 'ランキング(スポットいいね数)のテスト' do
+    let!(:other_spot2) { create(:spot, user: user) }
+    let!(:other_spot3) { create(:spot, user: user) }
+    let!(:other_spot4) { create(:spot, user: user) }
+    let!(:favorite1) { create(:favorite, spot: spot)}
+    let!(:favorite2) { create(:favorite, spot: other_spot)}
+    let!(:favorite3) { create(:favorite, spot: other_spot2)}
+    let!(:favorite4) { create(:favorite, spot: other_spot3)}
+    let!(:favorite5) { create(:favorite, spot: other_spot4)}
+
+    before do
+      visit spot_favorite_ranking_path
+    end
+
+    context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が5以下の場合' do
+      it '「現在準備中です。」と表示される' do
+        expect(page).to have_content '現在準備中です。'
+      end
+      it '「ユーザーのいいね数ランキングは こちら」と表示される' do
+        expect(page).to have_content 'ユーザーのいいね数ランキングは こちら'
+      end
+      it '「こちら」がいいね数ランキング(ユーザー)へのリンクとなっている' do
+        expect(page).to have_link 'こちら', href: user_favorite_ranking_path
+      end
+    end
+
+    context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が11以上の場合' do
+      let!(:other_spot5) { create(:spot, user: user) }
+      let!(:other_spot6) { create(:spot, user: user) }
+      let!(:other_spot7) { create(:spot, user: user) }
+      let!(:other_spot8) { create(:spot, user: user) }
+      let!(:other_spot9) { create(:spot, user: user) }
+      let!(:other_spot10) { create(:spot, user: user) }
+      let!(:favorite6) { create(:favorite, spot: other_spot5)}
+      let!(:favorite7) { create(:favorite, spot: other_spot6)}
+      let!(:favorite8) { create(:favorite, spot: other_spot7)}
+      let!(:favorite9) { create(:favorite, spot: other_spot8)}
+      let!(:favorite10) { create(:favorite, spot: other_spot9)}
+      let!(:favorite11) { create(:favorite, spot: other_spot10)}
+      let!(:favorite12) { create(:favorite, spot: spot)}
+      let!(:favorite13) { create(:favorite, spot: other_spot)}
+      let!(:favorite14) { create(:favorite, spot: other_spot2)}
+      let!(:favorite15) { create(:favorite, spot: other_spot3)}
+      let!(:favorite16) { create(:favorite, spot: other_spot4)}
+      let!(:favorite17) { create(:favorite, spot: other_spot5)}
+      let!(:favorite18) { create(:favorite, spot: other_spot6)}
+      let!(:favorite19) { create(:favorite, spot: other_spot7)}
+      let!(:favorite20) { create(:favorite, spot: other_spot8)}
+      let!(:favorite21) { create(:favorite, spot: other_spot9)}
+
+      it '順位が表示される' do
+        expect(page).to have_content '第1位'
+      end
+      it 'スポットのタイトルが表示される' do
+        expect(page).to have_content spot.title
+      end
+      it 'スポットの所在地が表示される' do
+        expect(page).to have_content spot.prefecture
+        expect(page).to have_content spot.city
+      end
+      it 'スポットの投稿日が表示される' do
+        expect(page).to have_content spot.created_at.strftime("%Y年%-m月%-d日")
+      end
+      it 'スポットの投稿者のニックネームが表示される' do
+        expect(page).to have_content spot.user.nickname
+      end
+      it 'スポットのいいね数が表示される' do
+        expect(page).to have_content spot.favorites.count
+      end
+      it '第11位は表示されない' do
+        expect(page).not_to have_content '第11位'
+      end
     end
   end
 end
@@ -930,5 +1121,5 @@ describe '[STEP2] ユーザログイン後のテスト いいね機能のテス�
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
-  #ランキング、キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
+  #キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
 end

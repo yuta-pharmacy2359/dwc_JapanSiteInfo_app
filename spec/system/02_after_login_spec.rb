@@ -296,21 +296,14 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_content spot.rate
         sleep 3
       end
-      it '自分のスポットのいいねボタンが表示される' do
+      it '自分のスポットのいいねボタン及びいいね数が表示される' do
         expect(page).to have_link '', href: spot_favorites_path(spot)
-      end
-      it '自分のスポットのいいね数が表示される' do
         expect(page).to have_content spot.favorites.count
       end
       #'スポットのキーワードが表示される'は、新規登録のテストで確認
-
-      it 'スポットの画像(1枚目)が表示される' do
+      it 'スポットの画像が表示される' do
         expect(page).to have_selector("img[src$='spot_image1.jpeg']")
-      end
-      it 'スポットの画像(2枚目)が表示される' do
         expect(page).to have_selector("img[src$='spot_image2.jpeg']")
-      end
-      it 'スポットの画像(3枚目)が表示される' do
         expect(page).to have_selector("img[src$='spot_image3.jpeg']")
       end
       it 'スポットの内容が表示される' do
@@ -347,7 +340,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '自分の自己紹介が表示される' do
         expect(page).to have_content user.introduction
       end
-      it '「プロフィールをみる」(マイページ画面へのリンク)が存在する' do
+      it '「プロフィールをみる」(マイページ画面へのリンク)が表示される' do
         expect(page).to have_link 'プロフィールをみる', href: user_path(user)
       end
     end

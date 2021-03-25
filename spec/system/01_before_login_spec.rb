@@ -122,11 +122,9 @@ describe '[STEP1] ユーザログイン前のテスト' do
         click_button 'ログイン'
         visit edit_spot_path(search_spot)
         fill_in 'spot[keyword]', with: '夢の国 ミッキー'
-        find('input[@name="spot[rate]"]', visible: false).set('5')
         click_button '更新する'
         visit edit_spot_path(search_spot2)
         fill_in 'spot[keyword]', with: '稲荷山公園 前方後円墳'
-        find('input[@name="spot[rate]"]', visible: false).set('4')
         click_button '更新する'
         click_link 'ログアウト'
       end
@@ -138,7 +136,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
       end
     end
 
-    context 'ソート機能のテスト' do
+    context 'ソート機能のテスト(スポット一覧画面)' do
       before do
         click_button '検索'
       end
@@ -182,6 +180,245 @@ describe '[STEP1] ユーザログイン前のテスト' do
         click_link '評価' #降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('ディズニーランド')
+      end
+      #it 'いいねのソート：正しく表示されるか' do
+        #click_link 'いいね' #昇順
+        #first_spot_link = find_all('a')[10]
+        #expect(first_spot_link).to match(spot_path(search_spot))
+        #click_link 'いいね' #降順
+        #first_spot_link = find_all('a')[10]
+        #expect(first_spot_link).to match(spot_path(search_spot2))
+      #end
+    end
+  end
+
+  describe 'スポット詳細画面のテスト' do
+    let(:user) { create(:user) }
+    let!(:spot) { create(:spot, user: user) }
+    let!(:comment) { create(:comment, user: user, spot: spot) }
+
+    before do
+      visit spot_path(spot)
+    end
+
+    context '表示内容の確認' do
+      it 'URLが正しい' do
+        expect(current_path).to eq '/spots/' + spot.id.to_s
+      end
+      it 'スポットのタイトルが表示される' do
+        expect(page).to have_content spot.title
+      end
+      it 'スポットの所在地が表示される' do
+        expect(page).to have_content spot.prefecture
+        expect(page).to have_content spot.city
+      end
+      it 'スポットの投稿日が表示される' do
+        expect(page).to have_content spot.created_at.strftime("%Y年%-m月%-d日")
+      end
+      it 'スポットの来訪日が表示される' do
+        expect(page).to have_content spot.visited_day.strftime("%Y年%-m月%-d日")
+      end
+      it 'スポットの評価が表示される', js: true do
+        expect(page).to have_content spot.rate
+        sleep 3
+      end
+      it 'スポットのいいねボタンといいね数が表示される' do
+        expect(page).to have_link '', href: spot_favorites_path(spot)
+        expect(page).to have_content spot.favorites.count
+      end
+      it 'スポットの画像が表示される' do
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
+        expect(page).to have_selector("img[src$='spot_image2.jpeg']")
+        expect(page).to have_selector("img[src$='spot_image3.jpeg']")
+      end
+      it 'スポットの内容が表示される' do
+        expect(page).to have_content spot.content
+      end
+      it 'スポットの編集ボタンは表示されない' do
+        expect(page).not_to have_link '編集する', href: edit_spot_path(spot)
+      end
+      it 'スポットの削除ボタンは表示されない' do
+        expect(page).not_to have_link '削除する', href: spot_path(spot)
+      end
+    end
+
+    context 'サイドバーの確認' do
+      it '「投稿者プロフィール」と表示されている' do
+        expect(page).to have_content '投稿者プロフィール'
+      end
+      it '自分のプロフィール画像が表示される' do
+        expect(page).to have_selector("img[src$='profile_image.jpeg']")
+      end
+      it '自分のニックネームが表示される' do
+        expect(page).to have_content user.nickname
+      end
+      it '自分の性別が表示される' do
+        expect(page).to have_content user.sex
+      end
+      it '自分の年齢が表示される' do
+        expect(page).to have_content user.age
+      end
+      it '自分の住所が表示される' do
+        expect(page).to have_content user.prefecture
+        expect(page).to have_content user.city
+      end
+      it '自分の自己紹介が表示される' do
+        expect(page).to have_content user.introduction
+      end
+      it '「プロフィールをみる」(ユーザー詳細画面へのリンク)は表示されない' do
+        expect(page).not_to have_link 'プロフィールをみる', href: user_path(user)
+      end
+    end
+
+    context 'コメントエリアのテスト' do
+      it '「コメント」と表示される' do
+        expect(page).to have_content 'コメント'
+      end
+      it 'コメントの全件数が表示される' do
+        expect(page).to have_content "全#{spot.comments.count}件"
+      end
+      it 'コメントしたユーザーのニックネームが表示される(リンクではない)' do
+        expect(page).to have_content user.nickname
+        expect(page).not_to have_link user.nickname, href: user_path(user)
+      end
+      it 'コメントの内容が表示される' do
+        expect(page).to have_content comment.comment
+      end
+      it 'コメントの送信日時が表示される' do
+        expect(page).to have_content comment.created_at.strftime("%Y年%-m月%-d日 %-H:%M")
+      end
+      it 'コメントの削除リンクは表示されない' do
+        expect(page).not_to have_link 'delete-' + comment.id.to_s + '-btn'
+      end
+      it 'コメント入力エリアは表示されない' do
+        expect(page).not_to have_content 'コメントをどうぞ'
+        expect(page).not_to have_field 'comment[comment]'
+        expect(page).not_to have_button '送信する'
+      end
+    end
+
+    context 'キーワード関連のテスト' do
+      before do
+        visit new_user_session_path
+        fill_in 'user[email]', with: user.email
+        fill_in 'user[password]', with: user.password
+        click_button 'ログイン'
+        visit edit_spot_path(spot)
+        fill_in 'spot[keyword]', with: '東京駅 丸の内'
+        find('input[@name="spot[rate]"]', visible: false).set('5')
+        click_button '更新する'
+        click_link 'ログアウト'
+      end
+
+      it 'スポット詳細画面、キーワードが表示され、リンク先が正しい' do
+        visit spot_path(spot)
+        expect(page).to have_link '東京駅', href: keyword_path(Keyword.first)
+      end
+    end
+  end
+
+  describe 'キーワード詳細画面のテスト' do
+    let(:user) { create(:user) }
+    let!(:spot) { create(:search_spot2, user: user) }
+    let!(:other_spot) { create(:search_spot3, user: user) }
+
+    before do
+      visit new_user_session_path
+      fill_in 'user[email]', with: user.email
+      fill_in 'user[password]', with: user.password
+      click_button 'ログイン'
+      visit edit_spot_path(spot)
+      fill_in 'spot[keyword]', with: '前方後円墳'
+      find('input[@name="spot[rate]"]', visible: false).set('4')
+      click_button '更新する'
+      visit edit_spot_path(other_spot)
+      fill_in 'spot[keyword]', with: '前方後円墳'
+      find('input[@name="spot[rate]"]', visible: false).set('3')
+      click_button '更新する'
+      click_link 'ログアウト'
+      visit keyword_path(Keyword.first)
+    end
+
+    context '表示の確認' do
+      it '「キーワード：「キーワード名」 スポット一覧」と表示される' do
+        expect(page).to have_content "キーワード：「#{Keyword.first.keyword}」 スポット一覧"
+      end
+      it 'スポットの画像(1枚目)が表示されている' do
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
+      end
+      it '各スポットのタイトルが表示され、リンク先がそれぞれ正しい' do
+        expect(page).to have_link spot.title, href: spot_path(spot)
+        expect(page).to have_link other_spot.title, href: spot_path(other_spot)
+      end
+      it '各スポットの所在地が表示される' do
+        expect(page).to have_content spot.prefecture
+        expect(page).to have_content other_spot.prefecture
+        expect(page).to have_content spot.city
+        expect(page).to have_content other_spot.city
+      end
+      it '各スポットの投稿日が表示される' do
+        expect(page).to have_content spot.created_at.strftime("%Y年%-m月%-d日")
+        expect(page).to have_content other_spot.created_at.strftime("%Y年%-m月%-d日")
+      end
+      it '各スポットの来訪日が表示される' do
+        expect(page).to have_content spot.visited_day.strftime("%Y年%-m月%-d日")
+        expect(page).to have_content other_spot.visited_day.strftime("%Y年%-m月%-d日")
+      end
+      #他のところで確認
+      #it '各スポットの評価が表示される', js: true do
+        #expect(page).to have_content spot.rate
+        #expect(page).to have_content other_spot.rate
+      #end
+      it '各スポットのいいねボタンが表示される' do
+        expect(page).to have_link '', href: spot_favorites_path(spot)
+        expect(page).to have_link '', href: spot_favorites_path(other_spot)
+      end
+      it '各スポットのいいね数が表示される' do
+        expect(page).to have_content spot.favorites.count
+        expect(page).to have_content other_spot.favorites.count
+      end
+    end
+
+    context 'ソート機能のテスト(スポット一覧画面)' do
+      it 'タイトルのソート：正しく表示されるか' do
+        click_link 'タイトル' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('大仙陵古墳')
+        click_link 'タイトル' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+      end
+      it '所在地のソート：正しく表示されるか' do
+        click_link '所在地' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+        click_link '所在地' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('大仙陵古墳')
+      end
+      it '投稿日のソート：正しく表示されるか' do
+        click_link '投稿日' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+        click_link '投稿日' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('大仙陵古墳')
+      end
+      it '来訪日のソート：正しく表示されるか' do
+        click_link '来訪日' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('大仙陵古墳')
+        click_link '来訪日' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+      end
+      it '評価のソート：正しく表示されるか' do
+        click_link '評価' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('大仙陵古墳')
+        click_link '評価' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
       end
       #it 'いいねのソート：正しく表示されるか' do
         #click_link 'いいね' #昇順
@@ -480,5 +717,6 @@ describe '[STEP1] ユーザログイン前のテスト' do
     end
   end
 end
+
 
 

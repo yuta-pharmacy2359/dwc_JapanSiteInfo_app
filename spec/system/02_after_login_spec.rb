@@ -117,20 +117,16 @@ describe '[STEP2] ユーザログイン後のテスト' do
     end
 
     context '検索エリアの確認' do
-      it '「都道府県」フォームがラベルを含め表示されている' do
-        expect(page).to have_content '都道府県'
+      it '都道府県フォームが表示されている' do
         expect(page).to have_field 'q[prefecture_eq]'
       end
-      it '「市区町村」フォームがラベルを含め表示されている' do
-        expect(page).to have_content '市区町村'
+      it '市区町村フォームが表示されている' do
         expect(page).to have_field 'q[city_cont]'
       end
-      it '「タイトル」フォームがラベルを含め表示されている' do
-        expect(page).to have_content 'タイトル'
+      it 'タイトルフォームが表示されている' do
         expect(page).to have_field 'q[title_cont]'
       end
-      it '「キーワード」フォームがラベルを含め表示されている' do
-        expect(page).to have_content 'キーワード'
+      it 'キーワードフォームが表示されている' do
         expect(page).to have_field 'q[keywords_keyword_cont]'
       end
       it '検索ボタンが表示される' do

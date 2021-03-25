@@ -2,6 +2,10 @@ require 'rails_helper'
 
 describe '[STEP1] ユーザログイン前のテスト' do
   describe 'トップ画面のテスト' do
+    let(:user) { create(:user) }
+    let!(:search_spot) { create(:search_spot, user: user) }
+    let!(:search_spot2) { create(:search_spot2, user: user) }
+
     before do
       visit top_path
     end
@@ -27,6 +31,109 @@ describe '[STEP1] ユーザログイン前のテスト' do
         log_in_link = find_all('a')[3]
         log_in_link.click
         expect(current_path).to eq('/users/sign_in')
+      end
+    end
+
+    context '新着スポット画面のテスト' do
+      it '「新着スポット」と表示されている' do
+        expect(page).to have_content '新着スポット'
+      end
+      it 'スポットの画像(1枚目)が表示されている' do
+        expect(page).to have_selector("img[src$='spot_image1.jpeg']")
+      end
+      it '各スポットのタイトルが表示され、リンク先がそれぞれ正しい' do
+        expect(page).to have_link search_spot.title, href: spot_path(search_spot)
+        expect(page).to have_link search_spot2.title, href: spot_path(search_spot2)
+      end
+      it '各スポットの所在地が表示される' do
+        expect(page).to have_content search_spot.prefecture
+        expect(page).to have_content search_spot2.prefecture
+        expect(page).to have_content search_spot.city
+        expect(page).to have_content search_spot2.city
+      end
+      it '各スポットの投稿日が表示される' do
+        expect(page).to have_content search_spot.created_at.strftime("%Y年%-m月%-d日")
+        expect(page).to have_content search_spot2.created_at.strftime("%Y年%-m月%-d日")
+      end
+      it '各スポットの来訪日が表示される' do
+        expect(page).to have_content search_spot.visited_day.strftime("%Y年%-m月%-d日")
+        expect(page).to have_content search_spot2.visited_day.strftime("%Y年%-m月%-d日")
+      end
+      it '各スポットの評価が表示される', js: true do
+        expect(page).to have_content search_spot.rate
+        expect(page).to have_content search_spot2.rate
+        sleep 3
+      end
+      it '各スポットのいいねボタンが表示される' do
+        expect(page).to have_link '', href: spot_favorites_path(search_spot)
+        expect(page).to have_link '', href: spot_favorites_path(search_spot2)
+      end
+      it '各スポットのいいね数が表示される' do
+        expect(page).to have_content search_spot.favorites.count
+        expect(page).to have_content search_spot2.favorites.count
+      end
+    end
+
+    context 'スポット検索のテスト(キーワード以外)' do
+      it '「スポットを探してみる」と表示されている' do
+        expect(page).to have_content 'スポットを探してみる'
+      end
+      it '都道府県フォームが表示されている' do
+        expect(page).to have_field 'q[prefecture_eq]'
+      end
+      it '市区町村フォームが表示されている' do
+        expect(page).to have_field 'q[city_cont]'
+      end
+      it 'タイトルフォームが表示されている' do
+        expect(page).to have_field 'q[title_cont]'
+      end
+      it 'キーワードフォームが表示されている' do
+        expect(page).to have_field 'q[keywords_keyword_cont]'
+      end
+      it '検索ボタンが表示される' do
+        expect(page).to have_button '検索'
+      end
+      it '都道府県での検索：条件に合致するものだけが表示されるか' do
+        select '千葉県', from: 'q_prefecture_eq'
+        click_button '検索'
+        expect(page).to have_content 'ディズニーランド'
+        expect(page).not_to have_content '稲荷山古墳'
+      end
+      it '市区町村での検索：条件に合致するものだけが表示されるか' do
+        fill_in 'q[city_cont]', with: '行田'
+        click_button '検索'
+        expect(page).not_to have_content 'ディズニーランド'
+        expect(page).to have_content '稲荷山古墳'
+      end
+      it 'タイトルでの検索：条件に合致するものだけが表示されるか' do
+        fill_in 'q[title_cont]', with: 'ディズニー'
+        click_button '検索'
+        expect(page).to have_content 'ディズニーランド'
+        expect(page).not_to have_content '稲荷山古墳'
+      end
+    end
+
+    context 'スポット検索のテスト(キーワード)' do
+      before do
+        visit new_user_session_path
+        fill_in 'user[email]', with: user.email
+        fill_in 'user[password]', with: user.password
+        click_button 'ログイン'
+        visit edit_spot_path(search_spot)
+        fill_in 'spot[keyword]', with: '夢の国 ミッキー'
+        find('input[@name="spot[rate]"]', visible: false).set('5')
+        click_button '更新する'
+        visit edit_spot_path(search_spot2)
+        fill_in 'spot[keyword]', with: '稲荷山公園 前方後円墳'
+        find('input[@name="spot[rate]"]', visible: false).set('4')
+        click_button '更新する'
+        click_link 'ログアウト'
+      end
+      it 'タイトルでの検索：条件に合致するものだけが表示されるか' do
+        fill_in 'q[keywords_keyword_cont]', with: 'ミッキー'
+        click_button '検索'
+        expect(page).to have_content 'ディズニーランド'
+        expect(page).not_to have_content '稲荷山古墳'
       end
     end
   end
@@ -317,3 +424,5 @@ describe '[STEP1] ユーザログイン前のテスト' do
     end
   end
 end
+
+

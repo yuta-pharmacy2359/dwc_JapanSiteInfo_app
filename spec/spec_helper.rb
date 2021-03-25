@@ -14,6 +14,8 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'capybara/rspec'
+require 'database_cleaner'
+
 RSpec.configure do |config|
   config.before(:each, type: :system) do
     # driven_by :selenium_chrome_headless
@@ -53,6 +55,13 @@ RSpec.configure do |config|
   # inherited by the metadata hash of host groups and examples, rather than
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  DatabaseCleaner.strategy = :truncation
+
+
+  config.after(:suite) do
+    DatabaseCleaner.clean
+  end
 
   # The settings below are suggested to provide a good initial experience
   # with RSpec, but feel free to customize to your heart's content.

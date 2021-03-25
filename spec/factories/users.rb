@@ -24,5 +24,20 @@ FactoryBot.define do
       prefecture {'沖縄県'}
       profile_image {File.open("#{Rails.root}/app/assets/images/image9.jpg")}
     end
+
+    factory :search_user do
+      nickname { 'ハナコ' }
+      sex { '女性' }
+      birthday { '1990-01-01' }
+      prefecture { '千葉県' }
+      city { '南房総市' }
+    end
+    
+    factory :search_user2 do
+      nickname { 'タロー' }
+      birthday { '1980-01-01' }
+      prefecture { '埼玉県' }
+      city { '所沢市' }
+    end
   end
 end

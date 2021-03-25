@@ -59,6 +59,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
   gem 'shoulda-matchers'
+  gem 'database_cleaner'
 end
 
 group :production do

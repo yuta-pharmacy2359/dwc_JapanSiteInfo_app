@@ -24,12 +24,16 @@ FactoryBot.define do
       title { 'ディズニーランド' }
       prefecture { '千葉県' }
       city { '浦安市' }
+      visited_day {'2020-01-01'}
+      rate {'5'}
     end
 
     factory :search_spot2 do
       title { '稲荷山古墳' }
       prefecture { '埼玉県' }
       city { '行田市' }
+      visited_day {'2021-01-01'}
+      rate {'4'}
     end
   end
 end

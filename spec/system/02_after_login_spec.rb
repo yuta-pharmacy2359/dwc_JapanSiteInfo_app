@@ -16,7 +16,6 @@ describe '[STEP2] ユーザログイン後のテスト' do
   describe 'ヘッダーのテスト: ログインしている場合' do
     context 'リンクの内容を確認: ※「ログアウト」は『ユーザログアウトのテスト』でテスト済み' do
       subject { current_path }
-
       it '「JapanSiteInfo」を押すと、トップ画面に遷移する' do
         top_link = find_all('a')[0].native.inner_text
         top_link = top_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
@@ -1331,78 +1330,244 @@ describe '[STEP2] ユーザログイン後のテスト いいね機能のテス�
 end
 
 describe '[STEP2] ユーザログイン後のテスト ランキング(スポットいいね数)のテスト' do
-  let(:user) { create(:spot, user: user) }
-  
-    let!(:other_spot2) { create(:spot, user: user) }
-    let!(:other_spot3) { create(:spot, user: user) }
-    let!(:other_spot4) { create(:spot, user: user) }
-    let!(:favorite1) { create(:favorite, spot: spot)}
-    let!(:favorite2) { create(:favorite, spot: other_spot)}
-    let!(:favorite3) { create(:favorite, spot: other_spot2)}
-    let!(:favorite4) { create(:favorite, spot: other_spot3)}
-    let!(:favorite5) { create(:favorite, spot: other_spot4)}
+  let!(:user) { create(:user, profile_image: nil) }
+  let!(:spot1) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:spot2) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:spot3) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:spot4) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:spot5) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:favorite1) { create(:favorite, user: user, spot: spot1)}
+  let!(:favorite2) { create(:favorite, user: user, spot: spot2)}
+  let!(:favorite3) { create(:favorite, user: user, spot: spot3)}
+  let!(:favorite4) { create(:favorite, user: user, spot: spot4)}
+  let!(:favorite5) { create(:favorite, user: user, spot: spot5)}
 
-    before do
-      visit spot_favorite_ranking_path
+  before do
+    visit new_user_session_path
+    fill_in 'user[email]', with: user.email
+    fill_in 'user[password]', with: user.password
+    click_button 'ログイン'
+    visit spot_favorite_ranking_path
+  end
+
+  context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が5以下の場合' do
+    it '「現在準備中です。」と表示される' do
+      expect(page).to have_content '現在準備中です。'
     end
-
-    context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が5以下の場合' do
-      it '「現在準備中です。」と表示される' do
-        expect(page).to have_content '現在準備中です。'
-      end
-      it '「ユーザーのいいね数ランキングは こちら」と表示される' do
-        expect(page).to have_content 'ユーザーのいいね数ランキングは こちら'
-      end
-      it '「こちら」がいいね数ランキング(ユーザー)へのリンクとなっている' do
-        expect(page).to have_link 'こちら', href: user_favorite_ranking_path
-      end
-    end
-
-    context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が11以上の場合' do
-      let!(:other_spot5) { create(:spot, user: user) }
-      let!(:other_spot6) { create(:spot, user: user) }
-      let!(:other_spot7) { create(:spot, user: user) }
-      let!(:other_spot8) { create(:spot, user: user) }
-      let!(:other_spot9) { create(:spot, user: user) }
-      let!(:other_spot10) { create(:spot, user: user) }
-      let!(:favorite6) { create(:favorite, spot: other_spot5)}
-      let!(:favorite7) { create(:favorite, spot: other_spot6)}
-      let!(:favorite8) { create(:favorite, spot: other_spot7)}
-      let!(:favorite9) { create(:favorite, spot: other_spot8)}
-      let!(:favorite10) { create(:favorite, spot: other_spot9)}
-      let!(:favorite11) { create(:favorite, spot: other_spot10)}
-      let!(:favorite12) { create(:favorite, spot: spot)}
-      let!(:favorite13) { create(:favorite, spot: other_spot)}
-      let!(:favorite14) { create(:favorite, spot: other_spot2)}
-      let!(:favorite15) { create(:favorite, spot: other_spot3)}
-      let!(:favorite16) { create(:favorite, spot: other_spot4)}
-      let!(:favorite17) { create(:favorite, spot: other_spot5)}
-      let!(:favorite18) { create(:favorite, spot: other_spot6)}
-      let!(:favorite19) { create(:favorite, spot: other_spot7)}
-      let!(:favorite20) { create(:favorite, spot: other_spot8)}
-      let!(:favorite21) { create(:favorite, spot: other_spot9)}
-
-      it '順位が表示される' do
-        expect(page).to have_content '第1位'
-      end
-      it 'スポットのタイトルが表示される' do
-        expect(page).to have_content spot.title
-      end
-      it 'スポットの所在地が表示される' do
-        expect(page).to have_content spot.prefecture
-        expect(page).to have_content spot.city
-      end
-      it 'スポットの投稿日が表示される' do
-        expect(page).to have_content spot.created_at.strftime("%Y年%-m月%-d日")
-      end
-      it 'スポットの投稿者のニックネームが表示される' do
-        expect(page).to have_content spot.user.nickname
-      end
-      it 'スポットのいいね数が表示される' do
-        expect(page).to have_content spot.favorites.count
-      end
-      it '第11位は表示されない' do
-        expect(page).not_to have_content '第11位'
-      end
+    it '「こちら」がいいね数ランキング(ユーザー)へのリンクとなっている' do
+      expect(page).to have_link 'こちら', href: user_favorite_ranking_path
     end
   end
+
+  context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が6以上10以下の場合' do
+    let!(:spot6) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot7) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:favorite6) { create(:favorite, user: user, spot: spot6)}
+
+    it '順位が表示される' do
+      expect(page).to have_content '第1位'
+    end
+    it 'スポットのタイトルが表示される' do
+      expect(page).to have_content spot1.title
+    end
+    it 'スポットの所在地が表示される' do
+      expect(page).to have_content spot1.prefecture
+      expect(page).to have_content spot1.city
+    end
+    it 'スポットの投稿日が表示される' do
+      expect(page).to have_content spot1.created_at.strftime("%Y年%-m月%-d日")
+    end
+    it 'スポットの投稿者のニックネームが表示される' do
+      expect(page).to have_content spot1.user.nickname
+    end
+    it 'スポットのいいね数が表示される' do
+      expect(page).to have_content spot1.favorites.count
+    end
+    it 'いいね数0のスポットは表示されない' do
+      expect(page).not_to have_content spot7.title
+    end
+  end
+
+
+  context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が11以上の場合' do
+    let!(:spot6) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot7) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot8) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot9) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot10) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot11) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:favorite6) { create(:favorite, user: user, spot: spot6)}
+    let!(:favorite7) { create(:favorite, user: user, spot: spot7)}
+    let!(:favorite8) { create(:favorite, user: user, spot: spot8)}
+    let!(:favorite9) { create(:favorite, user: user, spot: spot9)}
+    let!(:favorite10) { create(:favorite, user: user, spot: spot10)}
+    let!(:favorite11) { create(:favorite, user: user, spot: spot11)}
+    let!(:favorite12) { create(:favorite, user: user, spot: spot1)}
+    let!(:favorite13) { create(:favorite, user: user, spot: spot2)}
+    let!(:favorite14) { create(:favorite, user: user, spot: spot3)}
+    let!(:favorite15) { create(:favorite, user: user, spot: spot4)}
+    let!(:favorite16) { create(:favorite, user: user, spot: spot5)}
+    let!(:favorite17) { create(:favorite, user: user, spot: spot6)}
+    let!(:favorite18) { create(:favorite, user: user, spot: spot7)}
+    let!(:favorite19) { create(:favorite, user: user, spot: spot8)}
+    let!(:favorite20) { create(:favorite, user: user, spot: spot9)}
+    let!(:favorite21) { create(:favorite, user: user, spot: spot10)}
+
+    it '順位が表示される' do
+      expect(page).to have_content '第1位'
+    end
+    it 'スポットのタイトルが表示される' do
+      expect(page).to have_content spot1.title
+    end
+    it 'スポットの所在地が表示される' do
+      expect(page).to have_content spot1.prefecture
+      expect(page).to have_content spot1.city
+    end
+    it 'スポットの投稿日が表示される' do
+      expect(page).to have_content spot1.created_at.strftime("%Y年%-m月%-d日")
+    end
+    it 'スポットの投稿者のニックネームが表示される' do
+      expect(page).to have_content spot1.user.nickname
+    end
+    it 'スポットのいいね数が表示される' do
+      expect(page).to have_content spot1.favorites.count
+    end
+    #it '第11位は表示されない' do
+      #expect(page).not_to have_content '第11位'
+    #end
+  end
+end
+
+describe '[STEP2] ユーザログイン後のテスト ランキング(ユーザーいいね数)のテスト' do
+  let!(:user1) { create(:user, profile_image: nil) }
+  let!(:user2) { create(:user, profile_image: nil) }
+  let!(:user3) { create(:user, profile_image: nil) }
+  let!(:user4) { create(:user, profile_image: nil) }
+  let!(:user5) { create(:user, profile_image: nil) }
+  let!(:spot1) { create(:spot, user: user1, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:spot2) { create(:spot, user: user2, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:spot3) { create(:spot, user: user3, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:spot4) { create(:spot, user: user4, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:spot5) { create(:spot, user: user5, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+  let!(:favorite1) { create(:favorite, user: user1, spot: spot1)}
+  let!(:favorite2) { create(:favorite, user: user2, spot: spot2)}
+  let!(:favorite3) { create(:favorite, user: user3, spot: spot3)}
+  let!(:favorite4) { create(:favorite, user: user4, spot: spot4)}
+  let!(:favorite5) { create(:favorite, user: user5, spot: spot5)}
+
+  before do
+    visit new_user_session_path
+    fill_in 'user[email]', with: user1.email
+    fill_in 'user[password]', with: user1.password
+    click_button 'ログイン'
+    visit user_favorite_ranking_path
+  end
+
+  context 'いいね数ランキング(スポット)、総いいね数1以上のユーザー数が5以下の場合' do
+    it '「現在準備中です。」と表示される' do
+      expect(page).to have_content '現在準備中です。'
+    end
+    it '「こちら」がいいね数ランキング(スポット)へのリンクとなっている' do
+      expect(page).to have_link 'こちら', href: spot_favorite_ranking_path
+    end
+  end
+
+  context 'いいね数ランキング(スポット)、総いいね数1以上のユーザー数が6以上10以下の場合' do
+    let!(:user6) { create(:user, profile_image: nil) }
+    let!(:user7) { create(:user, profile_image: nil) }
+    let!(:spot6) { create(:spot, user: user6, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot7) { create(:spot, user: user7, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:favorite6) { create(:favorite, user: user6, spot: spot6)}
+
+    it '順位が表示される' do
+      expect(page).to have_content '第1位'
+    end
+    it 'ユーザーのニックネームが表示される' do
+      expect(page).to have_content user1.title
+    end
+    it 'ユーザーの住所が表示される' do
+      expect(page).to have_content user1.prefecture
+      expect(page).to have_content user1.city
+    end
+    it 'ユーザーの年齢が表示される' do
+      expect(page).to have_content user1.age
+    end
+    it 'ユーザーの投稿スポット数が表示される' do
+      expect(page).to have_content user1.spots.count
+    end
+    it 'ユーザーの獲得総いいね数が表示される' do
+      user = User.find(1)
+      all_user_spots = user.spots
+      all_user_favorites_count = 0
+      all_user_spots.each do |spot|
+        all_user_favorites_count += spot.favorites.count
+      end
+      expect(page).to have_content all_user_favorites_count
+    end
+    it 'いいね数0のユーザーは表示されない' do
+      expect(page).not_to have_content user7.nickname
+    end
+  end
+
+
+  context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が11以上の場合' do
+    let!(:user6) { create(:user, profile_image: nil) }
+    let!(:user7) { create(:user, profile_image: nil) }
+    let!(:user8) { create(:user, profile_image: nil) }
+    let!(:user9) { create(:user, profile_image: nil) }
+    let!(:user10) { create(:user, profile_image: nil) }
+    let!(:user11) { create(:user, profile_image: nil) }
+    let!(:spot6) { create(:spot, user: user6, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot7) { create(:spot, user: user7, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot8) { create(:spot, user: user8, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot9) { create(:spot, user: user9, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot10) { create(:spot, user: user10, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:spot11) { create(:spot, user: user11, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+    let!(:favorite6) { create(:favorite, user: user6, spot: spot6)}
+    let!(:favorite7) { create(:favorite, user: user7, spot: spot7)}
+    let!(:favorite8) { create(:favorite, user: user8, spot: spot8)}
+    let!(:favorite9) { create(:favorite, user: user9, spot: spot9)}
+    let!(:favorite10) { create(:favorite, user: user10, spot: spot10)}
+    let!(:favorite11) { create(:favorite, user: user11, spot: spot11)}
+    let!(:favorite12) { create(:favorite, user: user1, spot: spot1)}
+    let!(:favorite13) { create(:favorite, user: user2, spot: spot2)}
+    let!(:favorite14) { create(:favorite, user: user3, spot: spot3)}
+    let!(:favorite15) { create(:favorite, user: user4, spot: spot4)}
+    let!(:favorite16) { create(:favorite, user: user5, spot: spot5)}
+    let!(:favorite17) { create(:favorite, user: user6, spot: spot6)}
+    let!(:favorite18) { create(:favorite, user: user7, spot: spot7)}
+    let!(:favorite19) { create(:favorite, user: user8, spot: spot8)}
+    let!(:favorite20) { create(:favorite, user: user9, spot: spot9)}
+    let!(:favorite21) { create(:favorite, user: user10, spot: spot10)}
+
+    it '順位が表示される' do
+      byebug
+      expect(page).to have_content '第1位'
+    end
+    it 'ユーザーのニックネームが表示される' do
+      expect(page).to have_content user1.title
+    end
+    it 'ユーザーの住所が表示される' do
+      expect(page).to have_content user1.prefecture
+      expect(page).to have_content user1.city
+    end
+    it 'ユーザーの年齢が表示される' do
+      expect(page).to have_content user1.age
+    end
+    it 'ユーザーの投稿スポット数が表示される' do
+      expect(page).to have_content user1.spots.count
+    end
+    it 'ユーザーの獲得総いいね数が表示される' do
+      user = User.find(1)
+      all_user_spots = user.spots
+      all_user_favorites_count = 0
+      all_user_spots.each do |spot|
+        all_user_favorites_count += spot.favorites.count
+      end
+      expect(page).to have_content all_user_favorites_count
+    end
+    #it '第11位は表示されない' do
+      #expect(page).not_to have_content '第11位'
+    #end
+  end
+end

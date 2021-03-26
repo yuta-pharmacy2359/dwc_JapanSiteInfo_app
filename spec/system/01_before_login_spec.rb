@@ -719,5 +719,97 @@ describe '[STEP1] ユーザログイン前のテスト' do
   end
 end
 
+describe '[STEP2] ユーザログイン後のテスト いいね機能のテスト' do
+  let(:user) { create(:user, profile_image: nil) }
+  let!(:spot) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+
+  context 'トップ画面でのテスト' do
+    before do
+      visit top_path
+    end
+    it 'いいねを押す', js: true do
+      cookies[:favorite_spot_id] = spot.id
+      expect {
+        find("#like-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+    it 'いいねを取り消す', js: true do
+      find("#like-#{spot.id}").click
+      sleep 1
+      expect {
+        find("#unlike-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(-1)
+      expect(page).to have_css "#like-#{spot.id}"
+    end
+  end
+  context 'ユーザー詳細画面でのテスト' do
+    before do
+      visit user_path(user)
+    end
+    it 'いいねを押す', js: true do
+      expect {
+        find("#like-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+    it 'いいねを取り消す', js: true do
+      find("#like-#{spot.id}").click
+      sleep 1
+      expect {
+        find("#unlike-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(-1)
+      expect(page).to have_css "#like-#{spot.id}"
+    end
+  end
+  context 'スポット詳細画面でのテスト' do
+    before do
+      visit spot_path(spot)
+    end
+    it 'いいねを押す', js: true do
+      expect {
+        find("#like-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+    it 'いいねを取り消す', js: true do
+      find("#like-#{spot.id}").click
+      sleep 1
+      expect {
+        find("#unlike-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(-1)
+      expect(page).to have_css "#like-#{spot.id}"
+    end
+  end
+  context 'スポット一覧画面でのテスト' do
+    before do
+      visit spots_path
+    end
+    it 'いいねを押す', js: true do
+      expect {
+        find("#like-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+    it 'いいねを取り消す', js: true do
+      find("#like-#{spot.id}").click
+      sleep 1
+      expect {
+        find("#unlike-#{spot.id}").click
+        sleep 1
+      }.to change{ spot.favorites.count }.by(-1)
+      expect(page).to have_css "#like-#{spot.id}"
+    end
+  end
+  #キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
+end
+
 
 

@@ -45,7 +45,7 @@
                 <td><%= User.find(k.to_i).prefecture %><%= User.find(k.to_i).city %></td>
                 <td class="text-nowrap"><%= User.find(k.to_i).age %>歳</td>
                 <td class="text-nowrap"><%= User.find(k.to_i).spots.count %>スポット</td>
-                <td class="text-nowrap"><span class="fa fa-heart unlikebtn mr-1"></span><%= v.to_s %></td>
+                <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= v.to_s %></td>
                 <% lastFavorite = v %>
               <% else %>
                 <% lastFavorite = v %>
@@ -59,7 +59,7 @@
                 <td><%= User.find(k.to_i).prefecture %><%= User.find(k.to_i).city %></td>
                 <td class="text-nowrap"><%= User.find(k.to_i).age %>歳</td>
                 <td class="text-nowrap"><%= User.find(k.to_i).spots.count %>スポット</td>
-                <td class="text-nowrap"><span class="fa fa-heart unlikebtn mr-1"></span><%= v.to_s %></td>
+                <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= v.to_s %></td>
               <% end %>
             </tr>
           <% end %>

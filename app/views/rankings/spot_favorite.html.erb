@@ -49,7 +49,7 @@
                     <%= spot.user.nickname %>
                   <% end %>
                 </td>
-                <td class="text-nowrap"><span class="fa fa-heart unlikebtn mr-1"></span><%= spot.favorites.count %></td>
+                <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot.favorites.count %></td>
                 <% lastFavorite = spot.favorites.count %>
               <% else %>
                 <% lastFavorite = spot.favorites.count %>
@@ -67,7 +67,7 @@
                     <%= spot.user.nickname %>
                   <% end %>
                 </td>
-                <td class="text-nowrap"><span class="fa fa-heart unlikebtn mr-1"></span><%= spot.favorites.count %></td>
+                <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot.favorites.count %></td>
               </tr>
             <% end %>
           <% end %>

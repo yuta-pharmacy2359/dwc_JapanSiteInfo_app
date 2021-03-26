@@ -32,44 +32,48 @@
             <% if i == 1 %>
               <% lastFavorite = spot.favorites.count %>
             <% end %>
-            <tr>
-              <% if spot.favorites.count != lastFavorite %>
-                <% j = i %>
-                <td class="text-nowrap">第<%= j.to_s %>位</td>
-                <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
-                <td>
-                  <%= link_to spot_path(spot) do %>
-                    <%= spot.title %>
-                  <% end %>
-                </td>
-                <td><%= spot.prefecture %><%= spot.city %></td>
-                <td class="text-nowrap"><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
-                <td>
-                  <%= link_to user_path(spot.user) do %>
-                    <%= spot.user.nickname %>
-                  <% end %>
-                </td>
-                <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot.favorites.count %></td>
-                <% lastFavorite = spot.favorites.count %>
-              <% else %>
-                <% lastFavorite = spot.favorites.count %>
-                <td class="text-nowrap">第<%= j.to_s %>位</td>
-                <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
-                <td>
-                  <%= link_to spot_path(spot) do %>
-                    <%= spot.title %>
-                  <% end %>
-                </td>
-                <td><%= spot.prefecture %><%= spot.city %></td>
-                <td class="text-nowrap"><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
-                <td>
-                  <%= link_to user_path(spot.user) do %>
-                    <%= spot.user.nickname %>
-                  <% end %>
-                </td>
-                <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot.favorites.count %></td>
-              </tr>
+            <% if @all_ranks.count <= 10 %>
+              <tr>
+            <% else %>
+              <tr class="cut-final">
             <% end %>
+                <% if spot.favorites.count != lastFavorite %>
+                  <% j = i %>
+                  <td class="text-nowrap">第<%= j.to_s %>位</td>
+                  <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
+                  <td>
+                    <%= link_to spot_path(spot) do %>
+                      <%= spot.title %>
+                    <% end %>
+                  </td>
+                  <td><%= spot.prefecture %><%= spot.city %></td>
+                  <td class="text-nowrap"><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+                  <td>
+                    <%= link_to user_path(spot.user) do %>
+                      <%= spot.user.nickname %>
+                    <% end %>
+                  </td>
+                  <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot.favorites.count %></td>
+                  <% lastFavorite = spot.favorites.count %>
+                <% else %>
+                  <% lastFavorite = spot.favorites.count %>
+                  <td class="text-nowrap">第<%= j.to_s %>位</td>
+                  <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
+                  <td>
+                    <%= link_to spot_path(spot) do %>
+                      <%= spot.title %>
+                    <% end %>
+                  </td>
+                  <td><%= spot.prefecture %><%= spot.city %></td>
+                  <td class="text-nowrap"><%= spot.created_at.strftime("%Y年%-m月%-d日") %></td>
+                  <td>
+                    <%= link_to user_path(spot.user) do %>
+                      <%= spot.user.nickname %>
+                    <% end %>
+                  </td>
+                  <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot.favorites.count %></td>
+                <% end %>
+              </tr>
           <% end %>
         </tbody>
       </table>

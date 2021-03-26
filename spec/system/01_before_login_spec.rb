@@ -313,6 +313,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
       it 'スポット詳細画面、キーワードが表示され、リンク先が正しい' do
         visit spot_path(spot)
         expect(page).to have_link '東京駅', href: keyword_path(Keyword.first)
+        expect(page).to have_link '丸の内', href: keyword_path(Keyword.last)
       end
     end
   end
@@ -379,7 +380,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
       end
     end
 
-    context 'ソート機能のテスト(スポット一覧画面)' do
+    context 'ソート機能のテスト(キーワード詳細画面)' do
       it 'タイトルのソート：正しく表示されるか' do
         click_link 'タイトル' #昇順
         first_spot_link = find_all('a')[10].native.inner_text

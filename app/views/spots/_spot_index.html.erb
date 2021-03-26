@@ -31,7 +31,7 @@
     <% spots.each do |spot| %>
       <tr>
         <td>
-          <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "spot-image" %>
+          <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %>
         </td>
         <td>
           <%= link_to spot_path(spot) do %>

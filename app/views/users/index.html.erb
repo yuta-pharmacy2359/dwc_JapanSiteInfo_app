@@ -47,13 +47,11 @@
       <thead>
         <tr>
           <td></td>
-          <td>ニックネーム</td>
-          <td>年齢</td>
-          <td>性別</td>
-          <td>住所</td>
-          <td>フォロー数</td>
-          <td>フォロワー数</td>
-          <td>投稿数</td>
+          <td class="text-nowrap">ニックネーム</td>
+          <td class="text-nowrap"><%= sort_link(@q, :birthday, "年齢") %></td>
+          <td class="text-nowrap">性別</td>
+          <td class="text-nowrap">住所</td>
+          <td class="text-nowrap">自己紹介</td>
         </tr>
       </thead>
       <tbody>
@@ -68,9 +66,7 @@
             <td class="text-nowrap"><%= user.age %>歳</td>
             <td class="text-nowrap"><%= user.sex %></td>
             <td><%= user.prefecture %><%= user.city %></td>
-            <td class="text-nowrap"><%= user.following.count %>フォロー</td>
-            <td class="text-nowrap"><%= user.followers.count %>フォロワー</td>
-            <td class="text-nowrap"><%= user.spots.count %>スポット</td>
+            <td><%= user.introduction %></td>
           </tr>
         <% end %>
       </tbody>

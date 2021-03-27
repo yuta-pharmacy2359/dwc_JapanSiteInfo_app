@@ -20,9 +20,10 @@ class SpotsController < ApplicationController
   end
 
   def show
-    @spot = Spot.find(params[:id])
+    @spot = Spot.includes(:comments, :keywords).find(params[:id])
     @user = @spot.user
     @spot_keywords = @spot.keywords
+    @comments = @spot.comments.includes(:user)
     @comment = Comment.new
     @cookies = cookies[:favorite_spot_id]
   end
@@ -30,7 +31,7 @@ class SpotsController < ApplicationController
   def index
     @q = Spot.ransack(params[:q])
     @q.sorts = 'created_at desc' if @q.sorts.empty?
-    @spots = @q.result.page(params[:page])
+    @spots = @q.result.page(params[:page]).includes(:favorites)
     @cookies = cookies[:favorite_spot_id]
   end
 

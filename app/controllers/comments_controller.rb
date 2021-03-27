@@ -12,6 +12,7 @@ class CommentsController < ApplicationController
     else
       flash.now[:danger] = "コメントを記入してください"
     end
+    @comments = @spot.comments.includes(:user)
   end
 
   def destroy
@@ -19,6 +20,7 @@ class CommentsController < ApplicationController
     @comment.destroy
     @spot = @comment.spot
     flash.now[:success] = "コメントを削除しました"
+    @comments = @spot.comments.includes(:user)
   end
 
   private

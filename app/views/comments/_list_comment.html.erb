@@ -1,7 +1,7 @@
 <h3>コメント</h3>
-<p>全<%= spot.comments.count %>件 </p>
+<p>全<%= comments.count %>件 </p>
 <table class="table mb-4 comments-index">
-  <% spot.comments.each do |comment| %>
+  <% comments.each do |comment| %>
     <tr id="comment-<%= comment.id %>">
       <td><%= attachment_image_tag comment.user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-100" %></td>
       <td>
@@ -28,9 +28,9 @@
   <div id="comment-new">
     <h3>コメントをどうぞ</h3>
     <% if flash.now[:success] %>
-      <%= flash.now[:success] %>
+      <p class="alert alert-success"><%= flash.now[:success] %></p>
     <% elsif flash.now[:danger] %>
-      <%= flash.now[:danger] %>
+      <p class="alert alert-danger"><%= flash.now[:danger] %></p>
     <% end %>
     <%= form_with(model: [spot, Comment.new], remote: true) do |f| %>
       <%= f.text_area :comment, rows: '5', class: "comment-new-container" %><br />

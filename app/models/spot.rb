@@ -16,7 +16,7 @@ class Spot < ApplicationRecord
   end
 
   def favorited_by?(user)
-    favorites.where(user_id: user.id).exists?
+    favorites.find { |f| f.user_id == user.id }.present?
   end
 
   def save_keyword(sent_keywords)

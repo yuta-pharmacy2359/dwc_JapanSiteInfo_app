@@ -18,13 +18,13 @@
         <td class="text-nowrap">
           フォロー数：
           <%= link_to following_user_path(user) do %>
-            <%= user.following.count %>
+            <%= user.following.length %>
           <% end %>
         </td>
         <td class="text-nowrap">
           フォロワー数：
           <%= link_to followers_user_path(user) do %>
-            <%= user.followers.count %>
+            <%= user.followers.length %>
           <% end %>
         </td>
         <td class="text-nowrap">

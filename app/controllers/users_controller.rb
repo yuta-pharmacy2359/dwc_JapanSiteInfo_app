@@ -6,12 +6,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @q = @user.spots.ransack(params[:q])
     @q.sorts = 'created_at desc' if @q.sorts.empty?
-    @spots = @q.result.page(params[:page])
-    @all_user_spots = @user.spots
-    @all_user_favorites_count = 0
-    @all_user_spots.each do |spot|
-      @all_user_favorites_count += spot.favorites.count
-    end
+    @spots = @q.result.page(params[:page]).includes(:favorites)
+    @user_all_spots = @user.spots
+    fav_count = @user_all_spots.joins(:favorites).group("spots.user_id").count("favorites.id")
+    @user_all_favorites_count = fav_count.present? ? fav_count.fetch(@user.id) : 0
     @cookies = cookies[:favorite_spot_id]
   end
 

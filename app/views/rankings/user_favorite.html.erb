@@ -7,7 +7,7 @@
     <%= link_to "こちら", spot_favorite_ranking_path %>
   </p>
 
-  <% if @summary.count < 6 %>
+  <% if @all_ranks.count < 6 %>
     <div class="now-preparation mb-5 text-center">現在準備中です。</div>
     <div class="now-preparation-image"><img src="<%= asset_path "398656.jpg" %>" class="now-preparation-image-img"></div>
   <% else %>
@@ -27,12 +27,13 @@
         <tbody>
           <% lastFavorite = 0 %>
           <% j = 1 %>
-          <% @summary.sort{|(k1, v1),(k2, v2)| v2 <=> v1 }.to_h.each.with_index(1) do |(k, v), i| %>
+          <% @all_ranks.sort{|(k1, v1),(k2, v2)| v2 <=> v1 }.to_h.each.with_index(1) do |(k, v), i| %>
             <% break if j > 10 %>
+            <% rank_user = User.find(k) %>
             <% if i == 1 %>
               <% lastFavorite = v %>
             <% end %>
-            <% if @summary.count <= 10 %>
+            <% if @all_ranks.count <= 10 %>
               <tr>
             <% else %>
               <tr class="cut-final">
@@ -40,29 +41,29 @@
                 <% if v != lastFavorite %>
                   <% j = i %>
                   <td class="text-nowrap">第<%= j.to_s %>位</td>
-                  <td><%= attachment_image_tag User.find(k.to_i), :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
+                  <td><%= attachment_image_tag rank_user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
                   <td>
-                    <%= link_to user_path(User.find(k.to_i)) do %>
-                      <%= User.find(k.to_i).nickname %>
+                    <%= link_to user_path(rank_user) do %>
+                      <%= rank_user.nickname %>
                     <% end %>
                   </td>
-                  <td><%= User.find(k.to_i).prefecture %><%= User.find(k.to_i).city %></td>
-                  <td class="text-nowrap"><%= User.find(k.to_i).age %>歳</td>
-                  <td class="text-nowrap"><%= User.find(k.to_i).spots.count %>スポット</td>
+                  <td><%= rank_user.prefecture %><%= rank_user.city %></td>
+                  <td class="text-nowrap"><%= rank_user.age %>歳</td>
+                  <td class="text-nowrap"><%= rank_user.spots.length %>スポット</td>
                   <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= v.to_s %></td>
                   <% lastFavorite = v %>
                 <% else %>
                   <% lastFavorite = v %>
                   <td class="text-nowrap">第<%= j.to_s %>位</td>
-                  <td><%= attachment_image_tag User.find(k.to_i), :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
+                  <td><%= attachment_image_tag rank_user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
                   <td>
-                    <%= link_to user_path(User.find(k.to_i)) do %>
-                      <%= User.find(k.to_i).nickname %>
+                    <%= link_to user_path(rank_user) do %>
+                      <%= rank_user.nickname %>
                     <% end %>
                   </td>
-                  <td><%= User.find(k.to_i).prefecture %><%= User.find(k.to_i).city %></td>
-                  <td class="text-nowrap"><%= User.find(k.to_i).age %>歳</td>
-                  <td class="text-nowrap"><%= User.find(k.to_i).spots.count %>スポット</td>
+                  <td><%= rank_user.prefecture %><%= rank_user.city %></td>
+                  <td class="text-nowrap"><%= rank_user.age %>歳</td>
+                  <td class="text-nowrap"><%= rank_user.spots.length %>スポット</td>
                   <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= v.to_s %></td>
                 <% end %>
               </tr>

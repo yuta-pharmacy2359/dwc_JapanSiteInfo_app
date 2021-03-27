@@ -18,11 +18,9 @@ class FavoritesController < ApplicationController
     end
     @user = @spot.user
     @spots = @user.spots.page(params[:page]).reverse_order
-    @all_user_spots = @user.spots
-    @all_user_favorites_count = 0
-    @all_user_spots.each do |spot|
-      @all_user_favorites_count += spot.favorites.count
-    end
+    @user_all_spots = @user.spots
+    fav_count = @user_all_spots.joins(:favorites).group("spots.user_id").count("favorites.id")
+    @user_all_favorites_count = fav_count.present? ? fav_count.fetch(@user.id) : 0
   end
 
   def destroy
@@ -37,14 +35,12 @@ class FavoritesController < ApplicationController
       @favorite = current_user.favorites.find_by(spot_id: @spot.id)
       @favorite.destroy
     end
-    @user= @spot.user
+    @user = @spot.user
     @spots = @user.spots.page(params[:page]).reverse_order
     @favorites_count = @spot.favorites.count
-    @all_user_spots = @user.spots
-    @all_user_favorites_count = 0
-    @all_user_spots.each do |spot|
-      @all_user_favorites_count += spot.favorites.count
-    end
+    @user_all_spots = @user.spots
+    fav_count = @user_all_spots.joins(:favorites).group("spots.user_id").count("favorites.id")
+    @user_all_favorites_count = fav_count.present? ? fav_count.fetch(@user.id) : 0
   end
 
 end

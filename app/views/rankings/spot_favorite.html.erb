@@ -29,15 +29,16 @@
           <% j = 1 %>
           <% @all_ranks.each.with_index(1) do |spot, i| %>
             <% break if j > 10 %>
+            <% spot_favorites_count = spot.favorites.length  %>
             <% if i == 1 %>
-              <% lastFavorite = spot.favorites.count %>
+              <% lastFavorite = spot_favorites_count %>
             <% end %>
             <% if @all_ranks.count <= 10 %>
               <tr>
             <% else %>
               <tr class="cut-final">
             <% end %>
-                <% if spot.favorites.count != lastFavorite %>
+                <% if spot_favorites_count != lastFavorite %>
                   <% j = i %>
                   <td class="text-nowrap">第<%= j.to_s %>位</td>
                   <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
@@ -53,10 +54,10 @@
                       <%= spot.user.nickname %>
                     <% end %>
                   </td>
-                  <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot.favorites.count %></td>
-                  <% lastFavorite = spot.favorites.count %>
+                  <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot_favorites_count %></td>
+                  <% lastFavorite = spot_favorites_count %>
                 <% else %>
-                  <% lastFavorite = spot.favorites.count %>
+                  <% lastFavorite = spot_favorites_count %>
                   <td class="text-nowrap">第<%= j.to_s %>位</td>
                   <td><%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
                   <td>
@@ -71,7 +72,7 @@
                       <%= spot.user.nickname %>
                     <% end %>
                   </td>
-                  <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot.favorites.count %></td>
+                  <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= spot_favorites_count %></td>
                 <% end %>
               </tr>
           <% end %>

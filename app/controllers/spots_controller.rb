@@ -71,5 +71,4 @@ class SpotsController < ApplicationController
       redirect_to top_path
     end
   end
-
 end

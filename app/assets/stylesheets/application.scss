@@ -205,6 +205,29 @@ footer {
   }
 }
 
+/* ランキングでの1~3位の表示 */
+.prize-1st {
+  font-size: 30px;
+  &-img {
+    width: 50px;
+    display: block;
+  }
+}
+.prize-2nd {
+  font-size: 25px;
+  &-img {
+    width: 50px;
+    display: block;
+  }
+}
+.prize-3rd {
+  font-size: 25px;
+  &-img {
+    width: 50px;
+    display: block;
+  }
+}
+
 /* ランキングで最下段の行を表示しない */
 .spot-favorite-ranking tr:last-child {
   display: none;

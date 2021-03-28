@@ -73,21 +73,25 @@ RSpec.describe 'Spotモデルのテスト', type: :model do
         expect(Spot.reflect_on_association(:user).macro).to eq :belongs_to
       end
     end
+
     context 'KeywordRelationshipモデルとの関係' do
       it '1:Nとなっている' do
         expect(Spot.reflect_on_association(:keyword_relationships).macro).to eq :has_many
       end
     end
+
     context 'Keywordモデルとの関係' do
       it '1:Nとなっている' do
         expect(Spot.reflect_on_association(:keywords).macro).to eq :has_many
       end
     end
+
     context 'Commentモデルとの関係' do
       it '1:Nとなっている' do
         expect(Spot.reflect_on_association(:comments).macro).to eq :has_many
       end
     end
+
     context 'Favoriteモデルとの関係' do
       it '1:Nとなっている' do
         expect(Spot.reflect_on_association(:favorites).macro).to eq :has_many

@@ -30,6 +30,7 @@ RSpec.describe 'Commentモデルのテスト', type: :model do
         expect(Comment.reflect_on_association(:user).macro).to eq :belongs_to
       end
     end
+
     context 'Spotモデルとの関係' do
       it 'N:1となっている' do
         expect(Comment.reflect_on_association(:spot).macro).to eq :belongs_to

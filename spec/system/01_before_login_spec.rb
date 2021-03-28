@@ -128,6 +128,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
         click_button '更新する'
         click_link 'ログアウト'
       end
+
       it 'タイトルでの検索：条件に合致するものだけが表示されるか' do
         fill_in 'q[keywords_keyword_cont]', with: 'ミッキー'
         click_button '検索'
@@ -142,53 +143,53 @@ describe '[STEP1] ユーザログイン前のテスト' do
       end
 
       it 'タイトルのソート：正しく表示されるか' do
-        click_link 'タイトル' #昇順
+        click_link 'タイトル' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('ディズニーランド')
-        click_link 'タイトル' #降順
+        click_link 'タイトル' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
       end
       it '所在地のソート：正しく表示されるか' do
-        click_link '所在地' #昇順
+        click_link '所在地' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
-        click_link '所在地' #降順
+        click_link '所在地' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('ディズニーランド')
       end
       it '投稿日のソート：正しく表示されるか' do
-        click_link '投稿日' #昇順
+        click_link '投稿日' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('ディズニーランド')
-        click_link '投稿日' #降順
+        click_link '投稿日' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
       end
       it '来訪日のソート：正しく表示されるか' do
-        click_link '来訪日' #昇順
+        click_link '来訪日' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('ディズニーランド')
-        click_link '来訪日' #降順
+        click_link '来訪日' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
       end
       it '評価のソート：正しく表示されるか' do
-        click_link '評価' #昇順
+        click_link '評価' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
-        click_link '評価' #降順
+        click_link '評価' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('ディズニーランド')
       end
-      #it 'いいねのソート：正しく表示されるか' do
-        #click_link 'いいね' #昇順
-        #first_spot_link = find_all('a')[10]
-        #expect(first_spot_link).to match(spot_path(search_spot))
-        #click_link 'いいね' #降順
-        #first_spot_link = find_all('a')[10]
-        #expect(first_spot_link).to match(spot_path(search_spot2))
-      #end
+      # it 'いいねのソート：正しく表示されるか' do
+      # click_link 'いいね' #昇順
+      # first_spot_link = find_all('a')[10]
+      # expect(first_spot_link).to match(spot_path(search_spot))
+      # click_link 'いいね' #降順
+      # first_spot_link = find_all('a')[10]
+      # expect(first_spot_link).to match(spot_path(search_spot2))
+      # end
     end
   end
 
@@ -365,11 +366,11 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(page).to have_content spot.visited_day.strftime("%Y年%-m月%-d日")
         expect(page).to have_content other_spot.visited_day.strftime("%Y年%-m月%-d日")
       end
-      #他のところで確認
-      #it '各スポットの評価が表示される', js: true do
-        #expect(page).to have_content spot.rate
-        #expect(page).to have_content other_spot.rate
-      #end
+      # 他のところで確認
+      # it '各スポットの評価が表示される', js: true do
+      # expect(page).to have_content spot.rate
+      # expect(page).to have_content other_spot.rate
+      # end
       it '各スポットのいいねボタンが表示される' do
         expect(page).to have_link '', href: spot_favorites_path(spot)
         expect(page).to have_link '', href: spot_favorites_path(other_spot)
@@ -382,53 +383,53 @@ describe '[STEP1] ユーザログイン前のテスト' do
 
     context 'ソート機能のテスト(キーワード詳細画面)' do
       it 'タイトルのソート：正しく表示されるか' do
-        click_link 'タイトル' #昇順
+        click_link 'タイトル' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('大仙陵古墳')
-        click_link 'タイトル' #降順
+        click_link 'タイトル' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
       end
       it '所在地のソート：正しく表示されるか' do
-        click_link '所在地' #昇順
+        click_link '所在地' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
-        click_link '所在地' #降順
+        click_link '所在地' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('大仙陵古墳')
       end
       it '投稿日のソート：正しく表示されるか' do
-        click_link '投稿日' #昇順
+        click_link '投稿日' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
-        click_link '投稿日' #降順
+        click_link '投稿日' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('大仙陵古墳')
       end
       it '来訪日のソート：正しく表示されるか' do
-        click_link '来訪日' #昇順
+        click_link '来訪日' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('大仙陵古墳')
-        click_link '来訪日' #降順
+        click_link '来訪日' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
       end
       it '評価のソート：正しく表示されるか' do
-        click_link '評価' #昇順
+        click_link '評価' # 昇順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('大仙陵古墳')
-        click_link '評価' #降順
+        click_link '評価' # 降順
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
       end
-      #it 'いいねのソート：正しく表示されるか' do
-        #click_link 'いいね' #昇順
-        #first_spot_link = find_all('a')[10]
-        #expect(first_spot_link).to match(spot_path(search_spot))
-        #click_link 'いいね' #降順
-        #first_spot_link = find_all('a')[10]
-        #expect(first_spot_link).to match(spot_path(search_spot2))
-      #end
+      # it 'いいねのソート：正しく表示されるか' do
+      # click_link 'いいね' #昇順
+      # first_spot_link = find_all('a')[10]
+      # expect(first_spot_link).to match(spot_path(search_spot))
+      # click_link 'いいね' #降順
+      # first_spot_link = find_all('a')[10]
+      # expect(first_spot_link).to match(spot_path(search_spot2))
+      # end
     end
   end
 
@@ -727,89 +728,93 @@ describe '[STEP2] ユーザログイン後のテスト いいね機能のテス�
     before do
       visit top_path
     end
+
     it 'いいねを押す', js: true do
       cookies[:favorite_spot_id] = spot.id
-      expect {
+      expect do
         find("#like-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(1)
+      end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
     it 'いいねを取り消す', js: true do
       find("#like-#{spot.id}").click
       sleep 1
-      expect {
+      expect do
         find("#unlike-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(-1)
+      end.to change { spot.favorites.count }.by(-1)
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
+
   context 'ユーザー詳細画面でのテスト' do
     before do
       visit user_path(user)
     end
+
     it 'いいねを押す', js: true do
-      expect {
+      expect do
         find("#like-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(1)
+      end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
     it 'いいねを取り消す', js: true do
       find("#like-#{spot.id}").click
       sleep 1
-      expect {
+      expect do
         find("#unlike-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(-1)
+      end.to change { spot.favorites.count }.by(-1)
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
+
   context 'スポット詳細画面でのテスト' do
     before do
       visit spot_path(spot)
     end
+
     it 'いいねを押す', js: true do
-      expect {
+      expect do
         find("#like-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(1)
+      end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
     it 'いいねを取り消す', js: true do
       find("#like-#{spot.id}").click
       sleep 1
-      expect {
+      expect do
         find("#unlike-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(-1)
+      end.to change { spot.favorites.count }.by(-1)
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
+
   context 'スポット一覧画面でのテスト' do
     before do
       visit spots_path
     end
+
     it 'いいねを押す', js: true do
-      expect {
+      expect do
         find("#like-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(1)
+      end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
     it 'いいねを取り消す', js: true do
       find("#like-#{spot.id}").click
       sleep 1
-      expect {
+      expect do
         find("#unlike-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(-1)
+      end.to change { spot.favorites.count }.by(-1)
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
-  #キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
+  # キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
 end
-
-
-

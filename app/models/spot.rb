@@ -1,5 +1,4 @@
 class Spot < ApplicationRecord
-
   belongs_to :user
   has_many :comments, dependent: :destroy
   has_many :favorites, dependent: :destroy
@@ -20,24 +19,23 @@ class Spot < ApplicationRecord
   end
 
   def save_keyword(sent_keywords)
-    current_keywords = self.keywords.pluck(:keyword) unless self.keywords.nil?
+    current_keywords = keywords.pluck(:keyword) unless keywords.nil?
     old_keywords = current_keywords - sent_keywords
     new_keywords = sent_keywords - current_keywords
 
     old_keywords.each do |old|
-      self.keywords.delete Keyword.find_by(keyword: old)
+      keywords.delete Keyword.find_by(keyword: old)
     end
 
     new_keywords.each do |new|
       new_spot_keyword = Keyword.find_or_create_by(keyword: new)
-      self.keywords << new_spot_keyword
+      keywords << new_spot_keyword
     end
   end
 
-  validates :title, presence: true, length: {maximum: 20}
+  validates :title, presence: true, length: { maximum: 20 }
   validates :prefecture, presence: true
-  validates :city, presence: true, length: {maximum: 15}
+  validates :city, presence: true, length: { maximum: 15 }
   validate :visited_day_is_valid?
-  validates :content, presence: true, length: {maximum: 300}
-
+  validates :content, presence: true, length: { maximum: 300 }
 end

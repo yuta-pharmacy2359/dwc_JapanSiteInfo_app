@@ -2,7 +2,7 @@
 <div class="container px-5 my-5 px-sm-0">
   <h3 class="mb-4"><%= @user.nickname %>さんの<%= @title %></h3>
 
-  <table class="table follow-index">
+  <table class="table follow-index mt-5">
     <% @users.includes(:spots).each do |user| %>
       <tr>
         <td>

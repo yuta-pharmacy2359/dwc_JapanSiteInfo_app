@@ -16,9 +16,9 @@ class User < ApplicationRecord
   attachment :profile_image
 
   def age
-    day1 = self.birthday.strftime("%Y%m%d").to_i
+    day1 = birthday.strftime("%Y%m%d").to_i
     day2 = Date.today.strftime("%Y%m%d").to_i
-    return (day2 - day1) / 10000
+    (day2 - day1) / 10000
   end
 
   def birthday_is_valid?
@@ -41,12 +41,11 @@ class User < ApplicationRecord
     spots.find { |f| f.user_id == user.id }.present?
   end
 
-  validates :fullname, presence: true, length: {maximum: 20}
-  validates :nickname, {presence: true, uniqueness: true, length: {maximum: 20}}
+  validates :fullname, presence: true, length: { maximum: 20 }
+  validates :nickname, { presence: true, uniqueness: true, length: { maximum: 20 } }
   validates :sex, presence: true
   validate :birthday_is_valid?
   validates :prefecture, presence: true
-  validates :city, presence: true, length: {maximum: 15}
-  validates :introduction, length: {maximum: 50}
-
+  validates :city, presence: true, length: { maximum: 15 }
+  validates :introduction, length: { maximum: 50 }
 end

@@ -20,5 +20,4 @@ class SpotsControllerTest < ActionDispatch::IntegrationTest
     get spots_edit_url
     assert_response :success
   end
-
 end

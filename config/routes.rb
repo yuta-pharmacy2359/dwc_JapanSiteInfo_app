@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   get "/" => "homes#top", as: "top"
   get "/about" => "homes#about", as: "about"
   devise_for :users
@@ -21,5 +20,4 @@ Rails.application.routes.draw do
 
   get "/rankings/user_favorite" => "rankings#user_favorite", as: "user_favorite_ranking"
   get "/rankings/spot_favorite" => "rankings#spot_favorite", as: "spot_favorite_ranking"
-
 end

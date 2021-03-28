@@ -10,5 +10,4 @@ class KeywordsControllerTest < ActionDispatch::IntegrationTest
     get keywords_index_url
     assert_response :success
   end
-
 end

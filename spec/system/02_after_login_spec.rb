@@ -16,6 +16,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
   describe 'ヘッダーのテスト: ログインしている場合' do
     context 'リンクの内容を確認: ※「ログアウト」は『ユーザログアウトのテスト』でテスト済み' do
       subject { current_path }
+
       it '「JapanSiteInfo」を押すと、トップ画面に遷移する' do
         top_link = find_all('a')[0].native.inner_text
         top_link = top_link.gsub(/\n/, '').gsub(/\A\s*/, '').gsub(/\s*\Z/, '')
@@ -290,7 +291,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_link '', href: spot_favorites_path(spot)
         expect(page).to have_content spot.favorites.count
       end
-      #'スポットのキーワードが表示される'は、新規登録のテストで確認
+      # 'スポットのキーワードが表示される'は、新規登録のテストで確認
       it 'スポットの画像が表示される' do
         expect(page).to have_selector("img[src$='spot_image1.jpeg']")
         expect(page).to have_selector("img[src$='spot_image2.jpeg']")
@@ -756,7 +757,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
       end
 
       it '正しく送信される', js: true do
-        expect { click_button '送信する' }.to change{ user.comments.count }.by(1)
+        expect { click_button '送信する' }.to change { user.comments.count }.by(1)
       end
       it '遷移先が、スポット詳細になっている', js: true do
         expect(current_path).to eq '/spots/' + other_spot2.id.to_s
@@ -765,7 +766,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
 
     context '削除のテスト' do
       it '正しく削除される', js: true do
-        expect { click_link 'delete-' + comment.id.to_s + '-btn' }.to change{ user.comments.count }.by(-1)
+        expect { click_link 'delete-' + comment.id.to_s + '-btn' }.to change { user.comments.count }.by(-1)
       end
       it '遷移先が、マイページ画面になっている', js: true do
         expect(current_path).to eq '/spots/' + other_spot2.id.to_s
@@ -774,9 +775,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
   end
 
   describe 'フォロー機能のテスト' do
-
     context 'フォロー・フォロワー一覧のページのテスト' do
       let!(:other_user2) { create(:user) }
+
       before do
         user.follow(other_user)
         user.follow(other_user2)
@@ -815,6 +816,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
 
     context 'フォロー一覧のページのテスト(追加)' do
       let!(:other_user2) { create(:user) }
+
       before do
         user.follow(other_user2)
         visit following_user_path(user)
@@ -851,7 +853,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
     let!(:search_spot2) { create(:search_spot2, user: user) }
 
     context '検索機能のテスト(スポット一覧画面)' do
-      #フォームの表示はテスト済
+      # フォームの表示はテスト済
       before do
         visit spots_path
       end
@@ -877,7 +879,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
     end
 
     context '検索機能のテスト(ユーザー一覧画面)' do
-      #フォームの表示はテスト済
+      # フォームの表示はテスト済
       before do
         visit users_path
       end
@@ -895,7 +897,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_content 'タロー'
       end
       it '性別での検索：条件に合致するものだけが表示されるか' do
-        choose('q_sex_eq_1') #女性
+        choose('q_sex_eq_1') # 女性
         click_button '検索'
         expect(page).to have_content 'ハナコ'
         expect(page).not_to have_content 'タロー'
@@ -974,50 +976,50 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
     end
 
     it 'タイトルのソート：正しく表示されるか' do
-      click_link 'タイトル' #昇順
+      click_link 'タイトル' # 昇順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
-      click_link 'タイトル' #降順
+      click_link 'タイトル' # 降順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
     end
     it '所在地のソート：正しく表示されるか' do
-      click_link '所在地' #昇順
+      click_link '所在地' # 昇順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
-      click_link '所在地' #降順
+      click_link '所在地' # 降順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
     end
     it '投稿日のソート：正しく表示されるか' do
-      click_link '投稿日' #昇順
+      click_link '投稿日' # 昇順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
-      click_link '投稿日' #降順
+      click_link '投稿日' # 降順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
     end
     it '来訪日のソート：正しく表示されるか' do
-      click_link '来訪日' #昇順
+      click_link '来訪日' # 昇順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
-      click_link '来訪日' #降順
+      click_link '来訪日' # 降順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
     end
     it '評価のソート：正しく表示されるか' do
-      click_link '評価' #昇順
+      click_link '評価' # 昇順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
-      click_link '評価' #降順
+      click_link '評価' # 降順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
     end
     it 'いいねのソート：正しく表示されるか' do
-      click_link 'いいね' #昇順
+      click_link 'いいね' # 昇順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
-      click_link 'いいね' #降順
+      click_link 'いいね' # 降順
       first_spot_link = find_all('a')[19].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
     end
@@ -1029,50 +1031,50 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
     end
 
     it 'タイトルのソート：正しく表示されるか' do
-      click_link 'タイトル' #昇順
+      click_link 'タイトル' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
-      click_link 'タイトル' #降順
+      click_link 'タイトル' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
     end
     it '所在地のソート：正しく表示されるか' do
-      click_link '所在地' #昇順
+      click_link '所在地' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
-      click_link '所在地' #降順
+      click_link '所在地' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
     end
     it '投稿日のソート：正しく表示されるか' do
-      click_link '投稿日' #昇順
+      click_link '投稿日' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
-      click_link '投稿日' #降順
+      click_link '投稿日' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
     end
     it '来訪日のソート：正しく表示されるか' do
-      click_link '来訪日' #昇順
+      click_link '来訪日' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
-      click_link '来訪日' #降順
+      click_link '来訪日' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
     end
     it '評価のソート：正しく表示されるか' do
-      click_link '評価' #昇順
+      click_link '評価' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
-      click_link '評価' #降順
+      click_link '評価' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
     end
     it 'いいねのソート：正しく表示されるか' do
-      click_link 'いいね' #昇順
+      click_link 'いいね' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('稲荷山古墳')
-      click_link 'いいね' #降順
+      click_link 'いいね' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランド')
     end
@@ -1084,10 +1086,10 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
     end
 
     it '年齢のソート：正しく表示されるか' do
-      click_link '年齢' #昇順
+      click_link '年齢' # 昇順
       first_spot_link = find_all('a')[11].native.inner_text
       expect(first_spot_link).to match('ハナコ')
-      click_link '年齢' #降順
+      click_link '年齢' # 降順
       first_spot_link = find_all('a')[11].native.inner_text
       expect(first_spot_link).to match('タロー')
     end
@@ -1126,6 +1128,7 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
       fill_in 'spot[content]', with: Faker::Lorem.characters(number: 50)
       click_button '投稿する'
     end
+
     let!(:favorite2) { create(:favorite, user: search_user, spot: Spot.find(3)) }
 
     it 'キーワード一覧画面：各項目が表示されている' do
@@ -1140,10 +1143,10 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
     end
     it 'キーワード一覧画面：キーワード評価平均のソートが正しく表示されるか' do
       visit keywords_path
-      click_link '評価平均' #昇順
+      click_link '評価平均' # 昇順
       first_spot_link = find_all('a')[11].native.inner_text
       expect(first_spot_link).to match('あべのハルカス')
-      click_link '評価平均' #降順
+      click_link '評価平均' # 降順
       first_spot_link = find_all('a')[11].native.inner_text
       expect(first_spot_link).to match('東京タワー')
     end
@@ -1167,64 +1170,64 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
     end
     it 'キーワード詳細画面：タイトルのソートが正しく表示されるか' do
       visit keyword_path(Keyword.first)
-      click_link 'タイトル' #昇順
+      click_link 'タイトル' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランドから見た東京タワー')
-      click_link 'タイトル' #降順
+      click_link 'タイトル' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('夜の東京タワー')
     end
     it 'キーワード詳細画面：所在地のソートが正しく表示されるか' do
       visit keyword_path(Keyword.first)
-      click_link '所在地' #昇順
+      click_link '所在地' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランドから見た東京タワー')
-      click_link '所在地' #降順
+      click_link '所在地' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('夜の東京タワー')
     end
     it 'キーワード詳細画面：投稿日のソートが正しく表示されるか' do
       visit keyword_path(Keyword.first)
-      click_link '投稿日' #昇順
+      click_link '投稿日' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランドから見た東京タワー')
-      click_link '投稿日' #降順
+      click_link '投稿日' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('夜の東京タワー')
     end
     it 'キーワード詳細画面：来訪日のソートが正しく表示されるか' do
       visit keyword_path(Keyword.first)
-      click_link '来訪日' #昇順
+      click_link '来訪日' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('夜の東京タワー')
-      click_link '来訪日' #降順
+      click_link '来訪日' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランドから見た東京タワー')
     end
     it 'キーワード詳細画面：評価のソートが正しく表示されるか' do
       visit keyword_path(Keyword.first)
-      click_link '評価' #昇順
+      click_link '評価' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランドから見た東京タワー')
-      click_link '評価' #降順
+      click_link '評価' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('夜の東京タワー')
     end
     it 'キーワード詳細画面：評価のソートが正しく表示されるか' do
       visit keyword_path(Keyword.first)
-      click_link '評価' #昇順
+      click_link '評価' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランドから見た東京タワー')
-      click_link '評価' #降順
+      click_link '評価' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('夜の東京タワー')
     end
     it 'キーワード詳細画面：いいねのソートが正しく表示されるか' do
       visit keyword_path(Keyword.first)
-      click_link 'いいね' #昇順
+      click_link 'いいね' # 昇順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('夜の東京タワー')
-      click_link 'いいね' #降順
+      click_link 'いいね' # 降順
       first_spot_link = find_all('a')[16].native.inner_text
       expect(first_spot_link).to match('ディズニーランドから見た東京タワー')
     end
@@ -1246,87 +1249,94 @@ describe '[STEP2] ユーザログイン後のテスト いいね機能のテス�
     before do
       visit top_path
     end
+
     it 'いいねを押す', js: true do
-      expect {
+      expect do
         find("#like-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(1)
+      end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
     it 'いいねを取り消す', js: true do
       find("#like-#{spot.id}").click
       sleep 1
-      expect {
+      expect do
         find("#unlike-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(-1)
+      end.to change { spot.favorites.count }.by(-1)
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
+
   context 'ユーザー詳細画面でのテスト' do
     before do
       visit user_path(user)
     end
+
     it 'いいねを押す', js: true do
-      expect {
+      expect do
         find("#like-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(1)
+      end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
     it 'いいねを取り消す', js: true do
       find("#like-#{spot.id}").click
       sleep 1
-      expect {
+      expect do
         find("#unlike-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(-1)
+      end.to change { spot.favorites.count }.by(-1)
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
+
   context 'スポット詳細画面でのテスト' do
     before do
       visit spot_path(spot)
     end
+
     it 'いいねを押す', js: true do
-      expect {
+      expect do
         find("#like-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(1)
+      end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
     it 'いいねを取り消す', js: true do
       find("#like-#{spot.id}").click
       sleep 1
-      expect {
+      expect do
         find("#unlike-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(-1)
+      end.to change { spot.favorites.count }.by(-1)
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
+
   context 'スポット一覧画面でのテスト' do
     before do
       visit spots_path
     end
+
     it 'いいねを押す', js: true do
-      expect {
+      expect do
         find("#like-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(1)
+      end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
     it 'いいねを取り消す', js: true do
       find("#like-#{spot.id}").click
       sleep 1
-      expect {
+      expect do
         find("#unlike-#{spot.id}").click
         sleep 1
-      }.to change{ spot.favorites.count }.by(-1)
+      end.to change { spot.favorites.count }.by(-1)
       expect(page).to have_css "#like-#{spot.id}"
     end
   end
-  #キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
+  # キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
 end
 
 describe '[STEP2] ユーザログイン後のテスト ランキング(スポットいいね数)のテスト' do
@@ -1336,11 +1346,11 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(スポッ
   let!(:spot3) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
   let!(:spot4) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
   let!(:spot5) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
-  let!(:favorite1) { create(:favorite, user: user, spot: spot1)}
-  let!(:favorite2) { create(:favorite, user: user, spot: spot2)}
-  let!(:favorite3) { create(:favorite, user: user, spot: spot3)}
-  let!(:favorite4) { create(:favorite, user: user, spot: spot4)}
-  let!(:favorite5) { create(:favorite, user: user, spot: spot5)}
+  let!(:favorite1) { create(:favorite, user: user, spot: spot1) }
+  let!(:favorite2) { create(:favorite, user: user, spot: spot2) }
+  let!(:favorite3) { create(:favorite, user: user, spot: spot3) }
+  let!(:favorite4) { create(:favorite, user: user, spot: spot4) }
+  let!(:favorite5) { create(:favorite, user: user, spot: spot5) }
 
   before do
     visit new_user_session_path
@@ -1362,7 +1372,7 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(スポッ
   context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が6以上10以下の場合' do
     let!(:spot6) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
     let!(:spot7) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
-    let!(:favorite6) { create(:favorite, user: user, spot: spot6)}
+    let!(:favorite6) { create(:favorite, user: user, spot: spot6) }
 
     it '順位が表示される' do
       expect(page).to have_content '第1位'
@@ -1388,7 +1398,6 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(スポッ
     end
   end
 
-
   context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が11以上の場合' do
     let!(:spot6) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
     let!(:spot7) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
@@ -1396,22 +1405,22 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(スポッ
     let!(:spot9) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
     let!(:spot10) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
     let!(:spot11) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
-    let!(:favorite6) { create(:favorite, user: user, spot: spot6)}
-    let!(:favorite7) { create(:favorite, user: user, spot: spot7)}
-    let!(:favorite8) { create(:favorite, user: user, spot: spot8)}
-    let!(:favorite9) { create(:favorite, user: user, spot: spot9)}
-    let!(:favorite10) { create(:favorite, user: user, spot: spot10)}
-    let!(:favorite11) { create(:favorite, user: user, spot: spot11)}
-    let!(:favorite12) { create(:favorite, user: user, spot: spot1)}
-    let!(:favorite13) { create(:favorite, user: user, spot: spot2)}
-    let!(:favorite14) { create(:favorite, user: user, spot: spot3)}
-    let!(:favorite15) { create(:favorite, user: user, spot: spot4)}
-    let!(:favorite16) { create(:favorite, user: user, spot: spot5)}
-    let!(:favorite17) { create(:favorite, user: user, spot: spot6)}
-    let!(:favorite18) { create(:favorite, user: user, spot: spot7)}
-    let!(:favorite19) { create(:favorite, user: user, spot: spot8)}
-    let!(:favorite20) { create(:favorite, user: user, spot: spot9)}
-    let!(:favorite21) { create(:favorite, user: user, spot: spot10)}
+    let!(:favorite6) { create(:favorite, user: user, spot: spot6) }
+    let!(:favorite7) { create(:favorite, user: user, spot: spot7) }
+    let!(:favorite8) { create(:favorite, user: user, spot: spot8) }
+    let!(:favorite9) { create(:favorite, user: user, spot: spot9) }
+    let!(:favorite10) { create(:favorite, user: user, spot: spot10) }
+    let!(:favorite11) { create(:favorite, user: user, spot: spot11) }
+    let!(:favorite12) { create(:favorite, user: user, spot: spot1) }
+    let!(:favorite13) { create(:favorite, user: user, spot: spot2) }
+    let!(:favorite14) { create(:favorite, user: user, spot: spot3) }
+    let!(:favorite15) { create(:favorite, user: user, spot: spot4) }
+    let!(:favorite16) { create(:favorite, user: user, spot: spot5) }
+    let!(:favorite17) { create(:favorite, user: user, spot: spot6) }
+    let!(:favorite18) { create(:favorite, user: user, spot: spot7) }
+    let!(:favorite19) { create(:favorite, user: user, spot: spot8) }
+    let!(:favorite20) { create(:favorite, user: user, spot: spot9) }
+    let!(:favorite21) { create(:favorite, user: user, spot: spot10) }
 
     it '順位が表示される' do
       expect(page).to have_content '第1位'
@@ -1432,9 +1441,9 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(スポッ
     it 'スポットのいいね数が表示される' do
       expect(page).to have_content spot1.favorites.count
     end
-    #it '第11位は表示されない' do
-      #expect(page).not_to have_content '第11位'
-    #end
+    # it '第11位は表示されない' do
+    # expect(page).not_to have_content '第11位'
+    # end
   end
 end
 
@@ -1449,11 +1458,11 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(ユーザ
   let!(:spot3) { create(:spot, user: user3, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
   let!(:spot4) { create(:spot, user: user4, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
   let!(:spot5) { create(:spot, user: user5, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
-  let!(:favorite1) { create(:favorite, user: user1, spot: spot1)}
-  let!(:favorite2) { create(:favorite, user: user2, spot: spot2)}
-  let!(:favorite3) { create(:favorite, user: user3, spot: spot3)}
-  let!(:favorite4) { create(:favorite, user: user4, spot: spot4)}
-  let!(:favorite5) { create(:favorite, user: user5, spot: spot5)}
+  let!(:favorite1) { create(:favorite, user: user1, spot: spot1) }
+  let!(:favorite2) { create(:favorite, user: user2, spot: spot2) }
+  let!(:favorite3) { create(:favorite, user: user3, spot: spot3) }
+  let!(:favorite4) { create(:favorite, user: user4, spot: spot4) }
+  let!(:favorite5) { create(:favorite, user: user5, spot: spot5) }
 
   before do
     visit new_user_session_path
@@ -1477,7 +1486,7 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(ユーザ
     let!(:user7) { create(:user, profile_image: nil) }
     let!(:spot6) { create(:spot, user: user6, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
     let!(:spot7) { create(:spot, user: user7, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
-    let!(:favorite6) { create(:favorite, user: user6, spot: spot6)}
+    let!(:favorite6) { create(:favorite, user: user6, spot: spot6) }
 
     it '順位が表示される' do
       expect(page).to have_content '第1位'
@@ -1509,7 +1518,6 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(ユーザ
     end
   end
 
-
   context 'いいね数ランキング(スポット)、いいね数1以上のスポット数が11以上の場合' do
     let!(:user6) { create(:user, profile_image: nil) }
     let!(:user7) { create(:user, profile_image: nil) }
@@ -1523,22 +1531,22 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(ユーザ
     let!(:spot9) { create(:spot, user: user9, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
     let!(:spot10) { create(:spot, user: user10, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
     let!(:spot11) { create(:spot, user: user11, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
-    let!(:favorite6) { create(:favorite, user: user6, spot: spot6)}
-    let!(:favorite7) { create(:favorite, user: user7, spot: spot7)}
-    let!(:favorite8) { create(:favorite, user: user8, spot: spot8)}
-    let!(:favorite9) { create(:favorite, user: user9, spot: spot9)}
-    let!(:favorite10) { create(:favorite, user: user10, spot: spot10)}
-    let!(:favorite11) { create(:favorite, user: user11, spot: spot11)}
-    let!(:favorite12) { create(:favorite, user: user1, spot: spot1)}
-    let!(:favorite13) { create(:favorite, user: user2, spot: spot2)}
-    let!(:favorite14) { create(:favorite, user: user3, spot: spot3)}
-    let!(:favorite15) { create(:favorite, user: user4, spot: spot4)}
-    let!(:favorite16) { create(:favorite, user: user5, spot: spot5)}
-    let!(:favorite17) { create(:favorite, user: user6, spot: spot6)}
-    let!(:favorite18) { create(:favorite, user: user7, spot: spot7)}
-    let!(:favorite19) { create(:favorite, user: user8, spot: spot8)}
-    let!(:favorite20) { create(:favorite, user: user9, spot: spot9)}
-    let!(:favorite21) { create(:favorite, user: user10, spot: spot10)}
+    let!(:favorite6) { create(:favorite, user: user6, spot: spot6) }
+    let!(:favorite7) { create(:favorite, user: user7, spot: spot7) }
+    let!(:favorite8) { create(:favorite, user: user8, spot: spot8) }
+    let!(:favorite9) { create(:favorite, user: user9, spot: spot9) }
+    let!(:favorite10) { create(:favorite, user: user10, spot: spot10) }
+    let!(:favorite11) { create(:favorite, user: user11, spot: spot11) }
+    let!(:favorite12) { create(:favorite, user: user1, spot: spot1) }
+    let!(:favorite13) { create(:favorite, user: user2, spot: spot2) }
+    let!(:favorite14) { create(:favorite, user: user3, spot: spot3) }
+    let!(:favorite15) { create(:favorite, user: user4, spot: spot4) }
+    let!(:favorite16) { create(:favorite, user: user5, spot: spot5) }
+    let!(:favorite17) { create(:favorite, user: user6, spot: spot6) }
+    let!(:favorite18) { create(:favorite, user: user7, spot: spot7) }
+    let!(:favorite19) { create(:favorite, user: user8, spot: spot8) }
+    let!(:favorite20) { create(:favorite, user: user9, spot: spot9) }
+    let!(:favorite21) { create(:favorite, user: user10, spot: spot10) }
 
     it '順位が表示される' do
       byebug
@@ -1566,8 +1574,8 @@ describe '[STEP2] ユーザログイン後のテスト ランキング(ユーザ
       end
       expect(page).to have_content all_user_favorites_count
     end
-    #it '第11位は表示されない' do
-      #expect(page).not_to have_content '第11位'
-    #end
+    # it '第11位は表示されない' do
+    # expect(page).not_to have_content '第11位'
+    # end
   end
 end

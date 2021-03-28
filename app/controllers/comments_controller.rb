@@ -35,5 +35,4 @@ class CommentsController < ApplicationController
       redirect_to spot_path(@spot)
     end
   end
-
 end

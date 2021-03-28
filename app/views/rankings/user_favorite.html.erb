@@ -40,7 +40,15 @@
             <% end %>
                 <% if v != lastFavorite %>
                   <% j = i %>
-                  <td class="text-nowrap">第<%= j.to_s %>位</td>
+                  <% if j == 1 %>
+                    <td class="text-nowrap prize-1st">第1位<img src="<%= asset_path "1st_prize.jpg" %>" class="prize-1st-img"></td>
+                  <% elsif j == 2 %>
+                    <td class="text-nowrap prize-2nd">第2位<img src="<%= asset_path "2nd_prize.jpg" %>" class="prize-2nd-img"></td>
+                  <% elsif j == 3 %>
+                    <td class="text-nowrap prize-3rd">第3位<img src="<%= asset_path "3rd_prize.jpg" %>" class="prize-3rd-img"></td>
+                  <% else %>
+                    <td class="text-nowrap">第<%= j.to_s %>位</td>
+                  <% end %>
                   <td><%= attachment_image_tag rank_user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
                   <td>
                     <%= link_to user_path(rank_user) do %>
@@ -54,7 +62,15 @@
                   <% lastFavorite = v %>
                 <% else %>
                   <% lastFavorite = v %>
-                  <td class="text-nowrap">第<%= j.to_s %>位</td>
+                  <% if j == 1 %>
+                    <td class="text-nowrap prize-1st">第1位<img src="<%= asset_path "1st_prize.jpg" %>" class="prize-1st-img"></td>
+                  <% elsif j == 2 %>
+                    <td class="text-nowrap prize-2nd">第2位<img src="<%= asset_path "2nd_prize.jpg" %>" class="prize-2nd-img"></td>
+                  <% elsif j == 3 %>
+                    <td class="text-nowrap prize-3rd">第3位<img src="<%= asset_path "3rd_prize.jpg" %>" class="prize-3rd-img"></td>
+                  <% else %>
+                    <td class="text-nowrap">第<%= j.to_s %>位</td>
+                  <% end %>
                   <td><%= attachment_image_tag rank_user, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
                   <td>
                     <%= link_to user_path(rank_user) do %>

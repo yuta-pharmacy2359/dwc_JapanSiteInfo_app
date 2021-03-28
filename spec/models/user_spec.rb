@@ -99,6 +99,7 @@ RSpec.describe 'Userモデルのテスト', type: :model do
         expect(User.reflect_on_association(:spots).macro).to eq :has_many
       end
     end
+
     context 'FollowRelationshipモデルとの関係' do
       it 'followingと1:Nとなっている' do
         expect(User.reflect_on_association(:following).macro).to eq :has_many
@@ -107,11 +108,13 @@ RSpec.describe 'Userモデルのテスト', type: :model do
         expect(User.reflect_on_association(:followers).macro).to eq :has_many
       end
     end
+
     context 'Commentモデルとの関係' do
       it '1:Nとなっている' do
         expect(User.reflect_on_association(:comments).macro).to eq :has_many
       end
     end
+
     context 'Favoriteモデルとの関係' do
       it '1:Nとなっている' do
         expect(User.reflect_on_association(:favorites).macro).to eq :has_many

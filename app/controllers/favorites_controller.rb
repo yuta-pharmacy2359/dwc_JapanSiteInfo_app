@@ -1,5 +1,4 @@
 class FavoritesController < ApplicationController
-
   def create
     @spot = Spot.find(params[:spot_id])
     if current_user.nil?
@@ -26,11 +25,11 @@ class FavoritesController < ApplicationController
   def destroy
     @spot = Spot.find(params[:spot_id])
     if current_user.nil?
-      #arr = cookies[:favorite_spot_id].split(",").map(&:to_i)
-      #arr.delete(@spot.id)
-      #cookies[:favorite_spot_id] =  arr.join(",")
-      #@favorites_count = @spot.favorites.count
-      #@cookies = cookies[:favorite_spot_id]
+      # arr = cookies[:favorite_spot_id].split(",").map(&:to_i)
+      # arr.delete(@spot.id)
+      # cookies[:favorite_spot_id] =  arr.join(",")
+      # @favorites_count = @spot.favorites.count
+      # @cookies = cookies[:favorite_spot_id]
     else
       @favorite = current_user.favorites.find_by(spot_id: @spot.id)
       @favorite.destroy
@@ -42,5 +41,4 @@ class FavoritesController < ApplicationController
     fav_count = @user_all_spots.joins(:favorites).group("spots.user_id").count("favorites.id")
     @user_all_favorites_count = fav_count.present? ? fav_count.fetch(@user.id) : 0
   end
-
 end

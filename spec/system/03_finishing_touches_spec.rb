@@ -369,7 +369,7 @@ describe '[STEP3] 仕上げのテスト' do
           expect(page).to have_content other_user.nickname
         end
         it '他人の性別が表示される' do
-        expect(page).to have_content other_user.sex
+          expect(page).to have_content other_user.sex
         end
         it '他人の年齢が表示される' do
           expect(page).to have_content other_user.age
@@ -390,9 +390,9 @@ describe '[STEP3] 仕上げのテスト' do
         it '他人のスポット数がそれぞれ表示される' do
           expect(page).to have_content other_user.spots.count
         end
-        #it '自分の総いいね数が表示される' do
-          #expect(page).to have_content other_user.all_user_favorites_count
-        #end
+        # it '自分の総いいね数が表示される' do
+        # expect(page).to have_content other_user.all_user_favorites_count
+        # end
         it '「フォローする」のボタンが存在する' do
           expect(page).to have_button 'フォローする'
         end

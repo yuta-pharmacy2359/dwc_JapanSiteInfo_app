@@ -9,5 +9,4 @@ class RankingsController < ApplicationController
   def spot_favorite
     @all_ranks = Spot.includes(:user, :favorites).create_spot_favorite_ranks
   end
-
 end

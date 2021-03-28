@@ -49,7 +49,7 @@
                   </td>
                   <td><%= rank_user.prefecture %><%= rank_user.city %></td>
                   <td class="text-nowrap"><%= rank_user.age %>歳</td>
-                  <td class="text-nowrap"><%= rank_user.spots.length %>スポット</td>
+                  <td class="text-nowrap"><%= @spots_count.fetch(k) %>スポット</td>
                   <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= v.to_s %></td>
                   <% lastFavorite = v %>
                 <% else %>
@@ -63,7 +63,7 @@
                   </td>
                   <td><%= rank_user.prefecture %><%= rank_user.city %></td>
                   <td class="text-nowrap"><%= rank_user.age %>歳</td>
-                  <td class="text-nowrap"><%= rank_user.spots.length %>スポット</td>
+                  <td class="text-nowrap"><%= @spots_count.fetch(k) %>スポット</td>
                   <td class="text-nowrap"><span class="fa fa-heart unlike mr-1"></span><%= v.to_s %></td>
                 <% end %>
               </tr>

@@ -36,13 +36,19 @@ class UsersController < ApplicationController
     @title = "フォロー一覧"
     @user = User.find(params[:id])
     @users = @user.following.page(params[:page]).reverse_order
+    @following_count = User.joins(:following).group("follower_id").count("followed_id")
+    @followers_count = User.joins(:followers).group("followed_id").count("follower_id")
+    @user_spots_last_updated_at = Spot.group("user_id").order("spots.updated_at").pluck(:user_id, :updated_at).to_h
     render 'show_follow'
   end
 
   def followers
     @title = "フォロワー一覧"
     @user = User.find(params[:id])
-    @users= @user.followers.page(params[:page]).reverse_order
+    @users = @user.followers.page(params[:page]).reverse_order
+    @following_count = User.joins(:following).group("follower_id").count("followed_id")
+    @followers_count = User.joins(:followers).group("followed_id").count("follower_id")
+    @user_spots_last_updated_at = Spot.group("user_id").order("spots.updated_at").pluck(:user_id, :updated_at).to_h
     render 'show_follow'
   end
 

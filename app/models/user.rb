@@ -37,6 +37,10 @@ class User < ApplicationRecord
     following.include?(other_user)
   end
 
+  def spot_present?(user)
+    spots.find { |f| f.user_id == user.id }.present?
+  end
+
   validates :fullname, presence: true, length: {maximum: 20}
   validates :nickname, {presence: true, uniqueness: true, length: {maximum: 20}}
   validates :sex, presence: true

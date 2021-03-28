@@ -46,11 +46,8 @@
             <td>
               <%= keyword.spots.length %>スポット
             </td>
-            <% avg = @averages.fetch(keyword.id) %>
-            <% if avg.nil? %>
-              <td>評価なし</td>
-            <% else %>
-              <td id="star-rate-<%= keyword.id %>" class="py-3 text-nowrap"><%= avg.round(2) %></td>
+            <% if @rate_avg.has_key?(keyword.id) %>
+              <td id="star-rate-<%= keyword.id %>" class="py-3 text-nowrap"><%= @rate_avg.fetch(keyword.id).round(2) %></td>
               <script>
                 if(!$("#star-rate-<%= keyword.id %> img").length) {
                   $('#star-rate-<%= keyword.id %>').raty({
@@ -59,10 +56,12 @@
                     starOn: '<%= asset_path('star-on.png') %>',
                     starHalf: '<%= asset_path('star-half.png') %>',
                     readOnly: true,
-                    score: <%= avg %>,
+                    score: <%= @rate_avg.fetch(keyword.id) %>,
                   });
                 }
               </script>
+            <% else %>
+              <td class="text-nowrap">評価なし</td>
             <% end %>
           </tr>
         <% end %>

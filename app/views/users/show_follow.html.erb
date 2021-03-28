@@ -3,7 +3,7 @@
   <h3 class="mb-4"><%= @user.nickname %>さんの<%= @title %></h3>
 
   <table class="table follow-index">
-    <% @users.each do |user| %>
+    <% @users.includes(:spots).each do |user| %>
       <tr>
         <td>
           <%= link_to user_path(user.id) do %>
@@ -17,19 +17,27 @@
         </td>
         <td class="text-nowrap">
           フォロー数：
-          <%= link_to following_user_path(user) do %>
-            <%= user.following.length %>
+          <% if @following_count.has_key?(user.id) %>
+            <%= link_to following_user_path(user) do %>
+              <%= @following_count.fetch(user.id) %>
+            <% end %>
+          <% else %>
+            0
           <% end %>
         </td>
         <td class="text-nowrap">
           フォロワー数：
-          <%= link_to followers_user_path(user) do %>
-            <%= user.followers.length %>
+          <% if @followers_count.has_key?(user.id) %>
+            <%= link_to followers_user_path(user) do %>
+              <%= @followers_count.fetch(user.id) %>
+            <% end %>
+          <% else %>
+            0
           <% end %>
         </td>
         <td class="text-nowrap">
-          <% if user.spots.present? %>
-            最終更新：<%= user.spots.order(:updated_at).last.updated_at.strftime('%Y年%-m月%-d日') %>
+          <% if @user_spots_last_updated_at.has_key?(user.id) %>
+            最終更新：<%= @user_spots_last_updated_at.fetch(user.id).strftime('%Y年%-m月%-d日') %>
           <% else %>
             投稿なし
           <% end %>

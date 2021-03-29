@@ -390,9 +390,15 @@ describe '[STEP3] 仕上げのテスト' do
         it '他人のスポット数がそれぞれ表示される' do
           expect(page).to have_content other_user.spots.count
         end
-        # it '自分の総いいね数が表示される' do
-        # expect(page).to have_content other_user.all_user_favorites_count
-        # end
+        it '他人の総いいね数が表示される' do
+          user = User.find(other_user.id)
+          user_all_spots = user.spots
+          user_all_favorites_count = 0
+          user_all_spots.each do |spot|
+            user_all_favorites_count += spot.favorites.count
+          end
+          expect(page).to have_content user_all_favorites_count
+        end
         it '「フォローする」のボタンが存在する' do
           expect(page).to have_button 'フォローする'
         end

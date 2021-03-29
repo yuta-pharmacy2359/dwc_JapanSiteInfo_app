@@ -7,7 +7,7 @@
     <%= link_to "こちら", user_favorite_ranking_path %>
   </p>
 
-  <% if @all_ranks.count < 6 %>
+  <% if @all_ranks.blank? %>
     <div class="now-preparation mb-5 text-center">現在準備中です。</div>
     <div class="now-preparation-image"><img src="<%= asset_path "398656.jpg" %>" class="now-preparation-image-img"></div>
   <% else %>
@@ -33,7 +33,7 @@
             <% if i == 1 %>
               <% lastFavorite = spot_favorites_count %>
             <% end %>
-            <% if @all_ranks.count <= 10 %>
+            <% if @all_ranks.length <= 10 %>
               <tr>
             <% else %>
               <tr class="cut-final">

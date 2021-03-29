@@ -5,7 +5,9 @@ describe '[STEP1] ユーザログイン前のテスト' do
     let(:user) { create(:user) }
     let!(:search_spot) { create(:search_spot, user: user) }
     let!(:search_spot2) { create(:search_spot2, user: user) }
-    let!(:favorite) { create(:favorite, spot: search_spot) }
+    let!(:favorite) { create(:favorite, user: nil, spot: search_spot) }
+    let!(:favorite2) { create(:favorite, user: nil, spot: search_spot) }
+    let!(:favorite3) { create(:favorite, user: nil, spot: search_spot2) }
 
     before do
       visit top_path
@@ -182,14 +184,14 @@ describe '[STEP1] ユーザログイン前のテスト' do
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('ディズニーランド')
       end
-      # it 'いいねのソート：正しく表示されるか' do
-      # click_link 'いいね' #昇順
-      # first_spot_link = find_all('a')[10]
-      # expect(first_spot_link).to match(spot_path(search_spot))
-      # click_link 'いいね' #降順
-      # first_spot_link = find_all('a')[10]
-      # expect(first_spot_link).to match(spot_path(search_spot2))
-      # end
+      it 'いいねのソート：正しく表示されるか' do
+        click_link 'いいね' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+        click_link 'いいね' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('ディズニーランド')
+      end
     end
   end
 
@@ -321,8 +323,12 @@ describe '[STEP1] ユーザログイン前のテスト' do
 
   describe 'キーワード詳細画面のテスト' do
     let(:user) { create(:user) }
+    let!(:other_user) { create(:user) }
     let!(:spot) { create(:search_spot2, user: user) }
     let!(:other_spot) { create(:search_spot3, user: user) }
+    let!(:favorite1) { create(:favorite, user: user, spot: spot) }
+    let!(:favorite2) { create(:favorite, user: user, spot: other_spot) }
+    let!(:favorite3) { create(:favorite, user: other_user, spot: spot) }
 
     before do
       visit new_user_session_path
@@ -367,10 +373,10 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(page).to have_content other_spot.visited_day.strftime("%Y年%-m月%-d日")
       end
       # 他のところで確認
-      # it '各スポットの評価が表示される', js: true do
-      # expect(page).to have_content spot.rate
-      # expect(page).to have_content other_spot.rate
-      # end
+      it '各スポットの評価が表示される', js: true do
+        expect(page).to have_content spot.rate
+        expect(page).to have_content other_spot.rate
+      end
       it '各スポットのいいねボタンが表示される' do
         expect(page).to have_link '', href: spot_favorites_path(spot)
         expect(page).to have_link '', href: spot_favorites_path(other_spot)
@@ -422,14 +428,14 @@ describe '[STEP1] ユーザログイン前のテスト' do
         first_spot_link = find_all('a')[10].native.inner_text
         expect(first_spot_link).to match('稲荷山古墳')
       end
-      # it 'いいねのソート：正しく表示されるか' do
-      # click_link 'いいね' #昇順
-      # first_spot_link = find_all('a')[10]
-      # expect(first_spot_link).to match(spot_path(search_spot))
-      # click_link 'いいね' #降順
-      # first_spot_link = find_all('a')[10]
-      # expect(first_spot_link).to match(spot_path(search_spot2))
-      # end
+      it 'いいねのソート：正しく表示されるか' do
+        click_link 'いいね' #昇順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('大仙陵古墳')
+        click_link 'いいね' #降順
+        first_spot_link = find_all('a')[10].native.inner_text
+        expect(first_spot_link).to match('稲荷山古墳')
+      end
     end
   end
 
@@ -720,7 +726,7 @@ describe '[STEP1] ユーザログイン前のテスト' do
   end
 end
 
-describe '[STEP2] ユーザログイン後のテスト いいね機能のテスト' do
+describe '[STEP1] ユーザログイン前のテスト いいね機能のテスト' do
   let(:user) { create(:user, profile_image: nil) }
   let!(:spot) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
 
@@ -730,21 +736,11 @@ describe '[STEP2] ユーザログイン後のテスト いいね機能のテス�
     end
 
     it 'いいねを押す', js: true do
-      cookies[:favorite_spot_id] = spot.id
       expect do
         find("#like-#{spot.id}").click
         sleep 1
       end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
-    end
-    it 'いいねを取り消す', js: true do
-      find("#like-#{spot.id}").click
-      sleep 1
-      expect do
-        find("#unlike-#{spot.id}").click
-        sleep 1
-      end.to change { spot.favorites.count }.by(-1)
-      expect(page).to have_css "#like-#{spot.id}"
     end
   end
 
@@ -760,15 +756,6 @@ describe '[STEP2] ユーザログイン後のテスト いいね機能のテス�
       end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
-    it 'いいねを取り消す', js: true do
-      find("#like-#{spot.id}").click
-      sleep 1
-      expect do
-        find("#unlike-#{spot.id}").click
-        sleep 1
-      end.to change { spot.favorites.count }.by(-1)
-      expect(page).to have_css "#like-#{spot.id}"
-    end
   end
 
   context 'スポット詳細画面でのテスト' do
@@ -782,15 +769,6 @@ describe '[STEP2] ユーザログイン後のテスト いいね機能のテス�
         sleep 1
       end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
-    end
-    it 'いいねを取り消す', js: true do
-      find("#like-#{spot.id}").click
-      sleep 1
-      expect do
-        find("#unlike-#{spot.id}").click
-        sleep 1
-      end.to change { spot.favorites.count }.by(-1)
-      expect(page).to have_css "#like-#{spot.id}"
     end
   end
 
@@ -806,15 +784,5 @@ describe '[STEP2] ユーザログイン後のテスト いいね機能のテス�
       end.to change { spot.favorites.count }.by(1)
       expect(page).to have_css "#unlike-#{spot.id}"
     end
-    it 'いいねを取り消す', js: true do
-      find("#like-#{spot.id}").click
-      sleep 1
-      expect do
-        find("#unlike-#{spot.id}").click
-        sleep 1
-      end.to change { spot.favorites.count }.by(-1)
-      expect(page).to have_css "#like-#{spot.id}"
-    end
   end
-  # キーワード詳細でのいいね機能はそれぞれのテスト内で実施済
 end

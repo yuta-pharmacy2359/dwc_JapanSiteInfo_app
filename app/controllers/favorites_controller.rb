@@ -2,14 +2,14 @@ class FavoritesController < ApplicationController
   def create
     @spot = Spot.find(params[:spot_id])
     if current_user.nil?
-      #if cookies[:favorite_spot_id].nil?
-       # cookies.permanent[:favorite_spot_id] = @spot.id
-      #else
-       # cookies.permanent[:favorite_spot_id] = cookies.permanent[:favorite_spot_id] + "," + @spot.id.to_s
-      #end
-      #Favorite.create(user_id: nil, spot_id: @spot.id)
-      #@favorites_count = @spot.favorites.count
-      #@cookies = cookies[:favorite_spot_id]
+      if cookies[:favorite_spot_id].nil?
+        cookies.permanent[:favorite_spot_id] = @spot.id
+      else
+        cookies.permanent[:favorite_spot_id] = cookies.permanent[:favorite_spot_id] + "," + @spot.id.to_s
+      end
+      Favorite.create(user_id: nil, spot_id: @spot.id)
+      @favorites_count = @spot.favorites.count
+      @cookies = cookies[:favorite_spot_id]
     else
       @favorite = current_user.favorites.new(spot_id: @spot.id)
       @favorite.save

@@ -1,2 +1,2 @@
-$(".favorite-<%= @spot.id %>").html("<%= j(render 'favorites/list_favorite', spot: @spot, favorites_count: @favorites_count) %>")
+$(".favorite-<%= @spot.id %>").html("<%= j(render 'favorites/list_favorite', spot: @spot, favorites_count: @favorites_count, cookies: @cookies  ) %>")
 $(".user-favorite-count-<%= @user.id %>").html('<%= @user_all_favorites_count %>')

@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :timeoutable
 
   has_many :spots, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -39,6 +39,10 @@ class User < ApplicationRecord
 
   def spot_present?(user)
     spots.find { |f| f.user_id == user.id }.present?
+  end
+
+  def remember_me
+    true
   end
 
   validates :fullname, presence: true, length: { maximum: 20 }

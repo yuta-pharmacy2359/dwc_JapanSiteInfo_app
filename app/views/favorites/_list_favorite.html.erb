@@ -9,22 +9,22 @@
     <% end %>
   <% end %>
 <% else %>
-  <% if cookies.nil? %>
-    <%= link_to spot_favorites_path(spot), method: :post, remote: true do %>
-      <span class="far fa-heart like" id="like-<%= spot.id %>"></span>
-    <% end %>
-  <% else %>
-    <% arr = cookies.split(",").map(&:to_i) %>
-    <% if arr.include?(spot.id) %>
+  <%# if cookies.nil? %>
+    <%#= link_to spot_favorites_path(spot), method: :post, remote: true do %>
+      <!--span class="far fa-heart like" id="like-<%#= spot.id %>"></span-->
+    <%# end %>
+  <%# else %>
+    <%# arr = cookies.split(",").map(&:to_i) %>
+    <%#if arr.include?(spot.id) %>
       <%#= link_to spot_favorites_path(spot), method: :delete, remote: true do %>
         <span class="fas fa-heart unlike" id="unlike-<%= spot.id %>"></span>
       <%# end %>
-    <% else %>
-      <%= link_to spot_favorites_path(spot), method: :post, remote: true do %>
-        <span class="far fa-heart like" id="like-<%= spot.id %>"></span>
-      <% end %>
-    <% end %>
-  <% end %>
+    <%# else %>
+      <%#= link_to spot_favorites_path(spot), method: :post, remote: true do %>
+        <!--span class="far fa-heart like" id="like-<%#= spot.id %>"></span-->
+      <%# end %>
+    <%# end %>
+  <%# end %>
 <% end %>
 
   <%= favorites_count %>

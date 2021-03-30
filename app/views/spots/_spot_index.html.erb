@@ -64,7 +64,7 @@
             </script>
           <% end %>
         <td class="favorite-<%= spot.id %> text-nowrap">
-          <%= render "favorites/list_favorite", spot: spot, favorites_count: spot.favorites.length, cookies: cookies %>
+          <%= render "favorites/list_favorite", spot: spot, favorites_count: spot.favorites.length#, cookies: cookies %>
         </td>
       </tr>
     <% end %>

@@ -15,11 +15,11 @@
         </tr>
         <tr>
           <td class="mr-3 mt-4">ニックネーム ※</td>
-          <td><%= f.text_field :nickname, autofocus: true, autocomplete: "nickname", class: "form-width" %></td>
+          <td><%= f.text_field :nickname, autocomplete: "nickname", class: "form-width" %></td>
         </tr>
         <tr>
           <td class="mr-3 mt-4">メールアドレス ※</td>
-          <td><%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-width" %></td>
+          <td><%= f.email_field :email, autocomplete: "email", class: "form-width" %></td>
         </tr>
         <tr>
           <td class="mr-3 mt-4">性別 ※</td>
@@ -38,7 +38,7 @@
         </tr>
         <tr>
           <td class="mr-3 mt-4">住所(市区町村) ※</td>
-          <td><%= f.text_field :city, autofocus: true, autocomplete: "city", class: "form-width" %></td>
+          <td><%= f.text_field :city, autocomplete: "city", class: "form-width" %></td>
         </tr>
         <tr>
           <td class="mr-3 mt-4">プロフィール画像</td>
@@ -49,7 +49,7 @@
         </tr>
         <tr>
           <td class="mr-3 mt-4">自己紹介</td>
-          <td><%= f.text_area :introduction, rows: "5", autofocus: true, autocomplete: "introduction", placeholder: "50字以内で自由に記述してください", class: "form-width" %></td>
+          <td><%= f.text_area :introduction, rows: "5", autocomplete: "introduction", placeholder: "50字以内で自由に記述してください", class: "form-width" %></td>
         </tr>
       </table>
       <%= f.submit "更新する", class: "btn btn-success", style: "width: 125px;" %>

@@ -28,7 +28,7 @@
     </thead>
   <% end %>
   <tbody>
-    <% spots.includes(:favorites).each do |spot| %>
+    <% spots.each do |spot| %>
       <tr>
         <td>
           <%= attachment_image_tag spot, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %>

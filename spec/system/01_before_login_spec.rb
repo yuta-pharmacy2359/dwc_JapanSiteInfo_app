@@ -726,63 +726,63 @@ describe '[STEP1] ユーザログイン前のテスト' do
   end
 end
 
-#describe '[STEP1] ユーザログイン前のテスト いいね機能のテスト' do
-  #let(:user) { create(:user, profile_image: nil) }
-  #let!(:spot) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
+describe '[STEP1] ユーザログイン前のテスト いいね機能のテスト' do
+  let(:user) { create(:user, profile_image: nil) }
+  let!(:spot) { create(:spot, user: user, spot_image1: nil, spot_image2: nil, spot_image3: nil) }
 
-  #context 'トップ画面でのテスト' do
-    #before do
-      #visit top_path
-    #end
+  context 'トップ画面でのテスト' do
+    before do
+      visit top_path
+    end
 
-    #it 'いいねを押す', js: true do
-      #expect do
-        #find("#like-#{spot.id}").click
-        #sleep 1
-      #end.to change { spot.favorites.count }.by(1)
-      #expect(page).to have_css "#unlike-#{spot.id}"
-    #end
-  #end
+    it 'いいねを押す', js: true do
+      expect do
+        find("#like-#{spot.id}").click
+        sleep 1
+      end.to change { spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+  end
 
-  #context 'ユーザー詳細画面でのテスト' do
-    #before do
-      #visit user_path(user)
-   # end
+  context 'ユーザー詳細画面でのテスト' do
+    before do
+      visit user_path(user)
+    end
 
-    #it 'いいねを押す', js: true do
-      #expect do
-        #find("#like-#{spot.id}").click
-        #sleep 1
-      #end.to change { spot.favorites.count }.by(1)
-      #expect(page).to have_css "#unlike-#{spot.id}"
-    #end
-  #end
+    it 'いいねを押す', js: true do
+      expect do
+        find("#like-#{spot.id}").click
+        sleep 1
+      end.to change { spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+  end
 
-  #context 'スポット詳細画面でのテスト' do
-    #before do
-      #visit spot_path(spot)
-    #end
+  context 'スポット詳細画面でのテスト' do
+    before do
+      visit spot_path(spot)
+    end
 
-    #it 'いいねを押す', js: true do
-      #expect do
-        #find("#like-#{spot.id}").click
-        #sleep 1
-      #end.to change { spot.favorites.count }.by(1)
-      #expect(page).to have_css "#unlike-#{spot.id}"
-    #end
-  #end
+    it 'いいねを押す', js: true do
+      expect do
+        find("#like-#{spot.id}").click
+        sleep 1
+      end.to change { spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+  end
 
-  #context 'スポット一覧画面でのテスト' do
-    #before do
-      #visit spots_path
-    #end
+  context 'スポット一覧画面でのテスト' do
+    before do
+      visit spots_path
+    end
 
-    #it 'いいねを押す', js: true do
-      #expect do
-        #find("#like-#{spot.id}").click
-        #sleep 1
-      #end.to change { spot.favorites.count }.by(1)
-      #expect(page).to have_css "#unlike-#{spot.id}"
-    #end
-  #end
-#end
+    it 'いいねを押す', js: true do
+      expect do
+        find("#like-#{spot.id}").click
+        sleep 1
+      end.to change { spot.favorites.count }.by(1)
+      expect(page).to have_css "#unlike-#{spot.id}"
+    end
+  end
+end

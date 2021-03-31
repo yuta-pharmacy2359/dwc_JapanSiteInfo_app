@@ -17,7 +17,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   ransacker :favorites_count do
     query = <<-SQL
-      (SELECT COUNT (favorites.spot_id) as favorites_count
+      (SELECT COUNT(favorites.spot_id) as favorites_count
         FROM favorites
         WHERE favorites.spot_id = spots.id
         GROUP BY favorites.spot_id)
@@ -27,7 +27,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   ransacker :rate_average do
     query = <<-SQL
-      (SELECT AVG (spots.rate) as rate_average
+      (SELECT AVG(spots.rate) as rate_average
         FROM keyword_relationships, spots
         WHERE keywords.id = keyword_relationships.keyword_id
         AND spots.id = keyword_relationships.spot_id

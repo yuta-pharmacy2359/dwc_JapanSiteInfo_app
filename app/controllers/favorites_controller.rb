@@ -3,7 +3,7 @@ class FavoritesController < ApplicationController
     @spot = Spot.find(params[:spot_id])
     if current_user.nil?
       if cookies[:favorite_spot_id].nil?
-        cookies.permanent[:favorite_spot_id] = @spot.id
+        cookies.permanent[:favorite_spot_id] = @spot.id.to_s
       else
         cookies.permanent[:favorite_spot_id] = cookies.permanent[:favorite_spot_id] + "," + @spot.id.to_s
       end

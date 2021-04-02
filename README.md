@@ -1,5 +1,13 @@
 # JapanSiteInfo
 
+## トップ画面
+<img width="700" alt="JapanSiteInfo_README用画像1" src="https://user-images.githubusercontent.com/75191225/113389769-8c836e80-93cb-11eb-9797-7cf304a51965.png"><br>
+レスポンシブ対応<br>
+<img width="400" alt="JapanSIteInfo_README用画像2" src="https://user-images.githubusercontent.com/75191225/113389945-d2d8cd80-93cb-11eb-8a11-3ceebad28414.png">
+
+## 動作デモgif
+![JapanSiteInfo_README用GIF](https://user-images.githubusercontent.com/75191225/113389178-850f9580-93ca-11eb-894d-767a069809ef.gif)
+
 ## サイト概要
 
 日本各地の観光地などの情報を投稿するサイト

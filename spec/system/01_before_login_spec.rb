@@ -372,11 +372,6 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(page).to have_content spot.visited_day.strftime("%Y年%-m月%-d日")
         expect(page).to have_content other_spot.visited_day.strftime("%Y年%-m月%-d日")
       end
-      # 他のところで確認
-      it '各スポットの評価が表示される', js: true do
-        expect(page).to have_content spot.rate
-        expect(page).to have_content other_spot.rate
-      end
       it '各スポットのいいねボタンが表示される' do
         expect(page).to have_link '', href: spot_favorites_path(spot)
         expect(page).to have_link '', href: spot_favorites_path(other_spot)
@@ -530,7 +525,9 @@ describe '[STEP1] ユーザログイン前のテスト' do
         expect(page).to have_field 'user[sex]'
       end
       it '「誕生日」フォームが表示される' do
-        expect(page).to have_field 'user[birthday]'
+        expect(page).to have_field 'user[birthday(1i)]'
+        expect(page).to have_field 'user[birthday(2i)]'
+        expect(page).to have_field 'user[birthday(3i)]'
       end
       it '「住所(都道府県)」フォームが表示される' do
         expect(page).to have_field 'user[prefecture]'
@@ -563,7 +560,9 @@ describe '[STEP1] ユーザログイン前のテスト' do
         fill_in 'user[nickname]', with: Faker::Lorem.characters(number: 10)
         fill_in 'user[email]', with: Faker::Internet.email
         choose('user_sex_male')
-        fill_in 'user[birthday]', with: '2000-01-01'
+        select '2000', from: 'user_birthday_1i'
+        select '1', from: 'user_birthday_2i'
+        select '1', from: 'user_birthday_3i'
         select '東京都', from: 'user_prefecture'
         fill_in 'user[city]', with: Faker::Lorem.characters(number: 10)
         fill_in 'user[password]', with: 'password'
@@ -614,14 +613,14 @@ describe '[STEP1] ユーザログイン前のテスト' do
         log_in_link.click
         expect(current_path).to eq('/users/sign_up')
       end
-      it '「パスワードをお忘れの方はこちら」と表示されている' do
-        expect(page).to have_content 'パスワードをお忘れの方はこちら'
-      end
-      it '「こちら(パスワード)」を押すとパスワード発行画面に遷移する' do
-        log_in_link = find_all('a')[5]
-        log_in_link.click
-        expect(current_path).to eq('/users/password/new')
-      end
+      #it '「パスワードをお忘れの方はこちら」と表示されている' do
+        #expect(page).to have_content 'パスワードをお忘れの方はこちら'
+      #end
+      #it '「こちら(パスワード)」を押すとパスワード発行画面に遷移する' do
+        #log_in_link = find_all('a')[5]
+        #log_in_link.click
+        #expect(current_path).to eq('/users/password/new')
+      #end
     end
 
     context 'ログイン成功のテスト' do
@@ -733,20 +732,6 @@ describe '[STEP1] ユーザログイン前のテスト いいね機能のテス�
   context 'トップ画面でのテスト' do
     before do
       visit top_path
-    end
-
-    it 'いいねを押す', js: true do
-      expect do
-        find("#like-#{spot.id}").click
-        sleep 1
-      end.to change { spot.favorites.count }.by(1)
-      expect(page).to have_css "#unlike-#{spot.id}"
-    end
-  end
-
-  context 'ユーザー詳細画面でのテスト' do
-    before do
-      visit user_path(user)
     end
 
     it 'いいねを押す', js: true do

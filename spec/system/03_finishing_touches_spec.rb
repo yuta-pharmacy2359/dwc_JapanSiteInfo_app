@@ -15,7 +15,9 @@ describe '[STEP3] 仕上げのテスト' do
       fill_in 'user[nickname]', with: Faker::Lorem.characters(number: 10)
       fill_in 'user[email]', with: 'a' + user.email
       choose('user_sex_male')
-      fill_in 'user[birthday]', with: '2000-01-01'
+      select '2000', from: 'user_birthday_1i'
+      select '1', from: 'user_birthday_2i'
+      select '1', from: 'user_birthday_3i'
       select '東京都', from: 'user_prefecture'
       fill_in 'user[city]', with: Faker::Lorem.characters(number: 10)
       fill_in 'user[password]', with: 'password'
@@ -58,7 +60,9 @@ describe '[STEP3] 仕上げのテスト' do
       fill_in 'spot[title]', with: Faker::Lorem.characters(number: 10)
       select '東京都', from: 'spot_prefecture'
       fill_in 'spot[city]', with: Faker::Lorem.characters(number: 10)
-      fill_in 'spot[visited_day]', with: '2021-01-01'
+      select '2021', from: 'spot_visited_day_1i'
+      select '1', from: 'spot_visited_day_2i'
+      select '1', from: 'spot_visited_day_3i'
       find('input[@name="spot[rate]"]', visible: false).set('5')
       attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
       attach_file "spot[spot_image2]", "app/assets/images/image2.jpg"
@@ -86,14 +90,15 @@ describe '[STEP3] 仕上げのテスト' do
         @nickname = Faker::Lorem.characters(number: 10)
         @email = 'a' + user.email
         @sex = 'user_sex_male'
-        @birthday = '2112-01-01'
         @prefecture = '東京都'
         @city = Faker::Lorem.characters(number: 10)
         fill_in 'user[fullname]', with: @fullname
         fill_in 'user[nickname]', with: @nickname
         fill_in 'user[email]', with: @email
         choose(@sex)
-        fill_in 'user[birthday]', with: @birthday
+        select '2021', from: 'user_birthday_1i'
+        select '12', from: 'user_birthday_2i'
+        select '31', from: 'user_birthday_3i'
         select @prefecture, from: 'user_prefecture'
         fill_in 'user[city]', with: @city
         fill_in 'user[password]', with: 'password'
@@ -110,7 +115,9 @@ describe '[STEP3] 仕上げのテスト' do
         expect(page).to have_field 'user[nickname]', with: @nickname
         expect(page).to have_field 'user[email]', with: @email
         expect(page).to have_checked_field @sex
-        expect(page).to have_field 'user[birthday]', with: @birthday
+        expect(page).to have_field 'user[birthday(1i)]', with: 2021
+        expect(page).to have_field 'user[birthday(2i)]', with: 12
+        expect(page).to have_field 'user[birthday(3i)]', with: 31
         expect(page).to have_select('都道府県', selected: @prefecture)
         expect(page).to have_field 'user[city]', with: @city
       end
@@ -123,13 +130,14 @@ describe '[STEP3] 仕上げのテスト' do
     context 'ユーザのプロフィール情報編集失敗: 誕生日を未来の日付にする' do
       before do
         @user_old_birthday = user.birthday
-        @birthday = "2112-01-01"
         visit new_user_session_path
         fill_in 'user[email]', with: user.email
         fill_in 'user[password]', with: user.password
         click_button 'ログイン'
         visit edit_user_path(user)
-        fill_in 'user[birthday]', with: @birthday
+        select '2021', from: 'user_birthday_1i'
+        select '12', from: 'user_birthday_2i'
+        select '31', from: 'user_birthday_3i'
         click_button '更新する'
       end
 
@@ -141,7 +149,9 @@ describe '[STEP3] 仕上げのテスト' do
         expect(page).to have_field 'user[nickname]', with: user.nickname
         expect(page).to have_field 'user[email]', with: user.email
         expect(page).to have_checked_field 'edit_user_sex_male'
-        expect(page).to have_field 'user[birthday]', with: @birthday
+        expect(page).to have_field 'user[birthday(1i)]', with: 2021
+        expect(page).to have_field 'user[birthday(2i)]', with: 12
+        expect(page).to have_field 'user[birthday(3i)]', with: 31
         expect(page).to have_select('都道府県', selected: '東京都')
         expect(page).to have_field 'user[city]', with: user.city
         expect(page).to have_selector("img[src$='profile_image.jpeg']")
@@ -160,11 +170,12 @@ describe '[STEP3] 仕上げのテスト' do
         click_button 'ログイン'
         visit new_spot_path
         @city = Faker::Lorem.characters(number: 10)
-        @visited_day = '2021-01-01'
         @content = Faker::Lorem.characters(number: 50)
         select '東京都', from: 'spot_prefecture'
         fill_in 'spot[city]', with: @city
-        fill_in 'spot[visited_day]', with: @visited_day
+        select '2021', from: 'spot_visited_day_1i'
+        select '1', from: 'spot_visited_day_2i'
+        select '1', from: 'spot_visited_day_3i'
         find('input[@name="spot[rate]"]', visible: false).set('5')
         fill_in 'spot[content]', with: @content
       end
@@ -177,7 +188,9 @@ describe '[STEP3] 仕上げのテスト' do
         expect(find_field('spot[title]').text).to be_blank
         expect(page).to have_select('都道府県', selected: '東京都')
         expect(page).to have_field 'spot[city]', with: @city
-        expect(page).to have_field 'spot[visited_day]', with: @visited_day
+        expect(page).to have_field 'spot[visited_day(1i)]', with: 2021
+        expect(page).to have_field 'spot[visited_day(2i)]', with: 1
+        expect(page).to have_field 'spot[visited_day(3i)]', with: 1
         expect(page).to have_field 'spot[content]', with: @content
       end
       it 'バリデーションエラーが表示される' do
@@ -206,7 +219,9 @@ describe '[STEP3] 仕上げのテスト' do
         expect(find_field('spot[title]').text).to be_blank
         expect(page).to have_select('都道府県', selected: '東京都')
         expect(page).to have_field 'spot[city]', with: spot.city
-        expect(page).to have_field 'spot[visited_day]', with: spot.visited_day
+        expect(page).to have_field 'spot[visited_day(1i)]', with: 2020
+        expect(page).to have_field 'spot[visited_day(2i)]', with: 1
+        expect(page).to have_field 'spot[visited_day(3i)]', with: 1
         expect(page).to have_selector("img[src$='spot_image1.jpeg']")
         expect(page).to have_selector("img[src$='spot_image2.jpeg']")
         expect(page).to have_selector("img[src$='spot_image3.jpeg']")

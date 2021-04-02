@@ -215,7 +215,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_field 'spot[city]'
       end
       it '「来訪日」フォームが表示される' do
-        expect(page).to have_field 'spot[visited_day]'
+        expect(page).to have_field 'spot[visited_day(1i)]'
+        expect(page).to have_field 'spot[visited_day(2i)]'
+        expect(page).to have_field 'spot[visited_day(3i)]'
       end
       it '「評価」フォームが表示される' do
         expect(find('input[@name="spot[rate]"]', visible: false).text).to be_blank
@@ -239,7 +241,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
         fill_in 'spot[keyword]', with: '東京タワー'
         select '東京都', from: 'spot_prefecture'
         fill_in 'spot[city]', with: Faker::Lorem.characters(number: 10)
-        fill_in 'spot[visited_day]', with: '2021-01-01'
+        select '2021', from: 'spot_visited_day_1i'
+        select '1', from: 'spot_visited_day_2i'
+        select '1', from: 'spot_visited_day_3i'
         find('input[@name="spot[rate]"]', visible: false).set('5')
         attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
         attach_file "spot[spot_image2]", "app/assets/images/image2.jpg"
@@ -401,7 +405,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_field 'spot[city]', with: spot.city
       end
       it '生年月日編集フォームにスポットの来訪日が表示される' do
-        expect(page).to have_field 'spot[visited_day]', with: spot.visited_day
+        expect(page).to have_field 'spot[visited_day(1i)]', with: 2020
+        expect(page).to have_field 'spot[visited_day(2i)]', with: 1
+        expect(page).to have_field 'spot[visited_day(3i)]', with: 1
       end
       it '評価フォームが表示される' do
         expect(find('input[@name="spot[rate]"]', visible: false).text).to be_blank
@@ -437,7 +443,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
         fill_in 'spot[title]', with: Faker::Lorem.characters(number: 9)
         select '神奈川県', from: 'spot_prefecture'
         fill_in 'spot[city]', with: Faker::Lorem.characters(number: 9)
-        fill_in 'spot[visited_day]', with: '2021-01-01'
+        select '2021', from: 'spot_visited_day_1i'
+        select '1', from: 'spot_visited_day_2i'
+        select '1', from: 'spot_visited_day_3i'
         find('input[@name="spot[rate]"]', visible: false).set('4')
         attach_file "spot[spot_image1]", "app/assets/images/image4.jpg"
         attach_file "spot[spot_image2]", "app/assets/images/image5.jpg"
@@ -647,7 +655,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_checked_field 'edit_user_sex_male'
       end
       it '生年月日編集フォームに自分の生年月日が表示される' do
-        expect(page).to have_field 'user[birthday]', with: user.birthday
+        expect(page).to have_field 'user[birthday(1i)]', with: 1990
+        expect(page).to have_field 'user[birthday(2i)]', with: 1
+        expect(page).to have_field 'user[birthday(3i)]', with: 1
       end
       it '都道府県選択フォームで自分の都道府県が選択されている' do
         expect(page).to have_select('都道府県', selected: '東京都')
@@ -681,7 +691,9 @@ describe '[STEP2] ユーザログイン後のテスト' do
         fill_in 'user[nickname]', with: Faker::Lorem.characters(number: 9)
         fill_in 'user[email]', with: Faker::Internet.email
         choose('edit_user_sex_female')
-        fill_in 'user[birthday]', with: '2001-01-01'
+        select '2001', from: 'user_birthday_1i'
+        select '1', from: 'user_birthday_2i'
+        select '1', from: 'user_birthday_3i'
         select '神奈川県', from: 'user_prefecture'
         fill_in 'user[city]', with: Faker::Lorem.characters(number: 6)
         attach_file "user[profile_image]", "app/assets/images/image8.jpg"
@@ -931,9 +943,11 @@ describe '[STEP2] ユーザログイン後のテスト' do
       before do
         visit edit_spot_path(search_spot)
         fill_in 'spot[keyword]', with: '夢の国 ミッキー'
+        find('input[@name="spot[rate]"]', visible: false).set('4')
         click_button '更新する'
         visit edit_spot_path(search_spot2)
         fill_in 'spot[keyword]', with: '前方後円墳 鉄剣'
+        find('input[@name="spot[rate]"]', visible: false).set('4')
         click_button '更新する'
         visit keywords_path
       end
@@ -1112,7 +1126,9 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
       fill_in 'spot[keyword]', with: '東京タワー'
       select '千葉県', from: 'spot_prefecture'
       fill_in 'spot[city]', with: '浦安市'
-      fill_in 'spot[visited_day]', with: '2021-02-01'
+      select '2021', from: 'spot_visited_day_1i'
+      select '2', from: 'spot_visited_day_2i'
+      select '1', from: 'spot_visited_day_3i'
       find('input[@name="spot[rate]"]', visible: false).set('4')
       attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
       fill_in 'spot[content]', with: Faker::Lorem.characters(number: 50)
@@ -1122,7 +1138,9 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
       fill_in 'spot[keyword]', with: '東京タワー'
       select '東京都', from: 'spot_prefecture'
       fill_in 'spot[city]', with: '港区'
-      fill_in 'spot[visited_day]', with: '2021-01-01'
+      select '2021', from: 'spot_visited_day_1i'
+      select '1', from: 'spot_visited_day_2i'
+      select '1', from: 'spot_visited_day_3i'
       find('input[@name="spot[rate]"]', visible: false).set('5')
       attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
       fill_in 'spot[content]', with: Faker::Lorem.characters(number: 50)
@@ -1132,7 +1150,9 @@ describe '[STEP2] ユーザログイン後のテスト ソート機能のテス�
       fill_in 'spot[keyword]', with: 'あべのハルカス'
       select '大阪府', from: 'spot_prefecture'
       fill_in 'spot[city]', with: '大阪市阿倍野区'
-      fill_in 'spot[visited_day]', with: '2020-01-01'
+      select '2020', from: 'spot_visited_day_1i'
+      select '1', from: 'spot_visited_day_2i'
+      select '1', from: 'spot_visited_day_3i'
       find('input[@name="spot[rate]"]', visible: false).set('4')
       attach_file "spot[spot_image1]", "app/assets/images/image1.jpg"
       fill_in 'spot[content]', with: Faker::Lorem.characters(number: 50)

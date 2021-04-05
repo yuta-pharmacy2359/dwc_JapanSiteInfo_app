@@ -38,6 +38,8 @@
 
 ・機能一覧(https://docs.google.com/spreadsheets/d/15ZyaacnlLYVt2UiYMu4ja5J2thfTkkYupYOGmhFKg4A/edit#gid=0)<br>
 ・ER図(https://app.diagrams.net/#G1hehi0GDSWDi59i3i1iXcP50dsJQ1D6wT)<br>
+・テーブル定義書(https://docs.google.com/spreadsheets/d/1jNlNwvkfvA5OVQQdUNAkHiO9cJ6OGuqi/edit#gid=1260128466)<br>
+・アプリケーション詳細設計書(https://docs.google.com/spreadsheets/d/1GQhIay7zvfw3GbPX50oIlk4Wl4hIVzR-/edit#gid=184352165)<br>
 
 ## 開発環境
 

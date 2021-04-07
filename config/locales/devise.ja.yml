@@ -73,6 +73,6 @@ ja:
       confirmation_instructions:
         subject: 'アカウントの登録方法'
       reset_password_instructions:
-        subject: 'パスワードの再設定'
+        subject: 'パスワード再設定のご案内'
       unlock_instructions:
         subject: 'アカウントのロック解除'

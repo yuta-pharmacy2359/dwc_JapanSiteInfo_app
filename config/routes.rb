@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get "/" => "homes#top", as: "top"
   get "/about" => "homes#about", as: "about"
-  devise_for :users
+  devise_for :users, controllers: {registrations: 'users/registrations'}
 
   resources :users, only: [:show, :index, :edit, :update] do
     member do

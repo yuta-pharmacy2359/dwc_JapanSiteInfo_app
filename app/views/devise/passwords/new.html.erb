@@ -2,7 +2,7 @@
 
   <h2>パスワード再発行</h2>
 
-  <div class="row mt-3" style="margin-left: 0; margin-right: 0; padding-left: 0;">
+  <div class="row mt-5" style="margin-left: 0; margin-right: 0; padding-left: 0;">
     <%= form_with model: @user, url: user_password_path, local: true do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
@@ -12,16 +12,12 @@
           <td><%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-width" %></td>
         </tr>
       </table>
-      <%= f.submit "パスワード再発行メールを送る", class: "btn btn-success" %>
+      <%= f.submit "パスワード再発行メールを送る", class: "btn btn-success my-5" %>
     <% end %>
   </div>
 
   <p class="my-5">
     会員の方は<%= link_to "こちら", new_user_session_path %>からログイン
-  </p>
-
-  <p class="mb-5">
-    パスワードをお忘れの方は<%= link_to "こちら", new_user_password_path %>
   </p>
 
 </div>

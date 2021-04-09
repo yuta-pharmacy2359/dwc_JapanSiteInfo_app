@@ -20,6 +20,11 @@ class FavoritesController < ApplicationController
     @user_all_spots = @user.spots
     fav_count = @user_all_spots.joins(:favorites).group("spots.user_id").count("favorites.id")
     @user_all_favorites_count = fav_count.present? ? fav_count.fetch(@user.id) : 0
+    @spot.create_notification_by(current_user)
+    respond_to do |format|
+      format.html {redirect_to request.referrer}
+      format.js
+    end
   end
 
   def destroy

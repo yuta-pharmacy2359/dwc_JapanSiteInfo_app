@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  spot_id: 1
+  server_id: 1
+  host_id: 1
+  comment_id: 1
+  kind: MyString
+  check: false
+
+two:
+  spot_id: 1
+  server_id: 1
+  host_id: 1
+  comment_id: 1
+  kind: MyString
+  check: false

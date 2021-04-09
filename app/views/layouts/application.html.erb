@@ -27,7 +27,11 @@
             <ul class="navbar-nav ml-auto">
               <% if user_signed_in? %>
                 <li class="ml-4">
-                  <%= link_to " マイページ", user_path(current_user), class: "fas fa-address-card nav-link text-light" %>
+                  <% if uncheck_notifications.any? %>
+                    <%= link_to " 通知", notifications_path, class: "fas fa-bell nav-link text-warning" %>
+                  <% else %>
+                    <%= link_to " 通知", notifications_path, class: "fas fa-bell nav-link text-light" %>
+                  <% end %>
                 </li>
                 <li class="ml-4">
                   <%= link_to " 新規投稿", new_spot_path, class: "fas fa-plus-circle nav-link text-light" %>

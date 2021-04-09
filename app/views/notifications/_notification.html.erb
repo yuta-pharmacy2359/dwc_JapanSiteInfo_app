@@ -1,0 +1,8 @@
+<% server = notification.server %>
+<% spot = notification.spot %>
+
+<tr>
+  <td><%= attachment_image_tag server, :profile_image, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-50" %></td>
+  <td><%= notification_form(notification) %></td>
+  <td><%= " (#{time_ago_in_words(notification.created_at)}前)" %></td>
+</tr>

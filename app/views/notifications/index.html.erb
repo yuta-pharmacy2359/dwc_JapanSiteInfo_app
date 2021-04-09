@@ -1,0 +1,19 @@
+<div class="container px-5 mt-5 px-sm-0">
+
+  <h3 class="mb-4">通知</h3>
+
+  <% if @notifications.exists? %>
+    <%= link_to "全て削除する", user_notifications_all_destroy_path, method: :delete, class: "btn btn-danger spot-show-button" %>
+  <% end %>
+
+  <div class="notification-index my-5">
+    <% if @notifications.exists? %>
+      <table class="table mb-5">
+        <%= render @notifications.includes(:server, :spot, :comment) %>
+      </table>
+    <% else %>
+      <p>通知はありません</p>
+    <% end %>
+  </div>
+
+</div>

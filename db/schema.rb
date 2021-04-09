@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_08_080245) do
+ActiveRecord::Schema.define(version: 2021_04_09_050022) do
 
   create_table "comments", force: :cascade do |t|
     t.integer "user_id"
@@ -46,6 +46,17 @@ ActiveRecord::Schema.define(version: 2021_03_08_080245) do
 
   create_table "keywords", force: :cascade do |t|
     t.string "keyword"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "spot_id"
+    t.integer "server_id"
+    t.integer "host_id"
+    t.integer "comment_id"
+    t.string "kind"
+    t.boolean "check", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -7,8 +7,10 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     @comment.user_id = current_user.id
     @comment.spot_id = @spot.id
+    @comment_spot = @comment.spot
     if @comment.save
       flash.now[:success] = "コメントを送信しました"
+      @comment_spot.create_notification_comment!(current_user, @comment.id)
     else
       flash.now[:danger] = "コメントを記入してください"
     end

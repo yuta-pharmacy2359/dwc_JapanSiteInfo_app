@@ -71,6 +71,9 @@
         <%= yield %>
       <% end %>
       <% unless current_page?(top_path) %>
+        <% if current_user.present? && uncheck_notifications.any? %>
+          <div class="alert alert-warning">未確認の通知があります。</div>
+        <% end %>
         <div class="notice">
           <% if flash.now[:notice] %>
             <p class="alert alert-success"><%= flash.now[:notice] %></p>

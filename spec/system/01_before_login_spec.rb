@@ -613,14 +613,14 @@ describe '[STEP1] ユーザログイン前のテスト' do
         log_in_link.click
         expect(current_path).to eq('/users/sign_up')
       end
-      #it '「パスワードをお忘れの方はこちら」と表示されている' do
-        #expect(page).to have_content 'パスワードをお忘れの方はこちら'
-      #end
-      #it '「こちら(パスワード)」を押すとパスワード発行画面に遷移する' do
-        #log_in_link = find_all('a')[5]
-        #log_in_link.click
-        #expect(current_path).to eq('/users/password/new')
-      #end
+      it '「パスワードをお忘れの方はこちら」と表示されている' do
+        expect(page).to have_content 'パスワードをお忘れの方はこちら'
+      end
+      it '「こちら(パスワード)」を押すとパスワード発行画面に遷移する' do
+        log_in_link = find_all('a')[5]
+        log_in_link.click
+        expect(current_path).to eq('/users/password/new')
+      end
     end
 
     context 'ログイン成功のテスト' do
@@ -666,9 +666,9 @@ describe '[STEP1] ユーザログイン前のテスト' do
         users_link = find_all('a')[1].native.inner_text
         expect(users_link).to match("#{user.nickname}さん")
       end
-      it '「マイページ」リンクが表示される: 左上から3番目のリンクが「マイページ」である' do
+      it '「通知」リンクが表示される: 左上から3番目のリンクが「通知」である' do
         books_link = find_all('a')[2].native.inner_text
-        expect(books_link).to match('マイページ')
+        expect(books_link).to match('通知')
       end
       it '「新規投稿」リンクが表示される: 左上から4番目のリンクが「新規投稿」である' do
         books_link = find_all('a')[3].native.inner_text

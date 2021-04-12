@@ -6,7 +6,7 @@
 <img width="400" alt="JapanSIteInfo_README用画像2" src="https://user-images.githubusercontent.com/75191225/113389945-d2d8cd80-93cb-11eb-8a11-3ceebad28414.png">
 
 ## 動作デモgif
-![JapanSiteInfo_README用GIF](https://user-images.githubusercontent.com/75191225/113389178-850f9580-93ca-11eb-894d-767a069809ef.gif)
+![JapanSiteInfo_README用GIF2](https://user-images.githubusercontent.com/75191225/114429340-3e0a7700-9bf8-11eb-8b3e-7e407ded39ff.gif)
 
 ## サイト概要
 

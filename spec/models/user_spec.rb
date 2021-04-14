@@ -109,6 +109,15 @@ RSpec.describe 'Userモデルのテスト', type: :model do
       end
     end
 
+    context 'Notificationモデルとの関係' do
+      it 'serverと1:Nとなっている' do
+        expect(User.reflect_on_association(:servers).macro).to eq :has_many
+      end
+      it 'hostと1:Nとなっている' do
+        expect(User.reflect_on_association(:hosts).macro).to eq :has_many
+      end
+    end
+
     context 'Commentモデルとの関係' do
       it '1:Nとなっている' do
         expect(User.reflect_on_association(:comments).macro).to eq :has_many

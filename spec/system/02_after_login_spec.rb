@@ -993,10 +993,6 @@ describe '[STEP2] ユーザログイン後のテスト' do
         sleep 1
       end
 
-      it '' do
-        expect(page).to have_content other_spot.comments
-      end
-
       it '他人がいいねした通知が表示されるか：他人のニックネームと「あなたの投稿」のリンク先が正しいか' do
         click_link 'ログアウト'
         visit new_user_session_path
@@ -1009,19 +1005,16 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_link 'あなたの投稿', href: spot_path(other_spot)
       end
 
-      it '他人がコメントした通知が表示されるか：他人のニックネームと「あなたの投稿」のリンク先が正しいか', js: true do
-        fill_in 'comment[comment]', with: Faker::Lorem.characters(number: 50)
-        click_button '送信する'
-        sleep 1
+      it '他人がコメントした通知が表示されるか：他人のニックネームと「あなたの投稿」のリンク先が正しいか' do
         click_link 'ログアウト'
         visit new_user_session_path
-        fill_in 'user[email]', with: user.email
-        fill_in 'user[password]', with: user.password
+        fill_in 'user[email]', with: other_user.email
+        fill_in 'user[password]', with: other_user.password
         click_button 'ログイン'
         click_link '通知'
-        expect(page).to have_content "#{ other_user.nickname }があなたの投稿にコメントしました"
-        expect(page).to have_link other_user.nickname, href: user_path(other_user)
-        expect(page).to have_link 'あなたの投稿', href: spot_path(spot)
+        expect(page).to have_content "#{ user.nickname }があなたの投稿にコメントしました"
+        expect(page).to have_link other_user.nickname, href: user_path(user)
+        expect(page).to have_link 'あなたの投稿', href: spot_path(other_spot)
       end
     end
 

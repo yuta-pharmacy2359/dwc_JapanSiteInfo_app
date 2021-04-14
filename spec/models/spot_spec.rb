@@ -97,5 +97,11 @@ RSpec.describe 'Spotモデルのテスト', type: :model do
         expect(Spot.reflect_on_association(:favorites).macro).to eq :has_many
       end
     end
+    
+    context 'Notificationモデルとの関係' do
+      it '1:Nとなっている' do
+        expect(Spot.reflect_on_association(:notifications).macro).to eq :has_many
+      end
+    end
   end
 end

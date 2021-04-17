@@ -980,96 +980,92 @@ describe '[STEP2] ユーザログイン後のテスト' do
   end
 
   describe '通知機能のテスト' do
-    before do
-      visit spot_path(other_spot)
-    end
 
     context 'いいね・コメント通知のテスト' do
-      before js: true do
-        find("#like-#{ other_spot.id }").click
-        sleep 1
-        fill_in 'comment[comment]', with: Faker::Lorem.characters(number: 50)
-        click_button '送信する'
-        sleep 1
+      before do
+        visit spot_path(other_spot)
       end
 
-      it '他人がいいねした通知が表示されるか：他人のニックネームと「あなたの投稿」のリンク先が正しいか' do
+      it '他人がいいねした通知が表示されるか：他人のニックネームと「あなたの投稿」のリンク先が正しいか', js: true do
+        find("#like-#{ other_spot.id }").click
+        sleep 1
+        find(".navbar-toggler").click
         click_link 'ログアウト'
         visit new_user_session_path
         fill_in 'user[email]', with: other_user.email
         fill_in 'user[password]', with: other_user.password
         click_button 'ログイン'
+        find(".navbar-toggler").click
         click_link '通知'
-        expect(page).to have_content "#{ user.nickname }があなたの投稿をいいねしました"
+        expect(page).to have_content "#{ user.nickname }があなたの投稿にいいねしました"
         expect(page).to have_link user.nickname, href: user_path(user)
         expect(page).to have_link 'あなたの投稿', href: spot_path(other_spot)
       end
 
-      it '他人がコメントした通知が表示されるか：他人のニックネームと「あなたの投稿」のリンク先が正しいか' do
+      it '他人がコメントした通知が表示されるか：他人のニックネームと「あなたの投稿」のリンク先が正しいか', js: true do
+        fill_in 'comment[comment]', with: Faker::Lorem.characters(number: 50)
+        click_button '送信する'
+        sleep 1
+        find(".navbar-toggler").click
         click_link 'ログアウト'
         visit new_user_session_path
         fill_in 'user[email]', with: other_user.email
         fill_in 'user[password]', with: other_user.password
         click_button 'ログイン'
+        find(".navbar-toggler").click
         click_link '通知'
         expect(page).to have_content "#{ user.nickname }があなたの投稿にコメントしました"
-        expect(page).to have_link other_user.nickname, href: user_path(user)
+        expect(page).to have_link user.nickname, href: user_path(user)
         expect(page).to have_link 'あなたの投稿', href: spot_path(other_spot)
       end
     end
 
     context 'フォロー、通知表示、通知削除のテスト' do
       before do
-        visit user_path(user)
+        visit user_path(other_user)
       end
 
-      it '他人がフォローした通知が表示されるか', js: true do
+      it '他人がフォローした通知が表示されるか:「未確認の通知があります。」は表示されない', js: true do
         click_button 'フォローする'
         sleep 1
+        find(".navbar-toggler").click
         click_link 'ログアウト'
         visit new_user_session_path
-        fill_in 'user[email]', with: user.email
-        fill_in 'user[password]', with: user.password
+        fill_in 'user[email]', with: other_user.email
+        fill_in 'user[password]', with: other_user.password
         click_button 'ログイン'
+        find(".navbar-toggler").click
         click_link '通知'
-        expect(page).to have_content "#{ other_user.nickname }があなたをフォローしました"
-        expect(page).to have_link other_user.nickname, href: user_path(other_user)
+        expect(page).to have_content "#{ user.nickname }があなたをフォローしました"
+        expect(page).to have_link user.nickname, href: user_path(user)
+        expect(page).not_to have_content "未確認の通知があります。"
       end
 
       it '未読の通知がある場合、「未確認の通知があります。」と表示されるか', js: true do
         click_button 'フォローする'
         sleep 1
+        find(".navbar-toggler").click
         click_link 'ログアウト'
         visit new_user_session_path
-        fill_in 'user[email]', with: user.email
-        fill_in 'user[password]', with: user.password
+        fill_in 'user[email]', with: other_user.email
+        fill_in 'user[password]', with: other_user.password
         click_button 'ログイン'
         expect(page).to have_content "未確認の通知があります。"
-      end
-
-      it '上のテストの状態で、通知一覧画面を開くと「未確認の通知があります。」の表示が消えるか', js: true do
-        click_button 'フォローする'
-        sleep 1
-        click_link 'ログアウト'
-        visit new_user_session_path
-        fill_in 'user[email]', with: user.email
-        fill_in 'user[password]', with: user.password
-        click_button 'ログイン'
-        click_link '通知'
-        expect(page).not_to have_content "未確認の通知があります。"
       end
 
       it '「全て削除する」を押すと通知が消去され、「通知はありません」と表示されるか', js: true do
         click_button 'フォローする'
         sleep 1
+        find(".navbar-toggler").click
         click_link 'ログアウト'
         visit new_user_session_path
-        fill_in 'user[email]', with: user.email
-        fill_in 'user[password]', with: user.password
+        fill_in 'user[email]', with: other_user.email
+        fill_in 'user[password]', with: other_user.password
         click_button 'ログイン'
+        find(".navbar-toggler").click
         click_link '通知'
         click_link '全て削除する'
-        expect(page).not_to have_content "#{ other_user.nickname }があなたをフォローしました"
+        expect(page).not_to have_content "#{ user.nickname }があなたをフォローしました"
         expect(page).to have_content "通知はありません"
       end
     end

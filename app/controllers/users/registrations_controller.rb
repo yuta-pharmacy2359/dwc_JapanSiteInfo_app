@@ -10,10 +10,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  def create
-    super
-    ThanksMailer.complete_registration(current_user).deliver
-  end
+  #def create
+    #super
+    #ThanksMailer.complete_registration(current_user).deliver
+  #end
 
   # GET /resource/edit
   # def edit

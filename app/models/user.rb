@@ -49,6 +49,7 @@ class User < ApplicationRecord
     spots.find { |f| f.user_id == user.id }.present?
   end
 
+  #ログイン情報記憶機能
   def remember_me
     true
   end

@@ -1,8 +1,10 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
+  #性別選択
   enum sex: { 男性: 0, 女性: 1 }
 
+  #都道府県選択
   enum prefecture: {
     北海道: 1, 青森県: 2, 岩手県: 3, 宮城県: 4, 秋田県: 5, 山形県: 6, 福島県: 7,
     茨城県: 8, 栃木県: 9, 群馬県: 10, 埼玉県: 11, 千葉県: 12, 東京都: 13, 神奈川県: 14,
@@ -15,6 +17,7 @@ class ApplicationRecord < ActiveRecord::Base
     沖縄県: 47,
   }
 
+  #いいね数ソート(SQL勉強のため記述)
   ransacker :favorites_count do
     query = <<-SQL
       (SELECT COUNT(favorites.spot_id) as favorites_count
@@ -25,6 +28,7 @@ class ApplicationRecord < ActiveRecord::Base
     Arel.sql(query)
   end
 
+  #スポット評価平均ソート(SQL勉強のため記述)
   ransacker :rate_average do
     query = <<-SQL
       (SELECT AVG(spots.rate) as rate_average
@@ -34,9 +38,5 @@ class ApplicationRecord < ActiveRecord::Base
         GROUP BY keyword_relationships.keyword_id)
     SQL
     Arel.sql(query)
-  end
-
-  def self.create_spot_favorite_ranks
-    Spot.find(Favorite.group(:spot_id).order('count(spot_id) desc').pluck(:spot_id))
   end
 end

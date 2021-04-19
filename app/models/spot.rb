@@ -61,6 +61,11 @@ class Spot < ApplicationRecord
     notification.save if notification.valid?
   end
 
+  #スポット別いいね数ランキングの集計
+  def self.create_spot_favorite_ranks
+    Spot.find(Favorite.group(:spot_id).order('count(spot_id) desc').pluck(:spot_id))
+  end
+
   validates :title, presence: true, length: { maximum: 20 }
   validates :prefecture, presence: true
   validates :city, presence: true, length: { maximum: 15 }

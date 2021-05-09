@@ -17,7 +17,7 @@ class ApplicationRecord < ActiveRecord::Base
     沖縄県: 47,
   }
 
-  #いいね数ソート(SQL勉強のため記述)
+  #いいね数ソート(SQL学習のため記述)
   ransacker :favorites_count do
     query = <<-SQL
       (SELECT COUNT(favorites.spot_id) as favorites_count
@@ -28,7 +28,7 @@ class ApplicationRecord < ActiveRecord::Base
     Arel.sql(query)
   end
 
-  #スポット評価平均ソート(SQL勉強のため記述)
+  #スポット評価平均ソート(SQL学習のため記述)
   ransacker :rate_average do
     query = <<-SQL
       (SELECT AVG(spots.rate) as rate_average

@@ -40,6 +40,8 @@
 ・ER図(https://app.diagrams.net/#G1hehi0GDSWDi59i3i1iXcP50dsJQ1D6wT)<br>
 ・テーブル定義書(https://docs.google.com/spreadsheets/d/1jNlNwvkfvA5OVQQdUNAkHiO9cJ6OGuqi/edit#gid=1260128466)<br>
 ・アプリケーション詳細設計書(https://docs.google.com/spreadsheets/d/1GQhIay7zvfw3GbPX50oIlk4Wl4hIVzR-/edit#gid=184352165)<br>
+・AWS構成図(https://docs.google.com/presentation/d/13dMBIlINAkhTfK0h_gAVFSHj4y0KH0Yl/edit#slide=id.p1)<br>
+・AWSインフラ設計書(https://docs.google.com/spreadsheets/d/1gnNPFkVHjPHwOH3_PIZyD37yykBuhRri9LdQG-lSy50/edit#gid=0)<br>
 
 ## 開発環境
 

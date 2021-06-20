@@ -8,8 +8,7 @@ class UsersController < ApplicationController
     @q.sorts = 'created_at desc' if @q.sorts.empty?
     @spots = @q.result.page(params[:page]).includes(:favorites)
     @user_all_spots = @user.spots
-    fav_count = @user_all_spots.joins(:favorites).group("spots.user_id").count("favorites.id")
-    @user_all_favorites_count = fav_count.present? ? fav_count.fetch(@user.id) : 0
+    @user_all_favorites_count = @user_all_spots.joins(:favorites).count
     @cookies = cookies[:favorite_spot_id]
   end
 

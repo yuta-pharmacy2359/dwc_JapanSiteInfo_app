@@ -44,7 +44,7 @@
               <% end %>
             </td>
             <td>
-              <%= keyword.spots.length %>スポット
+              <%= keyword.spots.size %>スポット
             </td>
             <% if @rate_avg.has_key?(keyword.id) %>
               <td id="star-rate-<%= keyword.id %>" class="py-3 text-nowrap"><%= @rate_avg.fetch(keyword.id).round(2) %></td>

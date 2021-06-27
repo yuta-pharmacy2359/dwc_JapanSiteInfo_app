@@ -27,9 +27,16 @@ footer {
   right: 10px;
   bottom: 50px;
 }
-
 #page-top img {
   width: 40px;
+}
+
+/* スポット一覧画面でのアニメーション */
+.flowing {
+  transition: ease .2s;
+}
+.flowing:hover {
+  background-color: #dcdcdc;
 }
 
 /* いいねボタンのスタイル */

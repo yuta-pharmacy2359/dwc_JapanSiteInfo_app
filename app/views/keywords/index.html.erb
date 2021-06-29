@@ -36,7 +36,7 @@
       </thead>
       <tbody>
         <% @keywords.each do |keyword| %>
-          <tr>
+          <tr class="flowing">
             <td><%= attachment_image_tag keyword.spots.last, :spot_image1, format: "jpeg", fallback: "noimage-1-760x460.png", class: "image-150" %></td>
             <td>
               <%= link_to keyword_path(keyword) do %>
